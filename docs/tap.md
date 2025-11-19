@@ -1,4 +1,4 @@
-# TERMO DE ABERTURA DE PROJETO
+# TERMO DE ABERTURA DE PROJETO - UniEvent
 ### HISTÓRICO DE VERSÕES
 | Data | Autores | Descrição | Versões |
 | --- | --- | --- | --- |
