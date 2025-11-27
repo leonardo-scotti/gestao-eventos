@@ -1173,7 +1173,7 @@
             <mxRectangle height="30" width="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Mic8xlDxn8Izko59HYRF-128" parent="Mic8xlDxn8Izko59HYRF-126" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;" value="cpj: VARCHAR(18) NULL" vertex="1">
+        <mxCell id="Mic8xlDxn8Izko59HYRF-128" parent="Mic8xlDxn8Izko59HYRF-126" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;" value="cnpj: VARCHAR(18) NULL" vertex="1">
           <mxGeometry height="30" width="200" x="30" as="geometry">
             <mxRectangle height="30" width="200" as="alternateBounds" />
           </mxGeometry>
