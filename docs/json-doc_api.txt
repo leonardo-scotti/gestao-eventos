@@ -1,0 +1,198 @@
+---Post evento
+
+Request:
+{
+  "content-type": "APLICATION/JSON"
+}
+{
+  "id": int,
+  "nome": "string",
+  "descricao": "string",
+  "data_inicio": "string",
+  "hora_inicio": "string",
+  "data_termino": "string",
+  "hora_termino": "string",
+  "banner": "string",
+  "is_visible": "true",
+  "organizador": "string",
+  "categoria": "string",
+  "assunto": "string"
+}
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Evento criado com sucesso"
+  "eventos": [
+    {
+        "id": int,
+        "nome": "string",
+        "descricao": "string",
+  	"data_inicio": "string",
+  	"hora_inicio": "string",
+  	"data_termino": "string",
+  	"hora_termino": "string",
+  	"banner": "string",
+  	"is_visible": "true",
+  	"organizador": "string",
+  	"categoria": "string",
+  	"assunto": "string"
+    }
+  ]
+}
+
+
+
+---Get ALL eventos
+
+Request:
+  (Não há)
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "eventos": [
+    {
+        "id": int,
+        "nome": "string",
+        "descricao": "string",
+  	"data_inicio": "string",
+  	"hora_inicio": "string",
+  	"data_termino": "string",
+  	"hora_termino": "string",
+  	"banner": "string",
+  	"is_visible": "true",
+  	"organizador": "string",
+  	"categoria": "string",
+  	"assunto": "string"
+    }
+  ]
+}
+
+Get evento
+
+Request:
+  id do evento
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "evento": [
+    {
+        "id": int,
+        "nome": "string",
+        "descricao": "string",
+  	"data_inicio": "string",
+  	"hora_inicio": "string",
+  	"data_termino": "string",
+  	"hora_termino": "string",
+  	"banner": "string",
+  	"is_visible": "true",
+  	"organizador": "string",
+  	"categoria": "string",
+  	"assunto": "string"
+    }
+  ]
+}
+
+Put evento
+
+Request:
+{
+  "content-type": "APLICATION/JSON"
+}
+{
+  "id": int,
+  "nome": "string",
+  "descricao": "string",
+  "data_inicio": "string",
+  "hora_inicio": "string",
+  "data_termino": "string",
+  "hora_termino": "string",
+  "banner": "string",
+  "is_visible": "true",
+  "organizador": "string",
+  "categoria": "string",
+  "assunto": "string"
+}
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Evento atualizado"
+}
+
+Delete evento
+
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Evento deletado com sucesso"
+}
+
+Post organizador
+Get ALL organizadores
+Get organizador
+Put organizador
+Delete organizador
+
+Post cliente
+Get ALL clientes
+Get cliente
+Put cliente
+Delete cliente
+
+Post pedido
+Get ALL pedido
+Get pedido
+Put pedido
+Delete pedido
+
+Post item_pedido
+Get ALL item_pedido
+Get item_pedido
+Put item_pedido
+Delete item pedido
+
+Post endereco
+Get ALL endereco
+Get endereco
+Put endereco
+Delete endereco
+
+Post estado
+Get ALL estados
+Get estado
+Put estado
+Delete estado
+
+Post ingresso
+Get ALL ingressos
+Get ingresso
+Put ingresso
+Delete ingresso
+
+Post categoria
+Get ALL categorias
+Get categoria
+Put categoria
+Delete categoria
+
+Post assunto
+Get ALL assuntos
+Get assunto
+Put assunto
+Delete assunto
+
+
+
+
