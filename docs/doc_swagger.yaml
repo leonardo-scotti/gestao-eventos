@@ -1,0 +1,1351 @@
+openapi: 3.0.0
+info:
+  title: API de Gestão de Eventos
+  description: Documentação da API com FOREIGN KEYS em Request (Array de IDs) e Response (Array de Object Completo/Simples).
+  version: 1.9.0
+  contact:
+    name: Vitor Miguel Rodrigues Cezario
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor Local
+
+tags:
+  - name: Eventos
+  - name: Organizadores
+  - name: Clientes
+  - name: Pedidos
+  - name: Itens Pedido
+  - name: Endereços
+  - name: Estados
+  - name: Ingressos
+  - name: Categorias
+  - name: Assuntos
+
+paths:
+  # --- EVENTOS ---
+  /evento:
+    post:
+      tags: [Eventos]
+      summary: Criar novo evento
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EventoRequest'
+      responses:
+        '201':
+          description: Evento criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseEvento'
+    put:
+      tags: [Eventos]
+      summary: Atualizar evento
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventoRequest'
+      responses:
+        '200':
+          description: Evento atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  /eventos:
+    get:
+      tags: [Eventos]
+      summary: Listar todos os eventos
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaEventos'
+
+  /evento/{id}:
+    get:
+      tags: [Eventos]
+      summary: Obter evento por ID
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+          required: true
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: boolean, example: true }
+                  statuscode: { type: integer, example: 200 }
+                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+                  evento:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EventoObject'
+    delete:
+      tags: [Eventos]
+      summary: Deletar evento
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+          required: true
+      responses:
+        '200':
+          description: Deletado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  # --- ORGANIZADORES ---
+  /organizador:
+    post:
+      tags: [Organizadores]
+      summary: Criar organizador
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PessoaRequest'
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOrganizador'
+    put:
+      tags: [Organizadores]
+      summary: Atualizar organizador
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id: { type: integer }
+                - $ref: '#/components/schemas/PessoaRequest'
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  /organizadores:
+    get:
+      tags: [Organizadores]
+      summary: Listar todos organizadores
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaOrganizadores'
+
+  /organizador/{id}:
+    get:
+      tags: [Organizadores]
+      summary: Obter organizador por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOrganizador'
+    delete:
+      tags: [Organizadores]
+      summary: Deletar organizador
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  # --- CLIENTES ---
+  /cliente:
+    post:
+      tags: [Clientes]
+      summary: Criar cliente
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PessoaRequest'
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCliente'
+    put:
+      tags: [Clientes]
+      summary: Atualizar cliente
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id: { type: integer }
+                - $ref: '#/components/schemas/PessoaRequest'
+      responses:
+        '200':
+          description: Atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  /clientes:
+    get:
+      tags: [Clientes]
+      summary: Listar todos clientes
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaClientes'
+
+  /cliente/{id}:
+    get:
+      tags: [Clientes]
+      summary: Obter cliente por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCliente'
+    delete:
+      tags: [Clientes]
+      summary: Deletar cliente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  # --- PEDIDOS ---
+  /pedido:
+    post:
+      tags: [Pedidos]
+      summary: Criar pedido
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoRequest'
+      responses:
+        '201': 
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePedido'
+    put:
+      tags: [Pedidos]
+      summary: Atualizar pedido
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id: { type: integer }
+                - $ref: '#/components/schemas/PedidoRequest'
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaPedidos' 
+
+  /pedidos:
+    get:
+      tags: [Pedidos]
+      summary: Listar pedidos
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaPedidos'
+
+  /pedido/{id}:
+    get:
+      tags: [Pedidos]
+      summary: Obter pedido
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePedido'
+    delete:
+      tags: [Pedidos]
+      summary: Deletar pedido
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  # --- ITEM PEDIDO ---
+  /item-pedido:
+    post:
+      tags: [Itens Pedido]
+      summary: Criar item pedido
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemPedidoRequest'
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseItemPedido'
+    put:
+      tags: [Itens Pedido]
+      summary: Atualizar item pedido
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id: { type: integer }
+                - $ref: '#/components/schemas/ItemPedidoRequest'
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  /itens-pedidos:
+    get:
+      tags: [Itens Pedido]
+      summary: Listar itens pedidos
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaItensPedidos'
+
+  /item-pedido/{id}:
+    get:
+      tags: [Itens Pedido]
+      summary: Obter item pedido
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseItemPedido'
+    delete:
+      tags: [Itens Pedido]
+      summary: Deletar item pedido
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  # --- ENDERECO ---
+  /endereco:
+    post:
+      tags: [Endereços]
+      summary: Criar endereço
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnderecoRequest'
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseEndereco'
+    put:
+      tags: [Endereços]
+      summary: Atualizar endereço
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id: { type: integer }
+                - $ref: '#/components/schemas/EnderecoRequest'
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  /enderecos:
+    get:
+      tags: [Endereços]
+      summary: Listar endereços
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaEnderecos'
+
+  /endereco/{id}:
+    get:
+      tags: [Endereços]
+      summary: Obter endereço
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseEndereco'
+    delete:
+      tags: [Endereços]
+      summary: Deletar endereço
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  # --- ESTADO ---
+  /estado:
+    post:
+      tags: [Estados]
+      summary: Criar estado
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sigla]
+              properties:
+                sigla: { type: string }
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseEstado'
+    put:
+      tags: [Estados]
+      summary: Atualizar estado
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, sigla]
+              properties:
+                id: { type: integer }
+                sigla: { type: string }
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: boolean, example: true }
+                  statuscode: { type: integer, example: 200 }
+                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+                  message: { type: string, example: "Estado atualizado com sucesso!!!" } # Mensagem Exclusiva
+    
+  /estados:
+    get:
+      tags: [Estados]
+      summary: Listar estados
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaEstados'
+
+  /estado/{id}:
+    get:
+      tags: [Estados]
+      summary: Obter estado
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseEstado'
+    delete:
+      tags: [Estados]
+      summary: Deletar estado
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: boolean, example: true }
+                  statuscode: { type: integer, example: 200 }
+                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+                  message: { type: string, example: "Estado deletado com sucesso" } # Mensagem Exclusiva
+
+  # --- INGRESSO ---
+  /ingresso:
+    post:
+      tags: [Ingressos]
+      summary: Criar ingresso
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngressoRequest'
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseIngresso'
+    put:
+      tags: [Ingressos]
+      summary: Atualizar ingresso
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id: { type: integer }
+                - $ref: '#/components/schemas/IngressoRequest'
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  /ingressos:
+    get:
+      tags: [Ingressos]
+      summary: Listar ingressos
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaIngressos'
+
+  /ingresso/{id}:
+    get:
+      tags: [Ingressos]
+      summary: Obter ingresso
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaIngressos'
+    delete:
+      tags: [Ingressos]
+      summary: Deletar ingresso
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenericMessage'
+
+  # --- CATEGORIA ---
+  /categoria:
+    post:
+      tags: [Categorias]
+      summary: Criar categoria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [nome]
+              properties:
+                nome: { type: string }
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCategoria'
+    put:
+      tags: [Categorias]
+      summary: Atualizar categoria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, nome]
+              properties:
+                id: { type: integer }
+                nome: { type: string }
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: boolean, example: true }
+                  statuscode: { type: integer, example: 200 }
+                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+                  message: { type: string, example: "Categoria atualizada com sucesso!!!" } # Mensagem Exclusiva
+
+  /categorias:
+    get:
+      tags: [Categorias]
+      summary: Listar categorias
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaCategorias'
+
+  /categoria/{id}:
+    get:
+      tags: [Categorias]
+      summary: Obter categoria
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCategoria'
+    delete:
+      tags: [Categorias]
+      summary: Deletar categoria
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: boolean, example: true }
+                  statuscode: { type: integer, example: 200 }
+                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+                  message: { type: string, example: "Categoria deletada com sucesso" } # Mensagem Exclusiva
+
+  # --- ASSUNTO ---
+  /assunto:
+    post:
+      tags: [Assuntos]
+      summary: Criar assunto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [nome]
+              properties:
+                nome: { type: string }
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: boolean, example: true }
+                  statuscode: { type: integer, example: 201 }
+                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+                  message: { type: string, example: "Assunto criada com sucesso" } # Mensagem Exclusiva
+                  assunto:
+                    $ref: '#/components/schemas/ResponseFK'
+    put:
+      tags: [Assuntos]
+      summary: Atualizar assunto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, nome]
+              properties:
+                id: { type: integer }
+                nome: { type: string }
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: boolean, example: true }
+                  statuscode: { type: integer, example: 200 }
+                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+                  message: { type: string, example: "Assunto atualizado com sucesso!!!" } # Mensagem Exclusiva
+
+  /assuntos:
+    get:
+      tags: [Assuntos]
+      summary: Listar assuntos
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaAssuntos'
+
+  /assunto/{id}:
+    get:
+      tags: [Assuntos]
+      summary: Obter assunto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseAssunto'
+    delete:
+      tags: [Assuntos]
+      summary: Deletar assunto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: boolean, example: true }
+                  statuscode: { type: integer, example: 200 }
+                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+                  message: { type: string, example: "Assunto deletado com sucesso" } # Mensagem Exclusiva
+
+components:
+  schemas:
+    # --- COMMON ---
+    ResponseGenericMessage:
+      type: object
+      properties:
+        status: { type: boolean, example: true }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string }
+
+    # --- RESPONSE FOREIGN KEY STRUCTURE (SIMPLE OBJECT OUTPUT) ---
+    ResponseFK:
+      type: array
+      items:
+        type: object
+        properties:
+          id: { type: integer, example: 1 }
+          nome: { type: string, example: "Nome do Campo FK" } 
+
+    # --- PESSOA (Cliente/Organizador) ---
+    PessoaRequest:
+      type: object
+      required: [nome, email]
+      properties:
+        nome: { type: string }
+        email: { type: string }
+        cpf: { type: string, description: "Opcional" }
+        cnpj: { type: string, description: "Opcional" }
+        telefone: { type: string, description: "Opcional" }
+        data_nascimento: { type: string, description: "Opcional" }
+        data_fundacao: { type: string, description: "Opcional" }
+        genero:
+          type: array
+          items:
+            type: object
+            properties:
+              id_genero: { type: integer }
+
+    PessoaObject:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        nome: { type: string, example: "João da Silva" }
+        email: { type: string, example: "joao@email.com" }
+        cpf: { type: string, example: "123.456.789-00" }
+        cnpj: { type: string, example: "00.000.000/0001-00" }
+        telefone: { type: string, example: "(11) 99999-9999" }
+        genero:
+          $ref: '#/components/schemas/ResponseFK'
+        data_nascimento: { type: string, format: date, example: "1990-01-01" }
+        data_fundacao: { type: string, format: date, example: "2015-05-10" }
+
+    ResponseOrganizador:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Organizador criada com sucesso" }
+        organizador:
+          type: array
+          items:
+            $ref: '#/components/schemas/PessoaObject'
+
+    ResponseListaOrganizadores:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        organizadores:
+          type: array
+          items:
+            $ref: '#/components/schemas/PessoaObject'
+
+    ResponseCliente:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Cliente criado com sucesso" }
+        cliente:
+          type: array
+          items:
+            $ref: '#/components/schemas/PessoaObject'
+
+    ResponseListaClientes:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        clientes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PessoaObject'
+
+    # --- EVENTOS ---
+    EventoObject:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        nome: { type: string, example: "Feira de Tecnologia 2025" }
+        descricao: { type: string }
+        data_inicio: { type: string, format: date }
+        hora_inicio: { type: string }
+        data_termino: { type: string, format: date }
+        hora_termino: { type: string }
+        banner: { type: string }
+        is_visible: { type: string, enum: ["true", "false"] }
+        organizador:
+          type: array
+          items:
+            $ref: '#/components/schemas/PessoaObject' 
+        categoria:
+          $ref: '#/components/schemas/ResponseFK' 
+        assunto:
+          $ref: '#/components/schemas/ResponseFK' 
+
+    EventoRequest:
+      type: object
+      required: [nome, descricao, data_inicio, hora_inicio, data_termino, hora_termino, banner, is_visible, organizador, categoria, assunto]
+      properties:
+        id: { type: integer }
+        nome: { type: string }
+        descricao: { type: string }
+        data_inicio: { type: string }
+        hora_inicio: { type: string }
+        data_termino: { type: string }
+        hora_termino: { type: string }
+        banner: { type: string, format: binary }
+        is_visible: { type: string }
+        organizador:
+          type: array
+          items:
+            type: object
+            properties:
+              id_organizador: { type: integer, example: 1 }
+        categoria:
+          type: array
+          items:
+            type: object
+            properties:
+              id_categoria: { type: integer, example: 1 }
+        assunto:
+          type: array
+          items:
+            type: object
+            properties:
+              id_assunto: { type: integer, example: 1 }
+
+    ResponseEvento:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Evento criado com sucesso" }
+        eventos:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventoObject'
+
+    ResponseListaEventos:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        eventos:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventoObject'
+
+    # --- PEDIDOS ---
+    PedidoRequest:
+      type: object
+      required: [status, valor_total, organizador, cliente]
+      properties:
+        status: { type: string }
+        valor_total: { type: number }
+        organizador:
+          type: array
+          items:
+            type: object
+            properties:
+              id_organizador: { type: integer }
+        cliente:
+          type: array
+          items:
+            type: object
+            properties:
+              id_cliente: { type: integer }
+
+    PedidoObject:
+      type: object
+      properties:
+        status: { type: string }
+        data_pedido: { type: string }
+        valor_total: { type: number }
+        organizador:
+          type: array
+          items:
+            $ref: '#/components/schemas/PessoaObject' 
+        cliente:
+          type: array
+          items:
+            $ref: '#/components/schemas/PessoaObject' 
+
+    ResponsePedido:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Pedido criado com sucesso" }
+        pedido:
+          type: array
+          items:
+            $ref: '#/components/schemas/PedidoObject'
+
+    ResponseListaPedidos:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        pedidos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PedidoObject'
+
+    # --- ITEM PEDIDO ---
+    ItemPedidoRequest:
+      type: object
+      required: [quantidade, pedido, ingresso]
+      properties:
+        quantidade: { type: integer }
+        pedido:
+          type: array
+          items:
+            type: object
+            properties:
+              id_pedido: { type: integer }
+        ingresso:
+          type: array
+          items:
+            type: object
+            properties:
+              id_ingresso: { type: integer }
+
+    ItemPedidoObject:
+      type: object
+      properties:
+        id: { type: integer }
+        quantidade: { type: integer }
+        pedido:
+          $ref: '#/components/schemas/ResponseFK'
+        ingresso:
+          $ref: '#/components/schemas/ResponseFK'
+
+    ResponseItemPedido:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Item Pedido criado com sucesso" }
+        item-pedido:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemPedidoObject'
+
+    ResponseListaItensPedidos:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        items-pedidos:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemPedidoObject'
+
+    # --- ENDERECO ---
+    EnderecoRequest:
+      type: object
+      required: [cep, logradouro, numero, bairro, cidade, estado, evento]
+      properties:
+        cep: { type: string }
+        logradouro: { type: string }
+        complemento: { type: string, description: "Opcional" }
+        numero: { type: string }
+        bairro: { type: string }
+        cidade: { type: string }
+        estado:
+          type: array
+          items:
+            type: object
+            properties:
+              id_estado: { type: integer }
+        evento:
+          type: array
+          items:
+            type: object
+            properties:
+              id_evento: { type: integer }
+
+    EnderecoObject:
+      type: object
+      properties:
+        id: { type: integer }
+        cep: { type: string }
+        logradouro: { type: string }
+        complemento: { type: string }
+        numero: { type: string }
+        bairro: { type: string }
+        cidade: { type: string }
+        estado:
+          $ref: '#/components/schemas/ResponseFK'
+        evento:
+          $ref: '#/components/schemas/ResponseFK'
+
+    ResponseEndereco:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Endereço criado com sucesso" }
+        endereco:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnderecoObject'
+
+    ResponseListaEnderecos:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        enderecos:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnderecoObject'
+
+    # --- ESTADO (SIMPLES) ---
+    EstadoFK:
+      type: array
+      items:
+        type: object
+        properties:
+          id: { type: integer, example: 1 }
+          sigla: { type: string, example: "SP" }
+          
+    ResponseEstado:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Estado criado com sucesso" } # Mensagem Exclusiva (POST)
+        estado:
+          $ref: '#/components/schemas/EstadoFK'
+
+    ResponseListaEstados:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        estados:
+          $ref: '#/components/schemas/EstadoFK'
+
+    # --- INGRESSO ---
+    IngressoRequest:
+      type: object
+      required: [nome, preco_unitario, evento]
+      properties:
+        nome: { type: string }
+        preco_unitario: { type: string }
+        evento:
+          type: array
+          items:
+            type: object
+            properties:
+              id_evento: { type: integer }
+
+    ResponseIngresso:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Ingresso criado com sucesso" }
+        ingresso:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              nome: { type: string }
+              preco_unitario: { type: string }
+              is_ative: { type: boolean }
+              evento:
+                $ref: '#/components/schemas/ResponseFK'
+
+    ResponseListaIngressos:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        ingressos:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              nome: { type: string }
+              preco_unitario: { type: string }
+              is_ative: { type: boolean }
+              evento:
+                $ref: '#/components/schemas/ResponseFK'
+
+    # --- CATEGORIA (SIMPLES) ---
+    ResponseCategoria:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Categoria criada com sucesso" } # Mensagem Exclusiva (POST)
+        categoria:
+          $ref: '#/components/schemas/ResponseFK'
+
+    ResponseListaCategorias:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        categorias:
+          $ref: '#/components/schemas/ResponseFK'
+
+    # --- ASSUNTO (SIMPLES) ---
+    ResponseAssunto:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 } # GET tem status 200
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Assunto obtido com sucesso" }
+        assunto:
+          $ref: '#/components/schemas/ResponseFK'
+
+    ResponseListaAssuntos:
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 200 }
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        assuntos:
+          $ref: '#/components/schemas/ResponseFK'

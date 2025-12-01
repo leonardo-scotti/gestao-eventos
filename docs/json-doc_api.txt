@@ -2,27 +2,26 @@
 
 Request:
 {
-  "content-type": "APLICATION/JSON"
-}
-{
-  "id": int,
   "nome": "string",
   "descricao": "string",
   "data_inicio": "string",
   "hora_inicio": "string",
   "data_termino": "string",
   "hora_termino": "string",
-  "banner": "string",
+  "banner": "binary",
   "is_visible": "true",
-  "organizador": "string",
-  "categoria": "string",
-  "assunto": "string"
+  "organizador": "int",
+  "categoria": "int",
+  "assunto": "int"
+  "categoria": [
+	{"id_categoria": "int"}
+  ]
 }
 
 Response:
 {
   "status": true,
-  "statuscode": 200,
+  "statuscode": 201,
   "development": "Vitor Miguel Rodrigues Cezario",
   "message": "Evento criado com sucesso"
   "eventos": [
@@ -39,13 +38,16 @@ Response:
   	"organizador": "string",
   	"categoria": "string",
   	"assunto": "string"
+	"categoria": [
+		{"categoria": "String"}
+	]
     }
   ]
 }
 
 
 
----Get ALL eventos
+Get ALL eventos
 
 Request:
   (Não há)
@@ -105,9 +107,6 @@ Put evento
 
 Request:
 {
-  "content-type": "APLICATION/JSON"
-}
-{
   "id": int,
   "nome": "string",
   "descricao": "string",
@@ -115,11 +114,11 @@ Request:
   "hora_inicio": "string",
   "data_termino": "string",
   "hora_termino": "string",
-  "banner": "string",
+  "banner": "binary",
   "is_visible": "true",
-  "organizador": "string",
-  "categoria": "string",
-  "assunto": "string"
+  "organizador": "int",
+  "categoria": "int",
+  "assunto": "int"
 }
 
 Response:
@@ -127,11 +126,15 @@ Response:
   "status": true,
   "statuscode": 200,
   "development": "Vitor Miguel Rodrigues Cezario",
-  "message": "Evento atualizado"
+  "message": "Evento atualizado com sucesso!!!"
 }
 
 Delete evento
 
+Request:
+  id do evento
+
+Response:
 {
   "status": true,
   "statuscode": 200,
@@ -139,60 +142,983 @@ Delete evento
   "message": "Evento deletado com sucesso"
 }
 
-Post organizador
+
+
+
+
+---Post organizador
+
+Request:
+{
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+	"gênero": [
+		{"id_genero": "int}
+	]
+  	"id_genero": int,
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+}
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Organizador criado com sucesso"
+  "organizador": [
+    {
+        "id": int,
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+  	"genero": "string",
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+    }
+  ]
+}
+
+
+
 Get ALL organizadores
+
+Request:
+  (Não há)
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "organizadores": [
+    {
+        "id": int,
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+  	"genero": "string",
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+    }
+  ]
+}
+
+
+
 Get organizador
+
+Request:
+  id do organizador
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "organizador": [
+    {
+        "id": int,
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+  	"genero": "string",
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+    }
+  ]
+}
+
 Put organizador
+
+Request:
+   {
+        "id": int,
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+  	"id_genero": int,
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+    }
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Organizador atualizado com sucesso!!!"
+}
+
+
 Delete organizador
 
-Post cliente
+Request:
+  id do organizador
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Organizador deletado com sucesso"
+}
+
+---Post cliente
+
+Request:
+{
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+  	"id_genero": int,
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+}
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Cliente criado com sucesso"
+  "cliente": [
+    {
+        "id": int,
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+  	"genero": "string",
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+    }
+  ]
+}
+
+
+
 Get ALL clientes
+
+Request:
+  (Não há)
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "clientes": [
+    {
+        "id": int,
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+  	"genero": "string",
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+    }
+  ]
+}
+
+
+
 Get cliente
+
+Request:
+  id do cliente
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "cliente": [
+    {
+        "id": int,
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+  	"genero": "string",
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+    }
+  ]
+}
+
 Put cliente
+
+Request:
+   {
+        "id": int,
+        "nome": "string",
+        "email": "string",
+  	"cpf": "string",
+  	"cnpj": "string",
+  	"telefone": "string",
+  	"id_genero": int,
+  	"data_nascimento": "string"
+        "data_fundacao": "string"
+    }
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Cliente atualizado com sucesso!!!"
+}
+
+
 Delete cliente
 
-Post pedido
+Request:
+  id do cliente
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Cliente deletado com sucesso"
+}
+
+--Post pedido
+
+Request:
+{
+        "status": "string",
+  	"valor_total": "number",
+  	"id_organizador": "int",
+        "id_cliente": "int"
+}
+
+Response:
+
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "pedido": [
+    {
+        "status": "string",
+	"data_pedido": "string",
+  	"valor_total": "number",
+  	"organizador": "string",
+        "cliente": "string"
+      }
+  ]
+}
+
+
 Get ALL pedido
+
+Request:
+ (Não há)
+
+Response:
+
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "pedidos": [
+    {
+        "status": "string",
+	"data_pedido": "string",
+  	"valor_total": "number",
+  	"organizador": "string",
+        "cliente": "string"
+      }
+  ]
+}
+
 Get pedido
+
+Request:
+ id do pedido
+
+Response:
+
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "pedido": [
+    {
+        "status": "string",
+	"data_pedido": "string",
+  	"valor_total": "number",
+  	"organizador": "string",
+        "cliente": "string"
+      }
+  ]
+}
+
 Put pedido
+
+Request:
+{
+        "id": int,
+        "status": "string",
+  	"valor_total": "number",
+  	"id_organizador": "int",
+        "id_cliente": "int"
+}
+
+Response:
+
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "pedidos": [
+    {
+        "status": "string",
+	"data_pedido": "string",
+  	"valor_total": "number",
+  	"organizador": "string",
+        "cliente": "string"
+      }
+  ]
+}
+
+
 Delete pedido
 
-Post item_pedido
-Get ALL item_pedido
-Get item_pedido
-Put item_pedido
+Request:
+  id do pedido
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Pedido deletado com sucesso"
+}
+
+--Post item pedido
+
+Request:
+{
+  "quantidade": int,
+  "id_pedido": int,
+  "id_ingresso": "int"
+}
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Item-pedido criado com sucesso"
+  "item-pedido": [
+    {
+      "id": int,
+      "quantidade": int,
+      "pedido": int,
+      "ingresso": "string"
+   }
+  ]
+}
+
+
+Get ALL item pedido
+
+Request:
+  (Não há)
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "items-pedidos": [
+    {
+      "id": int,
+      "quantidade": int,
+      "pedido": int,
+      "ingresso": "string"
+   }
+  ]
+}
+
+Get item pedido
+
+Request:
+  id do item do pedido
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "item-pedido": [
+    {
+      "id": int,
+      "quantidade": int,
+      "pedido": int,
+      "ingresso": "string"
+   }
+  ]
+}
+
+
+Put item pedido
+
+Request:
+{
+    "id": int,
+    "quantidade": int,
+    "id_pedido": int,
+    "id_ingresso": "int"
+}
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Item-pedido atualizado com sucesso!!!"
+}
+
 Delete item pedido
 
-Post endereco
+Request:
+  id do item do pedido
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "item-pedido deletado com sucesso"
+}
+
+--Post endereço
+
+Request:
+{
+  "cep": "string",
+  "logradouro": "string",
+  "complemento": "string",
+  "numero": "string",
+  "bairro": "string",
+  "cidade": "string",
+  "id_estado": "int",
+  "id_evento": "int",
+}
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Endereço criado com sucesso"
+  "endereco": [
+    {
+      "cep": "string",
+      "logradouro": "string",
+      "complemento": "string",
+      "numero": "string",
+      "bairro": "string",
+      "cidade": "string",
+      "estado": "string",
+      "evento": "string"
+    }
+  ]
+}
+
 Get ALL endereco
-Get endereco
-Put endereco
-Delete endereco
+
+Request:
+  (Não há)
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "enderecos": [
+    {
+      "id": int,
+      "cep": "string",
+      "logradouro": "string",
+      "complemento": "string",
+      "numero": "string",
+      "bairro": "string",
+      "cidade": "string",
+      "estado": "string",
+      "evento": "string"
+    }
+  ]
+}
+
+Get endereço
+
+Request:
+  id do endereço
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "endereco": [
+    {
+      "id": int,
+      "cep": "string",
+      "logradouro": "string",
+      "complemento": "string",
+      "numero": "string",
+      "bairro": "string",
+      "cidade": "string",
+      "estado": "string",
+      "evento": "string"
+    }
+  ]
+}
+
+Put endereço
+
+Request:
+
+{
+  "id": int,
+  "cep": "string",
+  "logradouro": "string",
+  "complemento": "string",
+  "numero": "string",
+  "bairro": "string",
+  "cidade": "string",
+  "id_estado": "int",
+  "id_evento": "int"
+}
+
+
+Response:
+
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Endereço atualizado com sucesso!!!"
+}
+
+
+
+Delete endereço
+
+Request:
+  id do endereço
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Endereço deletado com sucesso!!!"
+}
 
 Post estado
+
+Request:
+{
+  "sigla": "string"
+}
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Estado criado com sucesso"
+  "estado": [
+    {
+      "id": int,
+      "sigla": "string"
+    }
+  ]
+}
+
+
 Get ALL estados
+
+Request:
+  (Não há)
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "estados": [
+    {
+      "id": int,
+      "sigla": "string"
+    }
+  ]
+}
+
+
 Get estado
+
+Request:
+  id do estado
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "estado": [
+    {
+      "id": int,
+      "sigla": "string"
+    }
+  ]
+}
+
+
 Put estado
+
+Request:
+{
+      "id": int,
+      "sigla": "string"
+}
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Estado atualizado com sucesso!!!"
+}
+
+
 Delete estado
 
-Post ingresso
+Request:
+  id do estado
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Estado deletado com sucesso"
+}
+
+
+--Post ingresso
+
+Request:
+{
+  "nome": "string",
+  "preco_unitario": "string",
+  "id_evento": int
+}
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Ingresso criado com sucesso"
+  "ingresso": [
+    {
+      "id": int,
+      "nome": "string",
+      "preco_unitario": "string",
+      "is_ative": "boolean",
+      "evento": "string"
+    }
+  ]
+}
+
+
 Get ALL ingressos
+
+Request:
+  (Não há)
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "ingressos": [
+    {
+      "id": int,
+      "nome": "string",
+      "preco_unitario": "string",
+      "is_ative": "boolean",
+      "evento": "string"
+    }
+  ]
+}
+
 Get ingresso
+
+Request:
+  id do ingresso
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "ingressos": [
+    {
+      "id": int,
+      "nome": "string",
+      "preco_unitario": "string",
+      "is_ative": "boolean",
+      "evento": "string"
+    }
+  ]
+}
+
 Put ingresso
+
+Request:
+{
+      "id": int,
+      "nome": "string",
+      "preco_unitario": "string",
+      "is_ative": "boolean",
+      "id_evento": int
+}
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Ingresso atualizado com sucesso!!!"
+}
+
+
 Delete ingresso
 
+Request:
+  id do estado
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Ingresso deletado com sucesso!!!"
+}
+
 Post categoria
+
+Request:
+{
+  "nome": "string",
+}
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Categoria criada com sucesso"
+  "categoria": [
+    {
+      "id": int,
+      "nome": "string"
+    }
+  ]
+}
+
+
 Get ALL categorias
+
+Request:
+  (Não há)
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "categorias": [
+    {
+      "id": int,
+      "nome": "string"
+    }
+  ]
+}
+
+
 Get categoria
+
+Request:
+  id da categoria
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Categoria criada com sucesso"
+  "categoria": [
+    {
+      "id": int,
+      "nome": "string"
+    }
+  ]
+}
+
 Put categoria
+
+Request:
+{
+      "id": int,
+      "nome": "string"
+}
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Categoria atualizada com sucesso!!!"
+}
+
 Delete categoria
 
-Post assunto
+Request:
+  id da categoria
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Categoria deletada com sucesso"
+}
+
+--Post assunto
+
+Request:
+{
+  "nome": "string",
+}
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Assunto criada com sucesso"
+  "assunto": [
+    {
+      "id": int,
+      "nome": "string"
+    }
+  ]
+}
+
+
 Get ALL assuntos
+
+Request:
+  (Não há)
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "assuntos": [
+    {
+      "id": int,
+      "nome": "string"
+    }
+  ]
+}
+
+
 Get assunto
+
+Request:
+  id da assunto
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Assunto criado com sucesso"
+  "assunto": [
+    {
+      "id": int,
+      "nome": "string"
+    }
+  ]
+}
+
 Put assunto
+
+Request:
+{
+      "id": int,
+      "nome": "string"
+}
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Assunto atualizado com sucesso!!!"
+}
+
 Delete assunto
 
+Request:
+  id da assunto
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Assunto deletado com sucesso"
+}
 
 
 
