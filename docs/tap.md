@@ -3,6 +3,15 @@
 | Data | Autores | Descrição | Versões |
 | --- | --- | --- | --- |
 | 18/11/2025 | Leonardo Scotti([leonardo-scotti](https://github.com/leonardo-scotti)) | Criação do Documento | 1.0 |
+| 24/11/2025 | Leonardo Scotti([leonardo-scotti](https://github.com/leonardo-scotti)) | Revisão e correção do documento | 1.1 |
+| 26/11/2025 | Leonardo Scotti([leonardo-scotti](https://github.com/leonardo-scotti)) | Adição da Justificativa e de Milestones, melhoria nas ações de mitigação | 2.0 |
+
+---
+
+## Justificativa
+A criação do UniEvent é justificada pela necessidade de um sistema que centralize a organização de eventos, o sistema web substituirá o trabalho manual e o uso de ferramentas separadas.
+O projeto busca entregar um sistema que facilite tanto a criação quanto a inscrição em eventos, o que reduzirá tempo e o esforço dos usuários da plataforma. O sucesso será medido através da quantidade de usuários e de eventos criados dentro do sistema, tendo uma meta de 10.000 usuários e que desse número, tenha no mínimo 20% de eventos criados, dentro de 6 meses.
+O prazo para a criação desse sistema é de 18/11/2025 a 12/12/2025.
 
 ## 1. Resumo Executivo
 - Definição do projeto (visão, objetivos, escopo e entregáveis);
@@ -56,7 +65,7 @@ com  o  público;
 | [Fernando Leonid](https://github.com/fernandoleonid) | Interessado na entrega do projeto |
 | [Yuri Komuta](https://github.com/yurikomuta) | Interessado na entrega do projeto |
 | [Celso Furtado](https://github.com/celsofurtado) | Interessado na entrega do projeto |
-| [Marcel Teixeira](https://github.com/marcelInt) | Interessado na entrega do projeto |
+| [Marcel Teixeira](https://github.com/marcelnt) | Interessado na entrega do projeto |
 
 ### 3.3 Papéis
 | Nome | Posições |
@@ -79,8 +88,9 @@ com  o  público;
 **DBA:**
 - Modelo Conceitual;
 - Modelo Lógico;
+- Modelo Físico;
 - Views;
-- Triggers;
+- Triggers.
 
 ## 4. Planejamento do Projeto
 ### 4.1 Abordagem
@@ -93,22 +103,32 @@ com  o  público;
 ### 4.2 Planejamento de Recursos
 | Posição | Data de início | Data Final | Esforço |
 | --- | --- | --- | --- |
-| Front-end | 18/11/2025 | 18/12/2025 | 100% |
-| Back-end | 18/11/2025 | 18/12/2025 | 100% |
-| DBA | 18/11/2025 | 18/12/2025 | 100% |
+| Front-end | 18/11/2025 | 12/12/2025 | 100% |
+| Back-end | 18/11/2025 | 12/12/2025 | 100% |
+| DBA | 18/11/2025 | 12/12/2025 | 100% |
 
-## 5. Considerações do Projeto
-### 5.1 Riscos
+---
+
+## 5. Milestones
+| Marco | Descrição |
+| ------- | ----------- |
+| Documentações | 1. TAP<br>2. Levantamento de Requisitos Funcionais<br>3. Levantamento de Requisitos Não Funcionais<br>4. Modelagem do Banco de Dados<br>5. Documentação da API |
+| Prototipação | 1. Wireframe<br>2. Alta Fidelidade |
+| CRUD | Codificação do CRUD de todas as entidades do projeto. |
+| Front-end | Criação das telas, já com a interligação com o Back-End, e todas as suas funcionalidades. |
+
+## 6. Considerações do Projeto
+### 6.1 Riscos
 | Descrição | Probabilidade | Impacto | Ações de mitigação |
 | :-------- | :-----------: | :-----: | :----------------- |
-| Desistência de membro | Média | Alto | Acúmulo de função por membro que tiver com menos trabalho para fazer |
-| Ausência constante de membro | Alta | Médio | Identificar o membro com problemas e entregar tarefas mais simples e menos importantes para ele |
-| Atrasos por dificuldades com as tecnologias | Média | Baixo | Atraso inicial em entregas do software por dificuldades com as tecnologias utilizadas |
-| Problemas com computadores de membro da equipe | Média | Baixo | Procurar outro computador para membro com problemas continuar o trabalho |
-| Falta de comunicação | Alta | Médio | Motivar a equipe a se comunicar melhor, encorajar a comunicação, deixar claro a importância da comunicação e reforçar os meios de comunicação oficiais da equipe |
+| Desistência de membro | Baixa| Alto | Não deixar que ocorra um acúmulo de funções para um único membro. Dividir o trabalho de forma que nenhum colaborador fique sobrecarregado |
+| Ausência constante de membro | Baixa| Médio | Encorajar membros que já reportaram que estão com dificuldades |
+| Atrasos por dificuldades com as tecnologias | Baixa| Médio | Priorizar a utilização de tecnologias conhecidas |
+| Problemas com computadores de membro da equipe | Baixa| Baixo | Reportar o caso aos responsáveis da sala que será utilizada. Utilizar computadores que recentemente tiveram manutenção |
+| Falta de comunicação | Baixa| Médio | Motivar a equipe a se comunicar melhor, encorajar a comunicação, deixar claro a importância da comunicação e reforçar os meios de comunicação oficiais da equipe |
 
-### 5.2 Suposições
-- Esopo não irá mudar durante o Desenvolvimento do Software.
+### 6.2 Suposições
+- Escopo não irá mudar durante o Desenvolvimento do Software.
 
-### 5.3 Restrições
+### 6.3 Restrições
 - A quantidade de pessoas participanets do projeto não será aumentada até o final do projeto
