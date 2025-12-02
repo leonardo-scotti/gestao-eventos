@@ -39,7 +39,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseEvento'
+                $ref: '#/components/schemas/ResponseEventoCreate' 
     put:
       tags: [Eventos]
       summary: Atualizar evento
@@ -54,7 +54,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseEventoUpdate'
 
   /eventos:
     get:
@@ -106,7 +106,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseEventoDelete'
 
   # --- ORGANIZADORES ---
   /organizador:
@@ -124,7 +124,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseOrganizador'
+                $ref: '#/components/schemas/ResponseOrganizadorCreate' 
     put:
       tags: [Organizadores]
       summary: Atualizar organizador
@@ -143,7 +143,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseOrganizadorUpdate'
 
   /organizadores:
     get:
@@ -172,7 +172,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseOrganizador'
+                $ref: '#/components/schemas/ResponseOrganizadorCreate' 
     delete:
       tags: [Organizadores]
       summary: Deletar organizador
@@ -187,7 +187,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseOrganizadorDelete'
 
   # --- CLIENTES ---
   /cliente:
@@ -205,7 +205,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseCliente'
+                $ref: '#/components/schemas/ResponseClienteCreate' 
     put:
       tags: [Clientes]
       summary: Atualizar cliente
@@ -224,7 +224,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseClienteUpdate'
 
   /clientes:
     get:
@@ -253,7 +253,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseCliente'
+                $ref: '#/components/schemas/ResponseClienteCreate' 
     delete:
       tags: [Clientes]
       summary: Deletar cliente
@@ -268,7 +268,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseClienteDelete'
 
   # --- PEDIDOS ---
   /pedido:
@@ -281,12 +281,12 @@ paths:
             schema:
               $ref: '#/components/schemas/PedidoRequest'
       responses:
-        '201': 
+        '201':
           description: Criado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponsePedido'
+                $ref: '#/components/schemas/ResponsePedidoCreate' 
     put:
       tags: [Pedidos]
       summary: Atualizar pedido
@@ -305,7 +305,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseListaPedidos' 
+                $ref: '#/components/schemas/ResponsePedidoUpdate'
 
   /pedidos:
     get:
@@ -334,7 +334,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponsePedido'
+                $ref: '#/components/schemas/ResponsePedidoCreate' 
     delete:
       tags: [Pedidos]
       summary: Deletar pedido
@@ -349,7 +349,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponsePedidoDelete'
 
   # --- ITEM PEDIDO ---
   /item-pedido:
@@ -367,7 +367,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseItemPedido'
+                $ref: '#/components/schemas/ResponseItemPedidoCreate' 
     put:
       tags: [Itens Pedido]
       summary: Atualizar item pedido
@@ -386,7 +386,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseItemPedidoUpdate'
 
   /itens-pedidos:
     get:
@@ -415,7 +415,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseItemPedido'
+                $ref: '#/components/schemas/ResponseItemPedidoCreate' 
     delete:
       tags: [Itens Pedido]
       summary: Deletar item pedido
@@ -430,7 +430,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseItemPedidoDelete'
 
   # --- ENDERECO ---
   /endereco:
@@ -448,7 +448,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseEndereco'
+                $ref: '#/components/schemas/ResponseEnderecoCreate' 
     put:
       tags: [Endereços]
       summary: Atualizar endereço
@@ -467,7 +467,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseEnderecoUpdate'
 
   /enderecos:
     get:
@@ -496,7 +496,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseEndereco'
+                $ref: '#/components/schemas/ResponseEnderecoCreate' 
     delete:
       tags: [Endereços]
       summary: Deletar endereço
@@ -511,7 +511,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseEnderecoDelete'
 
   # --- ESTADO ---
   /estado:
@@ -532,7 +532,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseEstado'
+                $ref: '#/components/schemas/ResponseEstadoCreate' 
     put:
       tags: [Estados]
       summary: Atualizar estado
@@ -551,13 +551,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: { type: boolean, example: true }
-                  statuscode: { type: integer, example: 200 }
-                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-                  message: { type: string, example: "Estado atualizado com sucesso!!!" } # Mensagem Exclusiva
-    
+                $ref: '#/components/schemas/ResponseEstadoUpdate' 
+
   /estados:
     get:
       tags: [Estados]
@@ -585,7 +580,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseEstado'
+                $ref: '#/components/schemas/ResponseEstado' 
     delete:
       tags: [Estados]
       summary: Deletar estado
@@ -600,12 +595,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: { type: boolean, example: true }
-                  statuscode: { type: integer, example: 200 }
-                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-                  message: { type: string, example: "Estado deletado com sucesso" } # Mensagem Exclusiva
+                $ref: '#/components/schemas/ResponseEstadoDelete' 
 
   # --- INGRESSO ---
   /ingresso:
@@ -623,7 +613,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseIngresso'
+                $ref: '#/components/schemas/ResponseIngressoCreate' 
     put:
       tags: [Ingressos]
       summary: Atualizar ingresso
@@ -642,7 +632,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseIngressoUpdate' 
 
   /ingressos:
     get:
@@ -671,7 +661,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseListaIngressos'
+                $ref: '#/components/schemas/ResponseIngresso' 
     delete:
       tags: [Ingressos]
       summary: Deletar ingresso
@@ -686,7 +676,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenericMessage'
+                $ref: '#/components/schemas/ResponseIngressoDelete' 
 
   # --- CATEGORIA ---
   /categoria:
@@ -707,7 +697,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseCategoria'
+                $ref: '#/components/schemas/ResponseCategoriaCreate' 
     put:
       tags: [Categorias]
       summary: Atualizar categoria
@@ -726,12 +716,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: { type: boolean, example: true }
-                  statuscode: { type: integer, example: 200 }
-                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-                  message: { type: string, example: "Categoria atualizada com sucesso!!!" } # Mensagem Exclusiva
+                $ref: '#/components/schemas/ResponseCategoriaUpdate' 
 
   /categorias:
     get:
@@ -760,7 +745,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseCategoria'
+                $ref: '#/components/schemas/ResponseCategoria' 
     delete:
       tags: [Categorias]
       summary: Deletar categoria
@@ -775,12 +760,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: { type: boolean, example: true }
-                  statuscode: { type: integer, example: 200 }
-                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-                  message: { type: string, example: "Categoria deletada com sucesso" } # Mensagem Exclusiva
+                $ref: '#/components/schemas/ResponseCategoriaDelete' 
 
   # --- ASSUNTO ---
   /assunto:
@@ -801,14 +781,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: { type: boolean, example: true }
-                  statuscode: { type: integer, example: 201 }
-                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-                  message: { type: string, example: "Assunto criada com sucesso" } # Mensagem Exclusiva
-                  assunto:
-                    $ref: '#/components/schemas/ResponseFK'
+                $ref: '#/components/schemas/ResponseAssuntoCreate' 
     put:
       tags: [Assuntos]
       summary: Atualizar assunto
@@ -827,12 +800,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: { type: boolean, example: true }
-                  statuscode: { type: integer, example: 200 }
-                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-                  message: { type: string, example: "Assunto atualizado com sucesso!!!" } # Mensagem Exclusiva
+                $ref: '#/components/schemas/ResponseAssuntoUpdate' 
 
   /assuntos:
     get:
@@ -861,7 +829,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseAssunto'
+                $ref: '#/components/schemas/ResponseAssunto' 
     delete:
       tags: [Assuntos]
       summary: Deletar assunto
@@ -876,21 +844,20 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: { type: boolean, example: true }
-                  statuscode: { type: integer, example: 200 }
-                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-                  message: { type: string, example: "Assunto deletado com sucesso" } # Mensagem Exclusiva
+                $ref: '#/components/schemas/ResponseAssuntoDelete' 
 
 components:
   schemas:
+    # ====================================================================
+    #           SCHEMAS DE ESTRUTURA E MENSAGENS COMUNS
+    # ====================================================================
+    
     # --- COMMON ---
     ResponseGenericMessage:
       type: object
       properties:
         status: { type: boolean, example: true }
-        statuscode: { type: integer, example: 200 }
+        statuscode: { type: integer, example: 200 } # Mantido 200 como padrão genérico
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
         message: { type: string }
 
@@ -901,52 +868,87 @@ components:
         type: object
         properties:
           id: { type: integer, example: 1 }
-          nome: { type: string, example: "Nome do Campo FK" } 
+          nome: { type: string, example: "Nome do Campo FK" }
 
-    # --- PESSOA (Cliente/Organizador) ---
-    PessoaRequest:
+    # ====================================================================
+    #           SCHEMAS DE DADOS (REQUEST/OBJECT)
+    # ====================================================================
+    
+    # --- EVENTOS ---
+    EventoRequest:
       type: object
-      required: [nome, email]
+      required: [nome, descricao, data_inicio, data_fim, localizacao, organizador, categoria, ingresso]
       properties:
-        nome: { type: string }
-        email: { type: string }
-        cpf: { type: string, description: "Opcional" }
-        cnpj: { type: string, description: "Opcional" }
-        telefone: { type: string, description: "Opcional" }
-        data_nascimento: { type: string, description: "Opcional" }
-        data_fundacao: { type: string, description: "Opcional" }
-        genero:
+        nome: { type: string, example: "Show de Rock" }
+        descricao: { type: string, example: "Evento com as melhores bandas de rock." }
+        data_inicio: { type: string, format: date-time }
+        data_fim: { type: string, format: date-time }
+        localizacao: { type: string, example: "Estádio Municipal" }
+        organizador:
           type: array
           items:
             type: object
             properties:
-              id_genero: { type: integer }
+              id_organizador: { type: integer }
+        categoria:
+          type: array
+          items:
+            type: object
+            properties:
+              id_categoria: { type: integer }
+        ingresso:
+          type: array
+          items:
+            type: object
+            properties:
+              id_ingresso: { type: integer }
 
-    PessoaObject:
+    EventoObject:
       type: object
       properties:
-        id: { type: integer, example: 1 }
-        nome: { type: string, example: "João da Silva" }
-        email: { type: string, example: "joao@email.com" }
-        cpf: { type: string, example: "123.456.789-00" }
-        cnpj: { type: string, example: "00.000.000/0001-00" }
-        telefone: { type: string, example: "(11) 99999-9999" }
-        genero:
+        id: { type: integer }
+        nome: { type: string }
+        descricao: { type: string }
+        data_inicio: { type: string, format: date-time }
+        data_fim: { type: string, format: date-time }
+        localizacao: { type: string }
+        organizador:
           $ref: '#/components/schemas/ResponseFK'
-        data_nascimento: { type: string, format: date, example: "1990-01-01" }
-        data_fundacao: { type: string, format: date, example: "2015-05-10" }
+        categoria:
+          $ref: '#/components/schemas/ResponseFK'
+        ingresso:
+          $ref: '#/components/schemas/ResponseFK'
 
-    ResponseOrganizador:
+    ResponseListaEventos:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 201 }
+        statuscode: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Organizador criada com sucesso" }
-        organizador:
+        eventos:
           type: array
           items:
-            $ref: '#/components/schemas/PessoaObject'
+            $ref: '#/components/schemas/EventoObject'
+
+    # --- PESSOA (Cliente/Organizador) ---
+    PessoaRequest:
+      type: object
+      required: [nome, cpf, email]
+      properties:
+        nome: { type: string, example: "Fulano de Tal" }
+        cpf: { type: string, example: "123.456.789-00" }
+        email: { type: string, format: email, example: "fulano@email.com" }
+        telefone: { type: string, example: "(11) 98765-4321", description: "Opcional" }
+        
+    PessoaObject:
+      type: object
+      properties:
+        id: { type: integer }
+        nome: { type: string }
+        cpf: { type: string }
+        email: { type: string, format: email }
+        telefone: { type: string }
+        is_active: { type: boolean }
 
     ResponseListaOrganizadores:
       type: object
@@ -955,18 +957,6 @@ components:
         statuscode: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
         organizadores:
-          type: array
-          items:
-            $ref: '#/components/schemas/PessoaObject'
-
-    ResponseCliente:
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Cliente criado com sucesso" }
-        cliente:
           type: array
           items:
             $ref: '#/components/schemas/PessoaObject'
@@ -981,131 +971,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PessoaObject'
-
-    # --- EVENTOS ---
-    EventoObject:
-      type: object
-      properties:
-        id: { type: integer, example: 1 }
-        nome: { type: string, example: "Feira de Tecnologia 2025" }
-        descricao: { type: string }
-        data_inicio: { type: string, format: date }
-        hora_inicio: { type: string }
-        data_termino: { type: string, format: date }
-        hora_termino: { type: string }
-        banner: { type: string }
-        is_visible: { type: string, enum: ["true", "false"] }
-        organizador:
-          type: array
-          items:
-            $ref: '#/components/schemas/PessoaObject' 
-        categoria:
-          $ref: '#/components/schemas/ResponseFK' 
-        assunto:
-          $ref: '#/components/schemas/ResponseFK' 
-
-    EventoRequest:
-      type: object
-      required: [nome, descricao, data_inicio, hora_inicio, data_termino, hora_termino, banner, is_visible, organizador, categoria, assunto]
-      properties:
-        id: { type: integer }
-        nome: { type: string }
-        descricao: { type: string }
-        data_inicio: { type: string }
-        hora_inicio: { type: string }
-        data_termino: { type: string }
-        hora_termino: { type: string }
-        banner: { type: string, format: binary }
-        is_visible: { type: string }
-        organizador:
-          type: array
-          items:
-            type: object
-            properties:
-              id_organizador: { type: integer, example: 1 }
-        categoria:
-          type: array
-          items:
-            type: object
-            properties:
-              id_categoria: { type: integer, example: 1 }
-        assunto:
-          type: array
-          items:
-            type: object
-            properties:
-              id_assunto: { type: integer, example: 1 }
-
-    ResponseEvento:
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Evento criado com sucesso" }
-        eventos:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventoObject'
-
-    ResponseListaEventos:
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        eventos:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventoObject'
-
+            
     # --- PEDIDOS ---
     PedidoRequest:
       type: object
-      required: [status, valor_total, organizador, cliente]
+      required: [data_pedido, valor_total, cliente]
       properties:
-        status: { type: string }
-        valor_total: { type: number }
-        organizador:
-          type: array
-          items:
-            type: object
-            properties:
-              id_organizador: { type: integer }
+        data_pedido: { type: string, format: date-time }
+        valor_total: { type: number, format: float }
         cliente:
           type: array
           items:
             type: object
             properties:
               id_cliente: { type: integer }
-
+              
     PedidoObject:
       type: object
       properties:
-        status: { type: string }
-        data_pedido: { type: string }
-        valor_total: { type: number }
-        organizador:
-          type: array
-          items:
-            $ref: '#/components/schemas/PessoaObject' 
+        id: { type: integer }
+        data_pedido: { type: string, format: date-time }
+        valor_total: { type: number, format: float }
+        status_pedido: { type: string, example: "Pendente" }
         cliente:
-          type: array
-          items:
-            $ref: '#/components/schemas/PessoaObject' 
-
-    ResponsePedido:
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Pedido criado com sucesso" }
-        pedido:
-          type: array
-          items:
-            $ref: '#/components/schemas/PedidoObject'
-
+          $ref: '#/components/schemas/ResponseFK'
+          
     ResponseListaPedidos:
       type: object
       properties:
@@ -1135,7 +1025,7 @@ components:
             type: object
             properties:
               id_ingresso: { type: integer }
-
+              
     ItemPedidoObject:
       type: object
       properties:
@@ -1145,18 +1035,6 @@ components:
           $ref: '#/components/schemas/ResponseFK'
         ingresso:
           $ref: '#/components/schemas/ResponseFK'
-
-    ResponseItemPedido:
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Item Pedido criado com sucesso" }
-        item-pedido:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemPedidoObject'
 
     ResponseListaItensPedidos:
       type: object
@@ -1208,18 +1086,6 @@ components:
         evento:
           $ref: '#/components/schemas/ResponseFK'
 
-    ResponseEndereco:
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Endereço criado com sucesso" }
-        endereco:
-          type: array
-          items:
-            $ref: '#/components/schemas/EnderecoObject'
-
     ResponseListaEnderecos:
       type: object
       properties:
@@ -1240,13 +1106,12 @@ components:
           id: { type: integer, example: 1 }
           sigla: { type: string, example: "SP" }
           
-    ResponseEstado:
+    ResponseEstado: 
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 201 }
+        statuscode: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Estado criado com sucesso" } # Mensagem Exclusiva (POST)
         estado:
           $ref: '#/components/schemas/EstadoFK'
 
@@ -1272,25 +1137,27 @@ components:
             type: object
             properties:
               id_evento: { type: integer }
+              
+    IngressoObject:
+      type: object
+      properties:
+        id: { type: integer }
+        nome: { type: string }
+        preco_unitario: { type: string }
+        is_ative: { type: boolean }
+        evento:
+          $ref: '#/components/schemas/ResponseFK'
 
-    ResponseIngresso:
+    ResponseIngresso: 
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 201 }
+        statuscode: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Ingresso criado com sucesso" }
         ingresso:
           type: array
           items:
-            type: object
-            properties:
-              id: { type: integer }
-              nome: { type: string }
-              preco_unitario: { type: string }
-              is_ative: { type: boolean }
-              evento:
-                $ref: '#/components/schemas/ResponseFK'
+            $ref: '#/components/schemas/IngressoObject'
 
     ResponseListaIngressos:
       type: object
@@ -1301,23 +1168,15 @@ components:
         ingressos:
           type: array
           items:
-            type: object
-            properties:
-              id: { type: integer }
-              nome: { type: string }
-              preco_unitario: { type: string }
-              is_ative: { type: boolean }
-              evento:
-                $ref: '#/components/schemas/ResponseFK'
+            $ref: '#/components/schemas/IngressoObject'
 
     # --- CATEGORIA (SIMPLES) ---
-    ResponseCategoria:
+    ResponseCategoria: 
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 201 }
+        statuscode: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Categoria criada com sucesso" } # Mensagem Exclusiva (POST)
         categoria:
           $ref: '#/components/schemas/ResponseFK'
 
@@ -1331,11 +1190,11 @@ components:
           $ref: '#/components/schemas/ResponseFK'
 
     # --- ASSUNTO (SIMPLES) ---
-    ResponseAssunto:
+    ResponseAssunto: 
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 } # GET tem status 200
+        statuscode: { type: integer, example: 200 } 
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
         message: { type: string, example: "Assunto obtido com sucesso" }
         assunto:
@@ -1349,3 +1208,248 @@ components:
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
         assuntos:
           $ref: '#/components/schemas/ResponseFK'
+
+
+    # ====================================================================
+    #           SCHEMAS DE MENSAGENS COMUNS (POST/PUT/DELETE)
+    # ====================================================================
+    
+    # --- EVENTO ---
+    ResponseEventoCreate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+            message: { type: string, example: "Evento criado com sucesso" }
+    ResponseEventoUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Evento atualizado com sucesso!!!" }
+    ResponseEventoDelete:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Evento deletado com sucesso" }
+
+    # --- ORGANIZADOR ---
+    ResponseOrganizadorCreate: # POST
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+            message: { type: string, example: "Organizador criado com sucesso" }
+    ResponseOrganizadorUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Organizador atualizado com sucesso!!!" }
+    ResponseOrganizadorDelete:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Organizador deletado com sucesso" }
+
+    # --- CLIENTE ---
+    ResponseClienteCreate: # POST
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+            message: { type: string, example: "Cliente criado com sucesso" }
+    ResponseClienteUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Cliente atualizado com sucesso!!!" }
+    ResponseClienteDelete:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Cliente deletado com sucesso" }
+
+    # --- PEDIDO ---
+    ResponsePedidoCreate: # POST
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+            message: { type: string, example: "Pedido criado com sucesso" }
+    ResponsePedidoUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Pedido atualizado com sucesso!!!" }
+    ResponsePedidoDelete:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Pedido deletado com sucesso" }
+            
+    # --- ITEM PEDIDO ---
+    ResponseItemPedidoCreate: # POST / GET por ID
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Item Pedido criado com sucesso" }
+        item-pedido:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemPedidoObject'
+
+    ResponseItemPedidoUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Item Pedido atualizado com sucesso!!!" }
+            
+    ResponseItemPedidoDelete:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Item Pedido deletado com sucesso" }
+
+    # --- ENDERECO ---
+    ResponseEnderecoCreate: # POST / GET por ID
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Endereço criado com sucesso" }
+        endereco:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnderecoObject'
+
+    ResponseEnderecoUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Endereço atualizado com sucesso!!!" }
+            
+    ResponseEnderecoDelete:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Endereço deletado com sucesso" }
+
+    # --- ESTADO (SIMPLES) ---
+    ResponseEstadoCreate: # POST
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Estado criado com sucesso" } 
+        estado:
+          $ref: '#/components/schemas/EstadoFK'
+          
+    ResponseEstadoUpdate: # PUT
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Estado atualizado com sucesso!!!" }
+            
+    ResponseEstadoDelete: # DELETE
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Estado deletado com sucesso" }
+
+    # --- INGRESSO ---
+    ResponseIngressoCreate: # POST
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Ingresso criado com sucesso" }
+        ingresso:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngressoObject'
+
+    ResponseIngressoUpdate: # PUT
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Ingresso atualizado com sucesso!!!" }
+            
+    ResponseIngressoDelete: # DELETE
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Ingresso deletado com sucesso" }
+
+    # --- CATEGORIA (SIMPLES) ---
+    ResponseCategoriaCreate: # POST
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Categoria criada com sucesso" } 
+        categoria:
+          $ref: '#/components/schemas/ResponseFK'
+          
+    ResponseCategoriaUpdate: # PUT
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Categoria atualizada com sucesso!!!" }
+            
+    ResponseCategoriaDelete: # DELETE
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Categoria deletada com sucesso" }
+
+    # --- ASSUNTO (SIMPLES) ---
+    ResponseAssuntoCreate: # POST
+      type: object
+      properties:
+        status: { type: boolean }
+        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Assunto criado com sucesso" }
+        assunto:
+          $ref: '#/components/schemas/ResponseFK'
+          
+    ResponseAssuntoUpdate: # PUT
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Assunto atualizado com sucesso!!!" }
+            
+    ResponseAssuntoDelete: # DELETE
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Assunto deletado com sucesso" }
