@@ -1,3 +1,6 @@
+CREATE DATABASE eventos_unievent;
+
+USE eventos_unievent;
 
 create table tbl_genero (
     id_genero int primary key auto_increment,
