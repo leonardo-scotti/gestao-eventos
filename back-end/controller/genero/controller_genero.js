@@ -27,7 +27,7 @@ const listarGeneros      = async function () {
             if (result.length > 0) {
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
-                MESSAGE.HEADER.response.genres = result
+                MESSAGE.HEADER.response.generos = result
 
                 return MESSAGE.HEADER //200
             } else {
@@ -57,7 +57,7 @@ const buscarGeneroId     = async function (id) {
                 if (result.length > 0) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
-                    MESSAGE.HEADER.response.genre = result
+                    MESSAGE.HEADER.response.genero = result
 
                     return MESSAGE.HEADER //200
                 } else {

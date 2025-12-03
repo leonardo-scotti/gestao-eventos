@@ -9,12 +9,9 @@ const dataAtual = new Date()
 
 /************************* MENSAGENS DE PADRONIZAÇÃO DO PROJETO ************************** */
 const HEADER    =   {
-                                developments:        'Vitor Miguel e João Blesa',
-                                api_description:    'API para manipular dados de uma Gestão de Eventos - UniEvent',
-                                version:            '1.0.10.25',
-                                request_date:       dataAtual.toLocaleDateString(),
                                 status:             Boolean,
                                 status_code:        Number,
+                                developments:        'Vitor Miguel e João Blesa',
                                 response: {}
 }
 
