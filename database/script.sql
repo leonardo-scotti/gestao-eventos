@@ -148,3 +148,4 @@ INSERT INTO tbl_ingresso (nome, preco_unitario, is_ative, id_evento) VALUES
 ('Passaporte 3 dias', 999.00, TRUE, 1),
 ('Dia 1', 399.00, TRUE, 1),
 ('Acesso Workshop', 150.00, TRUE, 2);
+
