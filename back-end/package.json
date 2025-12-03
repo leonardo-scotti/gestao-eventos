@@ -1,0 +1,29 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "Criação da API para Gestão de Eventos UniEvent",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leonardo-scotti/gestao-eventos.git"
+  },
+  "author": "Vitor Miguel E João Blesa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leonardo-scotti/gestao-eventos/issues"
+  },
+  "homepage": "https://github.com/leonardo-scotti/gestao-eventos#readme",
+  "dependencies": {
+    "@prisma/client": "^6.18.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "prisma": "^6.16.3"
+  }
+}
