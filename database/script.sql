@@ -4,7 +4,7 @@ USE eventos_unievent;
 
 create table tbl_genero (
     id_genero int primary key auto_increment,
-    nome varchar(15) not null
+    nome varchar(20) not null
 );
 
 create table tbl_assunto (
@@ -56,6 +56,7 @@ create table tbl_endereco (
     bairro varchar(150) not null,
     cidade varchar(150) not null,
     id_estado int not null,
+    id_evento int not null,
     foreign key (id_estado) references tbl_estado (id_estado),
     foreign key (id_evento) references tbl_evento (id_evento)
 );
@@ -170,4 +171,16 @@ INSERT INTO tbl_ingresso (nome, preco_unitario, is_ative, id_evento) VALUES
 ('Passaporte 3 dias', 999.00, TRUE, 1),
 ('Dia 1', 399.00, TRUE, 1),
 ('Acesso Workshop', 150.00, TRUE, 2);
+
+INSERT INTO tbl_categoria (nome) VALUES 
+('Festival'),
+('Workshop'),
+('Feira'),
+('Palestra');
+
+-- Inserção de dados na tabela tbl_genero
+INSERT INTO tbl_genero (nome) VALUES 
+('Homem'),
+('Mulher'),
+('Prefiro não dizer');
 

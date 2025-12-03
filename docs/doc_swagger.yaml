@@ -7,7 +7,7 @@ info:
     name: Vitor Miguel Rodrigues Cezario
 
 servers:
-  - url: http://localhost:8080/api/v1
+  - url: http://localhost:8080/api/v1/unievent
     description: Servidor Local
 
 tags:
@@ -21,7 +21,8 @@ tags:
   - name: Ingressos
   - name: Categorias
   - name: Assuntos
-
+  - name: Gêneros
+  
 paths:
   # --- EVENTOS ---
   /evento:
@@ -687,10 +688,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: [nome]
-              properties:
-                nome: { type: string }
+              $ref: '#/components/schemas/CategoriaAssuntoRequest'
       responses:
         '201':
           description: Criado com sucesso
@@ -728,7 +726,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseListaCategorias'
+                $ref: '#/components/schemas/ResponseListaCategorias' # <--- REFERÊNCIA CORRIGIDA
 
   /categoria/{id}:
     get:
@@ -771,10 +769,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: [nome]
-              properties:
-                nome: { type: string }
+              $ref: '#/components/schemas/CategoriaAssuntoRequest'
       responses:
         '201':
           description: Criado com sucesso
@@ -812,7 +807,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseListaAssuntos'
+                $ref: '#/components/schemas/ResponseListaAssuntos' # <--- REFERÊNCIA CORRIGIDA
 
   /assunto/{id}:
     get:
@@ -845,6 +840,93 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseAssuntoDelete' 
+  
+  # --- GÊNERO ---
+  /genero:
+    post:
+      tags: [Gêneros]
+      summary: Cria um novo registro de gênero
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneroRequest'
+      responses:
+        '201':
+          description: Gênero criado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGeneroCreate'
+    put:
+      tags: [Gêneros]
+      summary: Atualiza um registro de gênero pelo ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id: { type: integer }
+                - $ref: '#/components/schemas/GeneroRequest'
+      responses:
+        '200':
+          description: Gênero atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGeneroUpdate'
+
+  /generos:
+    get:
+      tags: [Gêneros]
+      summary: Retorna todos os registros de gênero
+      responses:
+        '200':
+          description: Lista de todos os gêneros retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaGeneros'
+
+  /genero/{id}:
+    get:
+      tags: [Gêneros]
+      summary: Retorna um registro de gênero pelo ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: O ID do gênero a ser buscado.
+      responses:
+        '200':
+          description: Gênero retornado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGenero'
+    delete:
+      tags: [Gêneros]
+      summary: Deleta um registro de gênero pelo ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: O ID do gênero a ser deletado.
+      responses:
+        '200':
+          description: Gênero deletado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGeneroDelete'
 
 components:
   schemas:
@@ -874,6 +956,32 @@ components:
     #           SCHEMAS DE DADOS (REQUEST/OBJECT)
     # ====================================================================
     
+    # --- CATEGORIA/ASSUNTO OBJECTS (Reutilizado) ---
+    CategoriaAssuntoRequest:
+      type: object
+      required: [nome]
+      properties:
+        nome: { type: string, example: "Palestra" }
+
+    CategoriaAssuntoObject:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        nome: { type: string, example: "Workshop" }
+
+    # --- GÊNERO ---
+    GeneroRequest:
+      type: object
+      required: [nome]
+      properties:
+        nome: { type: string, example: "Não-binário" }
+
+    GeneroObject:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        nome: { type: string, example: "Masculino" }
+        
     # --- EVENTOS ---
     EventoRequest:
       type: object
@@ -1148,17 +1256,6 @@ components:
         evento:
           $ref: '#/components/schemas/ResponseFK'
 
-    ResponseIngresso: 
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        ingresso:
-          type: array
-          items:
-            $ref: '#/components/schemas/IngressoObject'
-
     ResponseListaIngressos:
       type: object
       properties:
@@ -1169,65 +1266,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IngressoObject'
-
-    # --- CATEGORIA (SIMPLES) ---
-    ResponseCategoria: 
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        categoria:
-          $ref: '#/components/schemas/ResponseFK'
-
-    ResponseListaCategorias:
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        categorias:
-          $ref: '#/components/schemas/ResponseFK'
-
-    # --- ASSUNTO (SIMPLES) ---
-    ResponseAssunto: 
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 200 } 
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Assunto obtido com sucesso" }
-        assunto:
-          $ref: '#/components/schemas/ResponseFK'
-
-    ResponseListaAssuntos:
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        assuntos:
-          $ref: '#/components/schemas/ResponseFK'
-
-
+            
     # ====================================================================
-    #           SCHEMAS DE MENSAGENS COMUNS (POST/PUT/DELETE)
+    #           SCHEMAS DE RESPOSTAS (MENSAGENS POR ENTIDADE)
     # ====================================================================
-    
-    # --- EVENTO ---
+
+    # --- EVENTO RESPONSES ---
     ResponseEventoCreate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+            statuscode: { type: integer, example: 201 }
             message: { type: string, example: "Evento criado com sucesso" }
+            evento:
+              type: array
+              items:
+                $ref: '#/components/schemas/EventoObject'
     ResponseEventoUpdate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Evento atualizado com sucesso!!!" }
+            message: { type: string, example: "Evento atualizado com sucesso" }
     ResponseEventoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1235,20 +1296,24 @@ components:
           properties:
             message: { type: string, example: "Evento deletado com sucesso" }
 
-    # --- ORGANIZADOR ---
-    ResponseOrganizadorCreate: # POST
+    # --- ORGANIZADOR RESPONSES ---
+    ResponseOrganizadorCreate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+            statuscode: { type: integer, example: 201 }
             message: { type: string, example: "Organizador criado com sucesso" }
+            organizador:
+              type: array
+              items:
+                $ref: '#/components/schemas/PessoaObject'
     ResponseOrganizadorUpdate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Organizador atualizado com sucesso!!!" }
+            message: { type: string, example: "Organizador atualizado com sucesso" }
     ResponseOrganizadorDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1256,20 +1321,24 @@ components:
           properties:
             message: { type: string, example: "Organizador deletado com sucesso" }
 
-    # --- CLIENTE ---
-    ResponseClienteCreate: # POST
+    # --- CLIENTE RESPONSES ---
+    ResponseClienteCreate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+            statuscode: { type: integer, example: 201 }
             message: { type: string, example: "Cliente criado com sucesso" }
+            cliente:
+              type: array
+              items:
+                $ref: '#/components/schemas/PessoaObject'
     ResponseClienteUpdate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Cliente atualizado com sucesso!!!" }
+            message: { type: string, example: "Cliente atualizado com sucesso" }
     ResponseClienteDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1277,74 +1346,74 @@ components:
           properties:
             message: { type: string, example: "Cliente deletado com sucesso" }
 
-    # --- PEDIDO ---
-    ResponsePedidoCreate: # POST
+    # --- PEDIDO RESPONSES ---
+    ResponsePedidoCreate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
+            statuscode: { type: integer, example: 201 }
             message: { type: string, example: "Pedido criado com sucesso" }
+            pedido:
+              type: array
+              items:
+                $ref: '#/components/schemas/PedidoObject'
     ResponsePedidoUpdate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Pedido atualizado com sucesso!!!" }
+            message: { type: string, example: "Pedido atualizado com sucesso" }
     ResponsePedidoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
             message: { type: string, example: "Pedido deletado com sucesso" }
-            
-    # --- ITEM PEDIDO ---
-    ResponseItemPedidoCreate: # POST / GET por ID
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Item Pedido criado com sucesso" }
-        item-pedido:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemPedidoObject'
 
+    # --- ITEM PEDIDO RESPONSES ---
+    ResponseItemPedidoCreate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 201 }
+            message: { type: string, example: "Item pedido criado com sucesso" }
+            item_pedido:
+              type: array
+              items:
+                $ref: '#/components/schemas/ItemPedidoObject'
     ResponseItemPedidoUpdate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Item Pedido atualizado com sucesso!!!" }
-            
+            message: { type: string, example: "Item pedido atualizado com sucesso" }
     ResponseItemPedidoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Item Pedido deletado com sucesso" }
+            message: { type: string, example: "Item pedido deletado com sucesso" }
 
-    # --- ENDERECO ---
-    ResponseEnderecoCreate: # POST / GET por ID
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Endereço criado com sucesso" }
-        endereco:
-          type: array
-          items:
-            $ref: '#/components/schemas/EnderecoObject'
-
+    # --- ENDERECO RESPONSES ---
+    ResponseEnderecoCreate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 201 }
+            message: { type: string, example: "Endereço criado com sucesso" }
+            endereco:
+              type: array
+              items:
+                $ref: '#/components/schemas/EnderecoObject'
     ResponseEnderecoUpdate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Endereço atualizado com sucesso!!!" }
-            
+            message: { type: string, example: "Endereço atualizado com sucesso" }
     ResponseEnderecoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1352,104 +1421,199 @@ components:
           properties:
             message: { type: string, example: "Endereço deletado com sucesso" }
 
-    # --- ESTADO (SIMPLES) ---
-    ResponseEstadoCreate: # POST
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Estado criado com sucesso" } 
-        estado:
-          $ref: '#/components/schemas/EstadoFK'
-          
-    ResponseEstadoUpdate: # PUT
+    # --- ESTADO RESPONSES ---
+    ResponseEstadoCreate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Estado atualizado com sucesso!!!" }
-            
-    ResponseEstadoDelete: # DELETE
+            statuscode: { type: integer, example: 201 }
+            message: { type: string, example: "Estado criado com sucesso" }
+            estado:
+              $ref: '#/components/schemas/EstadoFK'
+    ResponseEstadoUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Estado atualizado com sucesso" }
+    ResponseEstadoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
             message: { type: string, example: "Estado deletado com sucesso" }
 
-    # --- INGRESSO ---
-    ResponseIngressoCreate: # POST
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Ingresso criado com sucesso" }
-        ingresso:
-          type: array
-          items:
-            $ref: '#/components/schemas/IngressoObject'
-
-    ResponseIngressoUpdate: # PUT
+    # --- INGRESSO RESPONSES ---
+    ResponseIngressoCreate:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Ingresso atualizado com sucesso!!!" }
-            
-    ResponseIngressoDelete: # DELETE
+            statuscode: { type: integer, example: 201 }
+            message: { type: string, example: "Ingresso criado com sucesso" }
+            ingresso:
+              type: array
+              items:
+                $ref: '#/components/schemas/IngressoObject'
+    ResponseIngresso:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 200 }
+            ingresso:
+              type: array
+              items:
+                $ref: '#/components/schemas/IngressoObject'
+    ResponseIngressoUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Ingresso atualizado com sucesso" }
+    ResponseIngressoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
             message: { type: string, example: "Ingresso deletado com sucesso" }
 
-    # --- CATEGORIA (SIMPLES) ---
-    ResponseCategoriaCreate: # POST
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Categoria criada com sucesso" } 
-        categoria:
-          $ref: '#/components/schemas/ResponseFK'
-          
-    ResponseCategoriaUpdate: # PUT
+    # --- CATEGORIA RESPONSES ---
+    ResponseCategoria:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 200 }
+            categoria:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoriaAssuntoObject'
+    
+    ResponseListaCategorias: # ADICIONADO
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 200 }
+            categorias:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoriaAssuntoObject'
+
+    ResponseCategoriaCreate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 201 }
+            message: { type: string, example: "Categoria criada com sucesso" }
+            categoria:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoriaAssuntoObject'
+    ResponseCategoriaUpdate: 
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
             message: { type: string, example: "Categoria atualizada com sucesso!!!" }
-            
-    ResponseCategoriaDelete: # DELETE
+    ResponseCategoriaDelete: 
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
             message: { type: string, example: "Categoria deletada com sucesso" }
 
-    # --- ASSUNTO (SIMPLES) ---
-    ResponseAssuntoCreate: # POST
-      type: object
-      properties:
-        status: { type: boolean }
-        statuscode: { type: integer, example: 201 } # CORRIGIDO/CONFIRMADO
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Assunto criado com sucesso" }
-        assunto:
-          $ref: '#/components/schemas/ResponseFK'
-          
-    ResponseAssuntoUpdate: # PUT
+    # --- ASSUNTO RESPONSES ---
+    ResponseAssunto:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 200 }
+            assunto:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoriaAssuntoObject'
+    
+    ResponseListaAssuntos: # ADICIONADO
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 200 }
+            assuntos:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoriaAssuntoObject'
+
+    ResponseAssuntoCreate: 
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 201 }
+            message: { type: string, example: "Assunto criado com sucesso" }
+            assunto:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoriaAssuntoObject'
+    ResponseAssuntoUpdate: 
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
             message: { type: string, example: "Assunto atualizado com sucesso!!!" }
-            
-    ResponseAssuntoDelete: # DELETE
+    ResponseAssuntoDelete: 
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
             message: { type: string, example: "Assunto deletado com sucesso" }
+
+    # --- GÊNERO RESPONSES ---
+    ResponseGenero:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 200 }
+            genero:
+              type: array
+              items:
+                $ref: '#/components/schemas/GeneroObject'
+    ResponseListaGeneros:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 200 }
+            generos:
+              type: array
+              items:
+                $ref: '#/components/schemas/GeneroObject'
+    ResponseGeneroCreate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            statuscode: { type: integer, example: 201 }
+            message: { type: string, example: "Gênero criado com sucesso" }
+            genero:
+              type: array
+              items:
+                $ref: '#/components/schemas/GeneroObject'
+    ResponseGeneroUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Gênero atualizado com sucesso" }
+    ResponseGeneroDelete:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Gênero deletado com sucesso" }

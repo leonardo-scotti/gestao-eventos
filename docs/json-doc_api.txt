@@ -1121,4 +1121,99 @@ Response:
 }
 
 
+--Post genero
+
+Request:
+{
+  "nome": "string",
+}
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Gênero criado com sucesso"
+  "genero": [
+    {
+      "id": int,
+      "nome": "string"
+    }
+  ]
+}
+
+
+Get ALL generos
+
+Request:
+  (Não há)
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "generos": [
+    {
+      "id": int,
+      "nome": "string"
+    }
+  ]
+}
+
+
+Get genero
+
+Request:
+  id da genero
+
+
+Response:
+{
+  "status": true,
+  "statuscode": 201,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Gênero criado com sucesso"
+  "genero": [
+    {
+      "id": int,
+      "nome": "string"
+    }
+  ]
+}
+
+Put genero
+
+Request:
+{
+      "id": int,
+      "nome": "string"
+}
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Gênero atualizado com sucesso!!!"
+}
+
+Delete genero
+
+Request:
+  id da genero
+
+Response:
+{
+  "status": true,
+  "statuscode": 200,
+  "development": "Vitor Miguel Rodrigues Cezario",
+  "message": "Gênero deletado com sucesso"
+}
+
+
+
+
 

@@ -1,6 +1,6 @@
 /********************************************************************************************************************
  * Objetivo: Arquivo responsavel pelas requisições 
- * Data: 07/10/2025
+ * Data: 03/12/2025
  * Autores: Vitor Miguel  e João Blesa
  * Versão: 1.0
  ********************************************************************************************************************/
@@ -46,9 +46,72 @@ app.use((request, response, next)=>{
     next()  //Proximo
 })
 
+const controllerGenero = require('./controller/genero/controller_genero.js')
+
+//Endpoint para o CRUD do Evento
+
+//Retorna a lista de generos
+app.get('/v1/unievent/genero', cors(), async function (request, response) {
+
+    let genero = await controllerGenero.listarGeneros()
+
+    response.status(genero.status_code)
+    response.json(genero)
+})
+
+//Retorna a um genero filtrando pelo ID
+app.get('/v1/unievent/genero/:id', cors(), async function (request, response) {
+
+    let IdGenero    = request.params.id
+
+    let genero      = await controllerGenero.buscarGeneroId(IdGenero)
+
+    response.status(genero.status_code)
+    response.json(genero)
+    
+})
+
+//Insere um novo Genero no BD
+app.post('/v1/unievent/genero', cors(), bodyParserJSON, async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let genero      = await controllerGenero.inserirGenero(dadosBody, contentType)
+
+    response.status(genero.status_code)
+    response.json(genero)
+
+})
+
+app.put('/v1/unievent/genero/:id', cors(), bodyParserJSON, async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdGenero    = request.params.id
+
+    contentType = request.headers['content-type']
+
+    genero      = await controllerGenero.atualizarGenero(dadosBody, IdGenero, contentType)
+
+    response.status(genero.status_code)
+    response.json(genero)
+
+})
+
+app.delete('/v1/unievent/genero/:id', cors(), async function (request,response) {
+
+    IdGenero = request.params.id
+
+    genero   = await controllerGenero.excluirGenero(IdGenero)
+
+    response.status(genero.status_code)
+    response.json(genero)
+    
+})
 
 
-//Endpoint para o CRUD de Evento
 
 
 
