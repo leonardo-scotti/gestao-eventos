@@ -1,5 +1,5 @@
 /********************************************************************************************************************
- * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a Model - do gênero
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a Model - da categoria
  *              (Validações, tratamento de dados, tratamento de erros, etc)
  * Data: 03/12/2025
  * Autor: Vitor Miguel Rodrigues Cezario
@@ -7,21 +7,21 @@
  ********************************************************************************************************************/
 
 //Import do arquivo DAO para manipular o CRUD no BD
-const generoDAO = require('../../model/DAO/genero.js')
+const categoriaDAO = require('../../model/DAO/categoria.js')
 
 //Import do arquivo que padroniza todas as mensagens
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
-//Retorna uma lista de gêneros
-const listarGeneros = async function () {
+//Retorna uma lista de categorias
+const listarCategorias = async function () {
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
 
-        //Chama a função do DAO para retornar a lista de gêneros
-        let result = await generoDAO.getSelectAllGenre()
+        //Chama a função do DAO para retornar a lista de categoria
+        let result = await categoriaDAO.getSelectAllCategories()
 
         if (result) {
             if (result.length > 0) {
@@ -31,7 +31,7 @@ const listarGeneros = async function () {
                     status_code: MESSAGE.SUCCESS_REQUEST.status_code,
                     developments: MESSAGE.HEADER.developments,
                     message: MESSAGE.SUCCESS_REQUEST.message,
-                    generos: result
+                    categorias: result
                 }
 
                 return jsonResult //200
@@ -48,8 +48,8 @@ const listarGeneros = async function () {
 
 }
 
-//Retorna um gênero filtrando pelo ID
-const buscarGeneroId = async function (id) {
+//Retorna um categoria filtrando pelo ID
+const buscarCategoriaId = async function (id) {
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
@@ -58,7 +58,7 @@ const buscarGeneroId = async function (id) {
         //Validação de campo obrigatório
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
             //Chama a função para filtrar pelo ID
-            let result = await generoDAO.getSelectByIdGenre(parseInt(id))
+            let result = await categoriaDAO.getSelectByIdCategory(parseInt(id))
             if (result) {
                 if (result.length > 0) {
                     const jsonResult = {
@@ -66,7 +66,7 @@ const buscarGeneroId = async function (id) {
                         status_code: MESSAGE.SUCCESS_REQUEST.status_code,
                         developments: MESSAGE.HEADER.developments,
                         message: MESSAGE.SUCCESS_REQUEST.message,
-                        generos: result
+                        categoria: result
                     }
 
                     return jsonResult //200
@@ -85,8 +85,8 @@ const buscarGeneroId = async function (id) {
     }
 }
 
-//Insere um novo gênero
-const inserirGenero = async function (genero, contentType) {
+//Insere um nova categoria
+const inserirCategoria = async function (categoria, contentType) {
 
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
@@ -95,19 +95,19 @@ const inserirGenero = async function (genero, contentType) {
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-            let validarDados = await validarDadosGenero(genero)
+            let validarDados = await validarDadosCategoria(categoria)
 
             if (!validarDados) {
 
                 //Chama a função do DAO para inserir um novo filme
-                let result = await generoDAO.setInsertGenre(genero)
+                let result = await categoriaDAO.setInsertCategory(categoria)
 
                 if (result) {
 
                     //Chama a função para receber o ID gerado no BD
-                    let lastIdGenero = await generoDAO.getSelectLastIdGenre()
+                    let lastIdCategoria = await categoriaDAO.getSelectLastIdCategory()
 
-                    if (lastIdGenero) {
+                    if (lastIdCategoria) {
 
                         const jsonResult = {
                             status: MESSAGE.SUCCESS_CREATED_ITEM.status,
@@ -136,8 +136,8 @@ const inserirGenero = async function (genero, contentType) {
 
 }
 
-//Atualiza um gênero filtrando pelo ID
-const atualizarGenero = async function (genero, id, contentType) {
+//Atualiza um categoria filtrando pelo ID
+const atualizarCategoria = async function (categoria, id, contentType) {
 
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
@@ -148,21 +148,21 @@ const atualizarGenero = async function (genero, id, contentType) {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
             //Chama a função de validação dos dados de cadastro
-            let validarDados = await validarDadosGenero(genero)
+            let validarDados = await validarDadosCategoria(categoria)
 
             if (!validarDados) {
 
                 //Chama a função para validar a consistencia do ID e verificar se existe no BD
-                let validarID = await buscarGeneroId(id)
+                let validarID = await buscarCategoriaId(id)
 
                 //Verifica se o ID existe no BD, caso exista teremos o status 200
                 if (validarID.status_code == 200) {
 
-                    //Adicionando o ID no JSON com os dados do genero
-                    genero.id = parseInt(id)
+                    //Adicionando o ID no JSON com os dados do categoria
+                    categoria.id = parseInt(id)
 
-                    //Chama a função do DAO para atualizar um genero
-                    let result = await generoDAO.setUpdateGenre(genero)
+                    //Chama a função do DAO para atualizar um categoria
+                    let result = await categoriaDAO.setUpdateCategory(categoria)
 
                     if (result) {
 
@@ -170,7 +170,7 @@ const atualizarGenero = async function (genero, id, contentType) {
                             status: MESSAGE.SUCCESS_UPDATED_ITEM.status,
                             status_code: MESSAGE.SUCCESS_UPDATED_ITEM.status_code,
                             developments: MESSAGE.HEADER.developments,
-                            message: MESSAGE.SUCCESS_UPDATED_ITEM.message
+                            message: MESSAGE.SUCCESS_UPDATED_ITEM.message,
                         }
 
                         return jsonResult //200
@@ -179,7 +179,7 @@ const atualizarGenero = async function (genero, id, contentType) {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                     }
                 } else {
-                    return validarID //Retorno da função de buscarGeneroId (400 ou 404 ou 500)
+                    return validarID //Retorno da função de buscarCategoriaId (400 ou 404 ou 500)
                 }
             } else {
                 return validarDados //Retorno da função de validar dados do Gênero 400
@@ -194,8 +194,8 @@ const atualizarGenero = async function (genero, id, contentType) {
 
 }
 
-//Apaga um gênero filtrando pelo ID
-const excluirGenero = async function (id) {
+//Apaga uma categoria filtrando pelo ID
+const excluirCategoria = async function (id) {
 
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
@@ -203,11 +203,11 @@ const excluirGenero = async function (id) {
 
     try {
 
-        let validarID = await buscarGeneroId(id)
+        let validarID = await buscarCategoriaId(id)
 
         if (validarID.status_code == 200) {
 
-            let result = await generoDAO.setDeleteGenre(id)
+            let result = await categoriaDAO.setDeleteCategory(id)
 
             if (result) {
 
@@ -224,7 +224,7 @@ const excluirGenero = async function (id) {
                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
             }
         } else {
-            return validarID //Retorno da função de buscarGeneroId (400 ou 404 ou 500)
+            return validarID //Retorno da função de buscarcategoriaId (400 ou 404 ou 500)
         }
 
     } catch (error) {
@@ -234,11 +234,11 @@ const excluirGenero = async function (id) {
 }
 
 //Validação dos dados de cadastro do Gênero
-const validarDadosGenero = async function (genero) {
+const validarDadosCategoria = async function (categoria) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
-    if (genero.nome == '' || genero.nome == null || genero.nome == undefined || genero.nome.length > 100) {
+    if (categoria.nome == '' || categoria.nome == null || categoria.nome == undefined || categoria.nome.length > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
@@ -249,9 +249,9 @@ const validarDadosGenero = async function (genero) {
 }
 
 module.exports = {
-    listarGeneros,
-    buscarGeneroId,
-    inserirGenero,
-    atualizarGenero,
-    excluirGenero
+    listarCategorias,
+    buscarCategoriaId,
+    inserirCategoria,
+    atualizarCategoria,
+    excluirCategoria
 }

@@ -26,7 +26,9 @@ create table tbl_cliente (
     id_cliente int primary key auto_increment,
     nome varchar(100) not null,
     email varchar(100) not null unique,
+    senha VARCHAR(150) not null,
     cpf varchar(14) unique,
+    cnpj VARCHAR(18) unique,
     telefone varchar(11) null,
     data_nascimento date null,
     data_fundacao date null,
@@ -34,10 +36,24 @@ create table tbl_cliente (
     foreign key (id_genero) references tbl_genero (id_genero)
 );
 
+ALTER TABLE tbl_cliente
+ADD COLUMN cnpj VARCHAR(18) UNIQUE
+AFTER cpf;
+
+ALTER TABLE tbl_cliente
+ADD COLUMN senha VARCHAR(150) NOT NULL
+AFTER email;
+
+ALTER TABLE tbl_organizador
+ADD COLUMN senha VARCHAR(150) NOT NULL
+AFTER email;
+
+
 create table tbl_organizador (
     id_organizador int primary key auto_increment,
     nome varchar(100) not null,
     email varchar(100) not null unique,
+    senha VARCHAR(150) not null,
     cpf varchar(14) unique,
     cnpj varchar(18) unique,
     telefone varchar(11) null,

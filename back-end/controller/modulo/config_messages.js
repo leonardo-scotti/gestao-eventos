@@ -11,8 +11,7 @@ const dataAtual = new Date()
 const HEADER    =   {
                                 status:             Boolean,
                                 status_code:        Number,
-                                developments:        'Vitor Miguel e João Blesa',
-                                response: {}
+                                developments:       'Vitor Miguel e João Blesa',
 }
 
 

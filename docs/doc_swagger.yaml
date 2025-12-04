@@ -84,15 +84,14 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: { type: boolean, example: true }
-                  statuscode: { type: integer, example: 200 }
-                  development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-                  evento:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/EventoObject'
+                allOf:
+                  - $ref: '#/components/schemas/ResponseGenericMessage'
+                  - type: object
+                    properties:
+                      evento:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/EventoObject'
     delete:
       tags: [Eventos]
       summary: Deletar evento
@@ -173,6 +172,7 @@ paths:
           content:
             application/json:
               schema:
+                # Reutilizando create pois retorna o objeto + mensagem
                 $ref: '#/components/schemas/ResponseOrganizadorCreate' 
     delete:
       tags: [Organizadores]
@@ -726,7 +726,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseListaCategorias' # <--- REFERÊNCIA CORRIGIDA
+                $ref: '#/components/schemas/ResponseListaCategorias'
 
   /categoria/{id}:
     get:
@@ -807,7 +807,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseListaAssuntos' # <--- REFERÊNCIA CORRIGIDA
+                $ref: '#/components/schemas/ResponseListaAssuntos'
 
   /assunto/{id}:
     get:
@@ -939,9 +939,9 @@ components:
       type: object
       properties:
         status: { type: boolean, example: true }
-        statuscode: { type: integer, example: 200 } # Mantido 200 como padrão genérico
+        status_code: { type: integer, example: 200 } # Alterado de statuscode para status_code
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
 
     # --- RESPONSE FOREIGN KEY STRUCTURE (SIMPLE OBJECT OUTPUT) ---
     ResponseFK:
@@ -1031,8 +1031,9 @@ components:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
+        status_code: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
         eventos:
           type: array
           items:
@@ -1062,8 +1063,9 @@ components:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
+        status_code: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
         organizadores:
           type: array
           items:
@@ -1073,8 +1075,9 @@ components:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
+        status_code: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
         clientes:
           type: array
           items:
@@ -1108,8 +1111,9 @@ components:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
+        status_code: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
         pedidos:
           type: array
           items:
@@ -1148,8 +1152,9 @@ components:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
+        status_code: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
         items-pedidos:
           type: array
           items:
@@ -1198,8 +1203,9 @@ components:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
+        status_code: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
         enderecos:
           type: array
           items:
@@ -1218,8 +1224,9 @@ components:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
+        status_code: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
         estado:
           $ref: '#/components/schemas/EstadoFK'
 
@@ -1227,8 +1234,9 @@ components:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
+        status_code: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
         estados:
           $ref: '#/components/schemas/EstadoFK'
 
@@ -1260,8 +1268,9 @@ components:
       type: object
       properties:
         status: { type: boolean }
-        statuscode: { type: integer, example: 200 }
+        status_code: { type: integer, example: 200 }
         development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida!!!" }
         ingressos:
           type: array
           items:
@@ -1277,8 +1286,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Evento criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             evento:
               type: array
               items:
@@ -1288,13 +1297,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Evento atualizado com sucesso" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseEventoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Evento deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- ORGANIZADOR RESPONSES ---
     ResponseOrganizadorCreate:
@@ -1302,8 +1311,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Organizador criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             organizador:
               type: array
               items:
@@ -1313,13 +1322,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Organizador atualizado com sucesso" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseOrganizadorDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Organizador deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- CLIENTE RESPONSES ---
     ResponseClienteCreate:
@@ -1327,8 +1336,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Cliente criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             cliente:
               type: array
               items:
@@ -1338,13 +1347,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Cliente atualizado com sucesso" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseClienteDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Cliente deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- PEDIDO RESPONSES ---
     ResponsePedidoCreate:
@@ -1352,8 +1361,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Pedido criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             pedido:
               type: array
               items:
@@ -1363,13 +1372,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Pedido atualizado com sucesso" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponsePedidoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Pedido deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- ITEM PEDIDO RESPONSES ---
     ResponseItemPedidoCreate:
@@ -1377,8 +1386,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Item pedido criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             item_pedido:
               type: array
               items:
@@ -1388,13 +1397,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Item pedido atualizado com sucesso" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseItemPedidoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Item pedido deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- ENDERECO RESPONSES ---
     ResponseEnderecoCreate:
@@ -1402,8 +1411,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Endereço criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             endereco:
               type: array
               items:
@@ -1413,13 +1422,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Endereço atualizado com sucesso" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseEnderecoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Endereço deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- ESTADO RESPONSES ---
     ResponseEstadoCreate:
@@ -1427,8 +1436,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Estado criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             estado:
               $ref: '#/components/schemas/EstadoFK'
     ResponseEstadoUpdate:
@@ -1436,13 +1445,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Estado atualizado com sucesso" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseEstadoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Estado deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- INGRESSO RESPONSES ---
     ResponseIngressoCreate:
@@ -1450,8 +1459,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Ingresso criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             ingresso:
               type: array
               items:
@@ -1461,7 +1470,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 200 }
+            status_code: { type: integer, example: 200 }
+            message: { type: string, example: "Requisição bem sucedida!!!" }
             ingresso:
               type: array
               items:
@@ -1471,13 +1481,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Ingresso atualizado com sucesso" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseIngressoDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Ingresso deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- CATEGORIA RESPONSES ---
     ResponseCategoria:
@@ -1485,18 +1495,20 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 200 }
+            status_code: { type: integer, example: 200 }
+            message: { type: string, example: "Requisição bem sucedida!!!" }
             categoria:
               type: array
               items:
                 $ref: '#/components/schemas/CategoriaAssuntoObject'
     
-    ResponseListaCategorias: # ADICIONADO
+    ResponseListaCategorias:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 200 }
+            status_code: { type: integer, example: 200 }
+            message: { type: string, example: "Requisição bem sucedida!!!" }
             categorias:
               type: array
               items:
@@ -1507,8 +1519,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Categoria criada com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             categoria:
               type: array
               items:
@@ -1518,13 +1530,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Categoria atualizada com sucesso!!!" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseCategoriaDelete: 
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Categoria deletada com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- ASSUNTO RESPONSES ---
     ResponseAssunto:
@@ -1532,18 +1544,20 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 200 }
+            status_code: { type: integer, example: 200 }
+            message: { type: string, example: "Requisição bem sucedida!!!" }
             assunto:
               type: array
               items:
                 $ref: '#/components/schemas/CategoriaAssuntoObject'
     
-    ResponseListaAssuntos: # ADICIONADO
+    ResponseListaAssuntos:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 200 }
+            status_code: { type: integer, example: 200 }
+            message: { type: string, example: "Requisição bem sucedida!!!" }
             assuntos:
               type: array
               items:
@@ -1554,8 +1568,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Assunto criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             assunto:
               type: array
               items:
@@ -1565,13 +1579,13 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Assunto atualizado com sucesso!!!" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseAssuntoDelete: 
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Assunto deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }
 
     # --- GÊNERO RESPONSES ---
     ResponseGenero:
@@ -1579,7 +1593,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 200 }
+            status_code: { type: integer, example: 200 }
+            message: { type: string, example: "Requisição bem sucedida!!!" }
             genero:
               type: array
               items:
@@ -1589,7 +1604,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 200 }
+            status_code: { type: integer, example: 200 }
+            message: { type: string, example: "Requisição bem sucedida!!!" }
             generos:
               type: array
               items:
@@ -1599,8 +1615,8 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            statuscode: { type: integer, example: 201 }
-            message: { type: string, example: "Gênero criado com sucesso" }
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
             genero:
               type: array
               items:
@@ -1610,10 +1626,10 @@ components:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Gênero atualizado com sucesso" }
+            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
     ResponseGeneroDelete:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Gênero deletado com sucesso" }
+            message: { type: string, example: "Item excluído com sucesso!!!" }

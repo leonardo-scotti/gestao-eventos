@@ -6,10 +6,11 @@
  ********************************************************************************************************************/
 
 //Import das dependencias
-const express       = require('express')
-const cors          = require('cors')
-const bodyParser    = require('body-parser')
-const multer        = require('multer')  
+const express           = require('express')
+const express_session   = require('express-session')
+const cors              = require('cors')
+const bodyParser        = require('body-parser')
+const multer            = require('multer')  
 
 //Configuração do diskmanager para o MULTER
 const storage = multer.diskStorage({
@@ -46,12 +47,25 @@ app.use((request, response, next)=>{
     next()  //Proximo
 })
 
+
+app.use(express_session({
+    secret: 'segredo_super_secreto_unievent', // Chave para assinar o cookie (em prod, use variável de ambiente)
+    resave: false, // Evita regravar a sessão se nada mudou
+    saveUninitialized: false, // Só cria a sessão se houver dados salvos (login efetuado)
+    cookie: { 
+        secure: false, // Use 'true' se estiver usando HTTPS
+        maxAge: 1000 * 60 * 60 * 24 // Sessão expira em 24 horas
+    }
+}))
+
 const controllerGenero = require('./controller/genero/controller_genero.js')
+const controllerCategoria = require('./controller/categoria/controller_categoria.js')
+const controllerCliente = require('./controller/cliente/controller_cliente.js')
 
 //Endpoint para o CRUD do Evento
 
 //Retorna a lista de generos
-app.get('/v1/unievent/genero', cors(), async function (request, response) {
+app.get('/api/v1/unievent/genero', cors(), async function (request, response) {
 
     let genero = await controllerGenero.listarGeneros()
 
@@ -60,7 +74,7 @@ app.get('/v1/unievent/genero', cors(), async function (request, response) {
 })
 
 //Retorna a um genero filtrando pelo ID
-app.get('/v1/unievent/genero/:id', cors(), async function (request, response) {
+app.get('/api/v1/unievent/genero/:id', cors(), async function (request, response) {
 
     let IdGenero    = request.params.id
 
@@ -72,7 +86,7 @@ app.get('/v1/unievent/genero/:id', cors(), async function (request, response) {
 })
 
 //Insere um novo Genero no BD
-app.post('/v1/unievent/genero', cors(), bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/genero', cors(), bodyParserJSON, async function (request, response) {
     
     let dadosBody   = request.body
 
@@ -85,7 +99,7 @@ app.post('/v1/unievent/genero', cors(), bodyParserJSON, async function (request,
 
 })
 
-app.put('/v1/unievent/genero/:id', cors(), bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/genero/:id', cors(), bodyParserJSON, async function (request, response) {
     
     dadosBody   = request.body
 
@@ -100,7 +114,7 @@ app.put('/v1/unievent/genero/:id', cors(), bodyParserJSON, async function (reque
 
 })
 
-app.delete('/v1/unievent/genero/:id', cors(), async function (request,response) {
+app.delete('/api/v1/unievent/genero/:id', cors(), async function (request,response) {
 
     IdGenero = request.params.id
 
@@ -111,9 +125,162 @@ app.delete('/v1/unievent/genero/:id', cors(), async function (request,response) 
     
 })
 
+//Retorna a lista de categorias
+app.get('/api/v1/unievent/categoria', cors(), async function (request, response) {
 
+    let categoria = await controllerCategoria.listarCategorias()
 
+    response.status(categoria.status_code)
+    response.json(categoria)
+})
 
+//Retorna a um categoria filtrando pelo ID
+app.get('/api/v1/unievent/categoria/:id', cors(), async function (request, response) {
+
+    let IdCategoria    = request.params.id
+
+    let categoria      = await controllerCategoria.buscarCategoriaId(IdCategoria)
+
+    response.status(categoria.status_code)
+    response.json(categoria)
+    
+})
+
+//Insere um novo Categoria no BD
+app.post('/api/v1/unievent/categoria', cors(), bodyParserJSON, async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let categoria      = await controllerCategoria.inserirCategoria(dadosBody, contentType)
+
+    response.status(categoria.status_code)
+    response.json(categoria)
+
+})
+
+app.put('/api/v1/unievent/categoria/:id', cors(), bodyParserJSON, async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdCategoria    = request.params.id
+
+    contentType = request.headers['content-type']
+
+    categoria      = await controllerCategoria.atualizarCategoria(dadosBody, IdCategoria, contentType)
+
+    response.status(categoria.status_code)
+    response.json(categoria)
+
+})
+
+app.delete('/api/v1/unievent/categoria/:id', cors(), async function (request,response) {
+
+    IdCategoria = request.params.id
+
+    categoria   = await controllerCategoria.excluirCategoria(IdCategoria)
+
+    response.status(categoria.status_code)
+    response.json(categoria)
+    
+})
+
+//Retorna a lista de clientes
+app.get('/api/v1/unievent/cliente', cors(), async function (request, response) {
+
+    let cliente = await controllerCliente.listarClientes()
+
+    response.status(cliente.status_code)
+    response.json(cliente)
+})
+
+//Retorna a um clinete filtrando pelo ID
+app.get('/api/v1/unievent/cliente/:id', cors(), async function (request, response) {
+
+    let IdCliente    = request.params.id
+
+    let cliente      = await controllerCliente.buscarClienteId(IdCliente)
+
+    response.status(cliente.status_code)
+    response.json(cliente)
+    
+})
+
+//Insere um novo cliente no BD
+app.post('/api/v1/unievent/cliente', cors(), bodyParserJSON, async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let cliente      = await controllerCliente.inserirCliente(dadosBody, contentType)
+
+    response.status(cliente.status_code)
+    response.json(cliente)
+
+})
+
+app.put('/api/v1/unievent/cliente/:id', cors(), bodyParserJSON, async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdCliente    = request.params.id
+
+    contentType = request.headers['content-type']
+
+    cliente      = await controllerCliente.atualizarCliente(dadosBody, IdCliente, contentType)
+
+    response.status(cliente.status_code)
+    response.json(cliente)
+
+})
+
+app.delete('/api/v1/unievent/cliente/:id', cors(), async function (request,response) {
+
+    IdCliente = request.params.id
+
+    cliente   = await controllerCliente.excluirCliente(IdCliente)
+
+    response.status(cliente.status_code)
+    response.json(cliente)
+    
+})
+
+// Rota de Login (Autenticação) Cliente
+app.post('/api/v1/unievent/login', cors(), bodyParserJSON, async function (request, response) {
+
+    let {email, senha}  = request.body
+
+    let resultadoLogin = await controllerCliente.AutenticarLogin(email, senha);
+
+    if (resultadoLogin.status) {
+        // SUCESSO: Salva os dados do usuário na sessão do servidor
+        request.session.user = {
+            id: resultadoLogin.cliente.id,
+            nome: resultadoLogin.cliente.nome,
+            email: resultadoLogin.cliente.email
+        };
+        response.status(200).json({ 
+            message: "Login realizado com sucesso", 
+            cliente: request.session.user 
+        });
+
+    } else {
+        response.status(401).json({ message: "Usuário ou senha inválidos" });
+    }
+})
+
+// Rota de Logout (Autenticação) Cliente
+app.post('/api/v1/unievent/logout', cors(), async function (request, response) {
+
+   request.session.destroy(function (erro) {
+        if (erro) {
+            return response.status(500).json({ message: "Erro ao fazer logout" });
+        }
+        response.status(200).json({ message: "Logout realizado com sucesso" });
+    });
+})
 
 
 app.listen(PORT, function(){
