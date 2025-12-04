@@ -10,5 +10,4 @@ const TOKEN     = 'sp=rcw&st=2025-11-24T19:47:02Z&se=2025-11-24T21:02:02Z&sv=202
 const ACCOUNT   = 'uploadteste'
 const CONTAINER = 'uploadteste'
 
-
 module.exports = {TOKEN, ACCOUNT, CONTAINER}

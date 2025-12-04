@@ -71,8 +71,8 @@ const getSelectLastIdCategory = async function () {
 //Insere um categoria no banco de dados
 const setInsertCategory = async function (categoria) {
     try {
-        let sql = `INSERT INTO tbl_categoria (nome) 
-        VALUES('${categoria.nome}');`
+        let sql = `INSERT INTO tbl_categoria (nome, icone) 
+        VALUES('${categoria.nome}', '${categoria.icone}');`
 
         // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
@@ -90,7 +90,8 @@ const setInsertCategory = async function (categoria) {
 const setUpdateCategory = async function (categoria) {
     try {
         let sql = `UPDATE tbl_categoria SET 
-                        nome            = '${categoria.nome}'
+                        nome            = '${categoria.nome}',
+                        icone           = '${categoria.icone}'
                     WHERE id_categoria = ${categoria.id}`
 
         // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)

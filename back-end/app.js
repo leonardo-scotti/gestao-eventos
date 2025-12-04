@@ -61,6 +61,8 @@ app.use(express_session({
 const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerCategoria = require('./controller/categoria/controller_categoria.js')
 const controllerCliente = require('./controller/cliente/controller_cliente.js')
+const controllerAssunto = require('./controller/assunto/controller_assunto.js')
+const controllerEvento = require('./controller/evento/controller_evento.js')
 
 //Endpoint para o CRUD do Evento
 
@@ -147,20 +149,22 @@ app.get('/api/v1/unievent/categoria/:id', cors(), async function (request, respo
 })
 
 //Insere um novo Categoria no BD
-app.post('/api/v1/unievent/categoria', cors(), bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/categoria', cors(), bodyParserJSON, upload.single('icone'), async function (request, response) {
     
-    let dadosBody   = request.body
+    let dadosBody       = request.body
 
-    let contentType = request.headers['content-type']
+    let contentType     = request.headers['content-type']
 
-    let categoria      = await controllerCategoria.inserirCategoria(dadosBody, contentType)
+    let icone            = request.file
+
+    let categoria      = await controllerCategoria.inserirCategoria(dadosBody, contentType, icone)
 
     response.status(categoria.status_code)
     response.json(categoria)
 
 })
 
-app.put('/api/v1/unievent/categoria/:id', cors(), bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/categoria/:id', cors(), bodyParserJSON, upload.single('icone'), async function (request, response) {
     
     dadosBody   = request.body
 
@@ -168,7 +172,9 @@ app.put('/api/v1/unievent/categoria/:id', cors(), bodyParserJSON, async function
 
     contentType = request.headers['content-type']
 
-    categoria      = await controllerCategoria.atualizarCategoria(dadosBody, IdCategoria, contentType)
+    let icone            = request.file
+
+    categoria      = await controllerCategoria.atualizarCategoria(dadosBody, IdCategoria, contentType, icone)
 
     response.status(categoria.status_code)
     response.json(categoria)
@@ -282,6 +288,131 @@ app.post('/api/v1/unievent/logout', cors(), async function (request, response) {
     });
 })
 
+//Retorna a lista de assuntos
+app.get('/api/v1/unievent/assunto', cors(), async function (request, response) {
+
+    let assunto = await controllerAssunto.listarAssuntos()
+
+    response.status(assunto.status_code)
+    response.json(assunto)
+})
+
+//Retorna a um assunto filtrando pelo ID
+app.get('/api/v1/unievent/assunto/:id', cors(), async function (request, response) {
+
+    let IdAssunto    = request.params.id
+
+    let assunto      = await controllerAssunto.buscarAssuntoId(IdAssunto)
+
+    response.status(assunto.status_code)
+    response.json(assunto)
+    
+})
+
+//Insere um novo Assunto no BD
+app.post('/api/v1/unievent/assunto', cors(), bodyParserJSON, async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let assunto      = await controllerAssunto.inserirAssunto(dadosBody, contentType)
+
+    response.status(assunto.status_code)
+    response.json(assunto)
+
+})
+
+app.put('/api/v1/unievent/assunto/:id', cors(), bodyParserJSON, async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdAssunto    = request.params.id
+
+    contentType = request.headers['content-type']
+
+    assunto      = await controllerAssunto.atualizarAssunto(dadosBody, IdAssunto, contentType)
+
+    response.status(assunto.status_code)
+    response.json(assunto)
+
+})
+
+app.delete('/api/v1/unievent/assunto/:id', cors(), async function (request,response) {
+
+    IdAssunto = request.params.id
+
+    assunto   = await controllerAssunto.excluirAssunto(IdAssunto)
+
+    response.status(assunto.status_code)
+    response.json(assunto)
+    
+})
+
+//Retorna a lista de eventos
+app.get('/api/v1/unievent/evento', cors(), async function (request, response) {
+
+    let evento = await controllerEvento.listarEventos()
+
+    response.status(evento.status_code)
+    response.json(evento)
+})
+
+//Retorna a um evento filtrando pelo ID
+app.get('/api/v1/unievent/evento/:id', cors(), async function (request, response) {
+
+    let IdEvento   = request.params.id
+
+    let evento      = await controllerEvento.buscarEventoId(IdEvento)
+
+    response.status(evento.status_code)
+    response.json(evento)
+    
+})
+
+//Insere um novo Evento no BD
+app.post('/api/v1/unievent/evento', cors(), bodyParserJSON, upload.single('banner'), async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let banner            = request.file
+
+    let evento      = await controllerEvento.inserirEvento(dadosBody, contentType, banner)
+
+    response.status(evento.status_code)
+    response.json(evento)
+
+})
+
+app.put('/api/v1/unievent/evento/:id', cors(), bodyParserJSON, upload.single('banner'), async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdEvento    = request.params.id
+
+    contentType = request.headers['content-type']
+
+    let banner            = request.file
+
+    evento      = await controllerEvento.atualizarEvento(dadosBody, IdEvento, contentType, banner)
+
+    response.status(evento.status_code)
+    response.json(evento)
+
+})
+
+app.delete('/api/v1/unievent/evento/:id', cors(), async function (request,response) {
+
+    IdEvento = request.params.id
+
+    evento   = await controllerEvento.excluirEvento(IdEvento)
+
+    response.status(evento.status_code)
+    response.json(evento)
+    
+})
 
 app.listen(PORT, function(){
     console.log('API aguardando requisições!!!')

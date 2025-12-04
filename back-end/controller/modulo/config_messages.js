@@ -20,7 +20,7 @@ const ERROR_NOT_FOUND                   =   {status: false, status_code: 404, me
 const ERROR_INTERNAL_SERVER_MODEL       =   {status: false, status_code: 500, message: 'Não foi possível processar a requisição, devido a problemas na camada da MODELAGEM de dados !!!'}
 const ERROR_INTERNAL_SERVER_CONTROLLER  =   {status: false, status_code: 500, message: 'Não foi possível processar a requisição, devido a problemas na camada de CONTROLE de dados !!!'}
 const ERROR_REQUIRED_FIELDS             =   {status: false, status_code: 400, message: 'Não foi possível processar a requisição, devido a campos obrigatórios que não foram enviados corretamente, conforme a documentação da API !!!'}
-const ERROR_CONTENT_TYPE                =   {status: false, status_code: 415, message: 'Não foi possível processar a requisição, pois o tipo de conteúdo enviado no body não é permitido. Deve-se utilizar apenas JSON na API !!!'}
+const ERROR_CONTENT_TYPE                =   {status: false, status_code: 415, message: 'Não foi possível processar a requisição, pois o tipo de conteúdo enviado no body não é permitido!!!'}
 const ERROR_UPLOADED_FILE               =   {status: false, status_code: 400, message: 'Não foi possível processar a requisição, pois o arquivo de imagem enviado está com problemas, encaminhe novamente  !!!'}
 
 /************************* MENSAGENS DE SUCESSO DO PROJETO ******************************** */

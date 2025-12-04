@@ -12,6 +12,9 @@ const categoriaDAO = require('../../model/DAO/categoria.js')
 //Import do arquivo que padroniza todas as mensagens
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
+//Import da controller que faz o upload da foto
+const UPLOAD = require('../upload/controller_upload_azure.js')
+
 //Retorna uma lista de categorias
 const listarCategorias = async function () {
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
@@ -86,43 +89,53 @@ const buscarCategoriaId = async function (id) {
 }
 
 //Insere um nova categoria
-const inserirCategoria = async function (categoria, contentType) {
+const inserirCategoria = async function (categoria, contentType, icone) {
 
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
-        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+        if (String(contentType).toLowerCase().includes('multipart/form-data')) {
 
             let validarDados = await validarDadosCategoria(categoria)
 
             if (!validarDados) {
 
-                //Chama a função do DAO para inserir um novo filme
-                let result = await categoriaDAO.setInsertCategory(categoria)
+                let urlFoto = await UPLOAD.uploadFiles(icone)
+                if (urlFoto) {
 
-                if (result) {
+                    let urlLimpa = urlFoto.split('?')[0];
+                    categoria.icone = urlLimpa;
 
-                    //Chama a função para receber o ID gerado no BD
-                    let lastIdCategoria = await categoriaDAO.getSelectLastIdCategory()
+                    //Chama a função do DAO para inserir um novo filme
+                    let result = await categoriaDAO.setInsertCategory(categoria)
 
-                    if (lastIdCategoria) {
+                    if (result) {
 
-                        const jsonResult = {
-                            status: MESSAGE.SUCCESS_CREATED_ITEM.status,
-                            status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
-                            developments: MESSAGE.HEADER.developments,
-                            message: MESSAGE.SUCCESS_CREATED_ITEM.message
+                        //Chama a função para receber o ID gerado no BD
+                        let lastIdCategoria = await categoriaDAO.getSelectLastIdCategory()
+
+                        if (lastIdCategoria) {
+
+                            const jsonResult = {
+                                status: MESSAGE.SUCCESS_CREATED_ITEM.status,
+                                status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
+                                developments: MESSAGE.HEADER.developments,
+                                message: MESSAGE.SUCCESS_CREATED_ITEM.message
+                            }
+
+                            return jsonResult //201
+
+                        } else {
+                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                         }
-
-                        return jsonResult //201
-
                     } else {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                     }
+
                 } else {
-                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                    return MESSAGE.ERROR_UPLOADED_FILE
                 }
             } else {
                 return validarDados //400
@@ -137,7 +150,7 @@ const inserirCategoria = async function (categoria, contentType) {
 }
 
 //Atualiza um categoria filtrando pelo ID
-const atualizarCategoria = async function (categoria, id, contentType) {
+const atualizarCategoria = async function (categoria, id, contentType, icone) {
 
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
@@ -145,7 +158,7 @@ const atualizarCategoria = async function (categoria, id, contentType) {
 
     try {
         //Validação do content-type
-        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+        if (String(contentType).toLowerCase().includes('multipart/form-data')) {
 
             //Chama a função de validação dos dados de cadastro
             let validarDados = await validarDadosCategoria(categoria)
@@ -161,22 +174,32 @@ const atualizarCategoria = async function (categoria, id, contentType) {
                     //Adicionando o ID no JSON com os dados do categoria
                     categoria.id = parseInt(id)
 
-                    //Chama a função do DAO para atualizar um categoria
-                    let result = await categoriaDAO.setUpdateCategory(categoria)
 
-                    if (result) {
+                    let urlFoto = await UPLOAD.uploadFiles(icone)
+                    if (urlFoto) {
 
-                        const jsonResult = {
-                            status: MESSAGE.SUCCESS_UPDATED_ITEM.status,
-                            status_code: MESSAGE.SUCCESS_UPDATED_ITEM.status_code,
-                            developments: MESSAGE.HEADER.developments,
-                            message: MESSAGE.SUCCESS_UPDATED_ITEM.message,
+                        let urlLimpa = urlFoto.split('?')[0];
+                        categoria.icone = urlLimpa;
+
+                        //Chama a função do DAO para atualizar um categoria
+                        let result = await categoriaDAO.setUpdateCategory(categoria)
+
+                        if (result) {
+
+                            const jsonResult = {
+                                status: MESSAGE.SUCCESS_UPDATED_ITEM.status,
+                                status_code: MESSAGE.SUCCESS_UPDATED_ITEM.status_code,
+                                developments: MESSAGE.HEADER.developments,
+                                message: MESSAGE.SUCCESS_UPDATED_ITEM.message,
+                            }
+
+                            return jsonResult //200
+
+                        } else {
+                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                         }
-
-                        return jsonResult //200
-
                     } else {
-                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                        return MESSAGE.ERROR_UPLOADED_FILE
                     }
                 } else {
                     return validarID //Retorno da função de buscarCategoriaId (400 ou 404 ou 500)
@@ -189,6 +212,7 @@ const atualizarCategoria = async function (categoria, id, contentType) {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
