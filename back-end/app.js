@@ -61,8 +61,13 @@ app.use(express_session({
 const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerCategoria = require('./controller/categoria/controller_categoria.js')
 const controllerCliente = require('./controller/cliente/controller_cliente.js')
+const controllerOrganizador = require('./controller/organizador/controller_organizador.js')
 const controllerAssunto = require('./controller/assunto/controller_assunto.js')
 const controllerEvento = require('./controller/evento/controller_evento.js')
+const controllerEstado = require('./controller/estado/controller_estado.js')
+const controllerEndereco = require('./controller/endereco/controller_endereco.js')
+const controllerIngresso = require('./controller/ingresso/controller_ingresso.js')
+const controllerPedido = require('./controller/pedido/controller_pedido.js')
 
 //Endpoint para o CRUD do Evento
 
@@ -201,7 +206,7 @@ app.get('/api/v1/unievent/cliente', cors(), async function (request, response) {
     response.json(cliente)
 })
 
-//Retorna a um clinete filtrando pelo ID
+//Retorna a um cliente filtrando pelo ID
 app.get('/api/v1/unievent/cliente/:id', cors(), async function (request, response) {
 
     let IdCliente    = request.params.id
@@ -254,11 +259,11 @@ app.delete('/api/v1/unievent/cliente/:id', cors(), async function (request,respo
 })
 
 // Rota de Login (Autenticação) Cliente
-app.post('/api/v1/unievent/login', cors(), bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/login/cliente', cors(), bodyParserJSON, async function (request, response) {
 
     let {email, senha}  = request.body
 
-    let resultadoLogin = await controllerCliente.AutenticarLogin(email, senha);
+    let resultadoLogin = await controllerCliente.AutenticarLoginCliente(email, senha);
 
     if (resultadoLogin.status) {
         // SUCESSO: Salva os dados do usuário na sessão do servidor
@@ -278,7 +283,7 @@ app.post('/api/v1/unievent/login', cors(), bodyParserJSON, async function (reque
 })
 
 // Rota de Logout (Autenticação) Cliente
-app.post('/api/v1/unievent/logout', cors(), async function (request, response) {
+app.post('/api/v1/unievent/logout/cliente', cors(), async function (request, response) {
 
    request.session.destroy(function (erro) {
         if (erro) {
@@ -413,6 +418,349 @@ app.delete('/api/v1/unievent/evento/:id', cors(), async function (request,respon
     response.json(evento)
     
 })
+
+//Retorna a lista de estados
+app.get('/api/v1/unievent/estado', cors(), async function (request, response) {
+
+    let estado = await controllerEstado.listarEstados()
+
+    response.status(estado.status_code)
+    response.json(estado)
+})
+
+//Retorna a um estado filtrando pelo ID
+app.get('/api/v1/unievent/estado/:id', cors(), async function (request, response) {
+
+    let IdEstado    = request.params.id
+
+    let estado      = await controllerEstado.buscarEstadoId(IdEstado)
+
+    response.status(estado.status_code)
+    response.json(estado)
+    
+})
+
+//Insere um novo Estado no BD
+app.post('/api/v1/unievent/estado', cors(), bodyParserJSON, async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let estado      = await controllerEstado.inserirEstado(dadosBody, contentType)
+
+    response.status(estado.status_code)
+    response.json(estado)
+
+})
+
+app.put('/api/v1/unievent/estado/:id', cors(), bodyParserJSON, async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdEstado    = request.params.id
+
+    contentType = request.headers['content-type']
+
+    estado      = await controllerEstado.atualizarEstado(dadosBody, IdEstado, contentType)
+
+    response.status(estado.status_code)
+    response.json(estado)
+
+})
+
+app.delete('/api/v1/unievent/estado/:id', cors(), async function (request,response) {
+
+    IdEstado = request.params.id
+
+    estado   = await controllerEstado.excluirEstado(IdEstado)
+
+    response.status(estado.status_code)
+    response.json(estado)
+    
+})
+
+//Retorna a lista de endereco
+app.get('/api/v1/unievent/endereco', cors(), async function (request, response) {
+
+    let endereco = await controllerEndereco.listarEnderecos()
+
+    response.status(endereco.status_code)
+    response.json(endereco)
+})
+
+//Retorna a um endereco filtrando pelo ID
+app.get('/api/v1/unievent/endereco/:id', cors(), async function (request, response) {
+
+    let IdEndereco    = request.params.id
+
+    let endereco      = await controllerEndereco.buscarEnderecoId(IdEndereco)
+
+    response.status(endereco.status_code)
+    response.json(endereco)
+    
+})
+
+//Insere um novo Endereco no BD
+app.post('/api/v1/unievent/endereco', cors(), bodyParserJSON, async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let endereco      = await controllerEndereco.inserirEndereco(dadosBody, contentType)
+
+    response.status(endereco.status_code)
+    response.json(endereco)
+
+})
+
+app.put('/api/v1/unievent/endereco/:id', cors(), bodyParserJSON, async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdEndereco   = request.params.id
+
+    contentType = request.headers['content-type']
+
+    endereco      = await controllerEndereco.atualizarEndereco(dadosBody, IdEndereco, contentType)
+
+    response.status(endereco.status_code)
+    response.json(endereco)
+
+})
+
+app.delete('/api/v1/unievent/endereco/:id', cors(), async function (request,response) {
+
+    IdEndereco = request.params.id
+
+    endereco   = await controllerEndereco.excluirEndereco(IdEndereco)
+
+    response.status(endereco.status_code)
+    response.json(endereco)
+    
+})
+
+//Retorna a lista de ingresso
+app.get('/api/v1/unievent/ingresso', cors(), async function (request, response) {
+
+    let ingresso = await controllerIngresso.listarIngressos()
+
+    response.status(ingresso.status_code)
+    response.json(ingresso)
+})
+
+//Retorna a um ingresso filtrando pelo ID
+app.get('/api/v1/unievent/ingresso/:id', cors(), async function (request, response) {
+
+    let IdIngresso    = request.params.id
+
+    let ingresso      = await controllerIngresso.buscarIngressoId(IdIngresso)
+
+    response.status(ingresso.status_code)
+    response.json(ingresso)
+    
+})
+
+//Insere um novo Ingresso no BD
+app.post('/api/v1/unievent/ingresso', cors(), bodyParserJSON, async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let ingresso      = await controllerIngresso.inserirIngresso(dadosBody, contentType)
+
+    response.status(ingresso.status_code)
+    response.json(ingresso)
+
+})
+
+app.put('/api/v1/unievent/ingresso/:id', cors(), bodyParserJSON, async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdIngresso   = request.params.id
+
+    contentType = request.headers['content-type']
+
+    ingresso      = await controllerIngresso.atualizarIngresso(dadosBody, IdIngresso, contentType)
+
+    response.status(ingresso.status_code)
+    response.json(ingresso)
+
+})
+
+app.delete('/api/v1/unievent/ingresso/:id', cors(), async function (request,response) {
+
+    IdIngresso = request.params.id
+
+    ingresso   = await controllerIngresso.excluirIngresso(IdIngresso)
+
+    response.status(ingresso.status_code)
+    response.json(ingresso)
+    
+})
+
+
+//Retorna a lista de organizadores
+app.get('/api/v1/unievent/organizador', cors(), async function (request, response) {
+
+    let organizador = await controllerOrganizador.listarOrganizadores()
+
+    response.status(organizador.status_code)
+    response.json(organizador)
+})
+
+//Retorna a um organizador filtrando pelo ID
+app.get('/api/v1/unievent/organizador/:id', cors(), async function (request, response) {
+
+    let IdOrganizador    = request.params.id
+
+    let organizador      = await controllerOrganizador.buscarOrganizadorId(IdOrganizador)
+
+    response.status(organizador.status_code)
+    response.json(organizador)
+    
+})
+
+//Insere um novo organizador no BD
+app.post('/api/v1/unievent/organizador', cors(), bodyParserJSON, async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let organizador      = await controllerOrganizador.inserirOrganizador(dadosBody, contentType)
+
+    response.status(organizador.status_code)
+    response.json(organizador)
+
+})
+
+app.put('/api/v1/unievent/organizador/:id', cors(), bodyParserJSON, async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdOrganizador    = request.params.id
+
+    contentType = request.headers['content-type']
+
+    organizador      = await controllerOrganizador.atualizarOrganizador(dadosBody, IdOrganizador, contentType)
+
+    response.status(organizador.status_code)
+    response.json(organizador)
+
+})
+
+app.delete('/api/v1/unievent/organizador/:id', cors(), async function (request,response) {
+
+    IdOrganizador = request.params.id
+
+    organizador   = await controllerOrganizador.excluirOrganizador(IdOrganizador)
+
+    response.status(organizador.status_code)
+    response.json(organizador)
+    
+})
+
+// Rota de Login (Autenticação) Organizador
+app.post('/api/v1/unievent/login/organizador', cors(), bodyParserJSON, async function (request, response) {
+
+    let {email, senha}  = request.body
+
+    let resultadoLogin = await controllerOrganizador.AutenticarLoginOrganizador(email, senha)
+
+    if (resultadoLogin.status) {
+        // SUCESSO: Salva os dados do usuário na sessão do servidor
+        request.session.user = {
+            id: resultadoLogin.organizador.id,
+            nome: resultadoLogin.organizador.nome,
+            email: resultadoLogin.organizador.email
+        };
+        response.status(200).json({ 
+            message: "Login realizado com sucesso", 
+            organizador: request.session.user 
+        });
+
+    } else {
+        response.status(401).json({ message: "Usuário ou senha inválidos" });
+    }
+})
+
+// Rota de Logout (Autenticação) Organizador
+app.post('/api/v1/unievent/logout/organizador', cors(), async function (request, response) {
+
+   request.session.destroy(function (erro) {
+        if (erro) {
+            return response.status(500).json({ message: "Erro ao fazer logout" });
+        }
+        response.status(200).json({ message: "Logout realizado com sucesso" });
+    });
+})
+
+//Retorna a lista de pedidos
+app.get('/api/v1/unievent/pedido', cors(), async function (request, response) {
+
+    let pedido = await controllerPedido.listarPedidos()
+
+    response.status(pedido.status_code)
+    response.json(pedido)
+})
+
+//Retorna a um pedido filtrando pelo ID
+app.get('/api/v1/unievent/pedido/:id', cors(), async function (request, response) {
+
+    let IdPedido    = request.params.id
+
+    let pedido      = await controllerPedido.buscarPedidoId(IdPedido)
+
+    response.status(pedido.status_code)
+    response.json(pedido)
+    
+})
+
+//Insere um novo Pedido no BD
+app.post('/api/v1/unievent/pedido', cors(), bodyParserJSON, async function (request, response) {
+    
+    let dadosBody   = request.body
+
+    let contentType = request.headers['content-type']
+
+    let pedido      = await controllerPedido.inserirPedido(dadosBody, contentType)
+
+    response.status(pedido.status_code)
+    response.json(pedido)
+
+})
+
+app.put('/api/v1/unievent/pedido/:id', cors(), bodyParserJSON, async function (request, response) {
+    
+    dadosBody   = request.body
+
+    IdPedido   = request.params.id
+
+    contentType = request.headers['content-type']
+
+    pedido      = await controllerPedido.atualizarPedido(dadosBody, IdPedido, contentType)
+
+    response.status(pedido.status_code)
+    response.json(pedido)
+
+})
+
+app.delete('/api/v1/unievent/pedido/:id', cors(), async function (request,response) {
+
+    IdPedido = request.params.id
+
+    pedido   = await controllerPedido.excluirPedido(IdPedido)
+
+    response.status(pedido.status_code)
+    response.json(pedido)
+    
+})
+
+
 
 app.listen(PORT, function(){
     console.log('API aguardando requisições!!!')

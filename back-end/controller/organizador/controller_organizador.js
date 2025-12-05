@@ -1,5 +1,5 @@
 /********************************************************************************************************************
- * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a Model - do cliente
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a Model - do organizador
  *              (Validações, tratamento de dados, tratamento de erros, etc)
  * Data: 03/12/2025
  * Autor: Vitor Miguel Rodrigues Cezario
@@ -7,7 +7,7 @@
  ********************************************************************************************************************/
 
 //Import do arquivo DAO para manipular o CRUD no BD
-const clienteDAO = require('../../model/DAO/cliente.js')
+const organizadorDAO = require('../../model/DAO/organizador.js')
 
 //Import da controller genero 
 const controllerGenero = require('../genero/controller_genero.js')
@@ -18,34 +18,33 @@ const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 // Importa o módulo nativo de criptografia do Node.js (Crypto)
 const crypto = require('crypto');
 
-//Retorna uma lista de clientes
-const listarClientes = async function () {
+//Retorna uma lista de organizadores
+const listarOrganizadores = async function () {
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
 
-        //Chama a função do DAO para retornar a lista de clientes
-        let result = await clienteDAO.getSelectAllCustomers()
+        //Chama a função do DAO para retornar a lista de gêneros
+        let result = await organizadorDAO.getSelectAllOrganizers()
 
         if (result) {
             if (result.length > 0) {
 
-                for (cliente of result) {
-
-                    let resultClientes = await controllerGenero.buscarGeneroId(cliente.id_genero)
-                    if (resultClientes.status_code == 200) {
-                        cliente.genero = resultClientes.generos[0].nome
-                        delete cliente.id_genero
+                for (let organizador of result) {
+                    let resultOrganizadores = await controllerGenero.buscarGeneroId(organizador.id_genero)
+                    if (resultOrganizadores.status_code == 200) {
+                        organizador.genero = resultOrganizadores.generos[0].nome
+                        delete organizador.id_genero
                     }
 
-                    if (cliente.data_nascimento != null) {
-                        cliente.data_nascimento = new Date(cliente.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    if (organizador.data_nascimento != null) {
+                        organizador.data_nascimento = new Date(organizador.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                     }
 
-                    if (cliente.fundacao != null) {
-                        cliente.fundacao = new Date(cliente.fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    if (organizador.data_fundacao != null) {
+                        organizador.data_fundacao = new Date(organizador.data_fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                     }
 
                 }
@@ -55,7 +54,7 @@ const listarClientes = async function () {
                     status_code: MESSAGE.SUCCESS_REQUEST.status_code,
                     developments: MESSAGE.HEADER.developments,
                     message: MESSAGE.SUCCESS_REQUEST.message,
-                    clientes: result
+                    organizadores: result
                 }
 
                 return jsonResult //200
@@ -72,8 +71,8 @@ const listarClientes = async function () {
 
 }
 
-//Retorna um cliente filtrando pelo ID
-const buscarClienteId = async function (id) {
+//Retorna um organizador filtrando pelo ID
+const buscarOrganizadorId = async function (id) {
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
@@ -82,24 +81,23 @@ const buscarClienteId = async function (id) {
         //Validação de campo obrigatório
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
             //Chama a função para filtrar pelo ID
-            let result = await clienteDAO.getSelectByIdCustomer(parseInt(id))
+            let result = await organizadorDAO.getSelectByIdOrganizer(parseInt(id))
             if (result) {
                 if (result.length > 0) {
 
-                    for (cliente of result) {
-
-                        let resultClientes = await controllerGenero.buscarGeneroId(cliente.id_genero)
-                        if (resultClientes.status_code == 200) {
-                            cliente.genero = resultClientes.generos[0].nome
-                            delete cliente.id_genero
+                    for (let organizador of result) {
+                        let resultOrganizadores = await controllerGenero.buscarGeneroId(organizador.id_genero)
+                        if (resultOrganizadores.status_code == 200) {
+                            organizador.genero = resultOrganizadores.generos[0].nome
+                            delete organizador.id_genero
                         }
 
-                        if (cliente.data_nascimento != null) {
-                            cliente.data_nascimento = new Date(cliente.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                        if (organizador.data_nascimento != null) {
+                            organizador.data_nascimento = new Date(organizador.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                         }
 
-                        if (cliente.fundacao != null) {
-                            cliente.fundacao = new Date(cliente.fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                        if (organizador.data_fundacao != null) {
+                            organizador.data_fundacao = new Date(organizador.data_fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                         }
 
                     }
@@ -109,7 +107,7 @@ const buscarClienteId = async function (id) {
                         status_code: MESSAGE.SUCCESS_REQUEST.status_code,
                         developments: MESSAGE.HEADER.developments,
                         message: MESSAGE.SUCCESS_REQUEST.message,
-                        cliente: result
+                        organizador: result
                     }
 
                     return jsonResult //200
@@ -128,8 +126,8 @@ const buscarClienteId = async function (id) {
     }
 }
 
-//Insere um novo cliente
-const inserirCliente = async function (cliente, contentType) {
+//Insere um novo organizador
+const inserirOrganizador = async function (organizador, contentType) {
 
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
@@ -138,27 +136,27 @@ const inserirCliente = async function (cliente, contentType) {
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-            let validarDados = await validarDadosCliente(cliente)
+            let validarDados = await validarDadosOrganizador(organizador)
 
             if (!validarDados) {
-                if (await clienteDAO.validCNPJ(cliente.cnpj) == false) {
+                if (await organizadorDAO.validCNPJ(organizador.cnpj) == false) {
 
-                    if (await clienteDAO.validCPF(cliente.cpf) == false) {
-                        let validarGenero = await controllerGenero.buscarGeneroId(cliente.id_genero)
+                    if (await organizadorDAO.validCPF(organizador.cpf) == false) {
+                        let validarGenero = await controllerGenero.buscarGeneroId(organizador.id_genero)
 
                         if (validarGenero.status_code == 200) {
 
-                            cliente.senha = gerarSha1(cliente.senha)
+                            organizador.senha = gerarSha1(organizador.senha)
 
-                            //Chama a função do DAO para inserir um novo cliente
-                            let result = await clienteDAO.setInsertCustomer(cliente)
+                            //Chama a função do DAO para inserir um novo organizador
+                            let result = await organizadorDAO.setInsertOrganizer(organizador)
 
                             if (result) {
 
                                 //Chama a função para receber o ID gerado no BD
-                                let lastIdCliente = await clienteDAO.getSelectLastIdCustomer()
+                                let lastIdorganizador = await organizadorDAO.getSelectLastIdOrganizer()
 
-                                if (lastIdCliente) {
+                                if (lastIdorganizador) {
 
                                     const jsonResult = {
                                         status: MESSAGE.SUCCESS_CREATED_ITEM.status,
@@ -198,8 +196,8 @@ const inserirCliente = async function (cliente, contentType) {
 
 }
 
-//Atualiza um cliente filtrando pelo ID
-const atualizarCliente = async function (cliente, id, contentType) {
+//Atualiza um organizador filtrando pelo ID
+const atualizarOrganizador = async function (organizador, id, contentType) {
 
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
@@ -210,25 +208,25 @@ const atualizarCliente = async function (cliente, id, contentType) {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
             //Chama a função de validação dos dados de cadastro
-            let validarDados = await validarDadosCliente(cliente)
+            let validarDados = await validarDadosOrganizador(organizador)
 
             if (!validarDados) {
 
                 //Chama a função para validar a consistencia do ID e verificar se existe no BD
-                let validarID = await buscarClienteId(id)
+                let validarID = await buscarOrganizadorId(id)
 
                 //Verifica se o ID existe no BD, caso exista teremos o status 200
                 if (validarID.status_code == 200) {
 
-                    let validarGenero = await controllerGenero.buscarGeneroId(cliente.id_genero)
+                    let validarGenero = await controllerGenero.buscarGeneroId(organizador.id_genero)
 
                     if (validarGenero.status_code == 200) {
 
-                        //Adicionando o ID no JSON com os dados do cliente
-                        cliente.id = parseInt(id)
+                        //Adicionando o ID no JSON com os dados do organizador
+                        organizador.id = parseInt(id)
 
-                        //Chama a função do DAO para atualizar um cliente
-                        let result = await clienteDAO.setUpdateCustomer(cliente)
+                        //Chama a função do DAO para atualizar um organizador
+                        let result = await organizadorDAO.setUpdateOrganizer(organizador)
 
                         if (result) {
 
@@ -248,7 +246,7 @@ const atualizarCliente = async function (cliente, id, contentType) {
                         return validarGenero
                     }
                 } else {
-                    return validarID //Retorno da função de buscarclienteId (400 ou 404 ou 500)
+                    return validarID //Retorno da função de buscarorganizadorId (400 ou 404 ou 500)
                 }
             } else {
                 return validarDados //Retorno da função de validar dados do Gênero 400
@@ -263,8 +261,8 @@ const atualizarCliente = async function (cliente, id, contentType) {
 
 }
 
-//Apaga um cliente filtrando pelo ID
-const excluirCliente = async function (id) {
+//Apaga um organizador filtrando pelo ID
+const excluirOrganizador = async function (id) {
 
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
@@ -272,11 +270,11 @@ const excluirCliente = async function (id) {
 
     try {
 
-        let validarID = await buscarClienteId(id)
+        let validarID = await buscarOrganizadorId(id)
 
         if (validarID.status_code == 200) {
 
-            let result = await clienteDAO.setDeleteCustomer(id)
+            let result = await organizadorDAO.setDeleteOrganizer(id)
 
             if (result) {
 
@@ -293,7 +291,7 @@ const excluirCliente = async function (id) {
                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
             }
         } else {
-            return validarID //Retorno da função de buscarclienteId (400 ou 404 ou 500)
+            return validarID //Retorno da função de buscarorganizadorId (400 ou 404 ou 500)
         }
 
     } catch (error) {
@@ -302,24 +300,24 @@ const excluirCliente = async function (id) {
 
 }
 
-//Validação dos dados de cadastro do Cliente
-const validarDadosCliente = async function (cliente) {
+//Validação dos dados de cadastro do organizador
+const validarDadosOrganizador = async function (organizador) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
-    if (cliente.nome == '' || cliente.nome == null || cliente.nome == undefined || cliente.nome.length > 100) {
+    if (organizador.nome == '' || organizador.nome == null || organizador.nome == undefined || organizador.nome.length > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if (cliente.telefone.length > 11 || cliente.telefone == '' || cliente.telefone == null || cliente.telefone == undefined) {
+    } else if (organizador.telefone.length > 11 || organizador.telefone == '' || organizador.telefone == null || organizador.telefone == undefined) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [TELEFONE] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if (cliente.id_genero < 0 && cliente.id_genero != null) {
+    } else if (organizador.id_genero < 0 && organizador.id_genero != null) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [GENERO] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if (!cliente.cpf && !cliente.cnpj) {
+    } else if (!organizador.cpf && !organizador.cnpj) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF/CNPJ] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
@@ -335,31 +333,31 @@ function gerarSha1(texto) {
 }
 
 //Função para autenticar o login
-const AutenticarLoginCliente = async function (email, senha) {
+const AutenticarLoginOrganizador = async function (email, senha) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
 
-        let dadosClientes = await listarClientes();
+        let dadosOrganizadores = await listarOrganizadores();
 
-        if (dadosClientes.status_code === 200) {
-            let listaReal = dadosClientes.clientes;
+        if (dadosOrganizadores.status_code === 200) {
+            let listaReal = dadosOrganizadores.organizadores;
 
             let senhaCriptografada = gerarSha1(senha);
 
-            let clienteEncontrado = listaReal.find(cliente =>
-                cliente.email == email &&
-                cliente.senha == senhaCriptografada
+            let organizadorEncontrado = listaReal.find(organizador =>
+                organizador.email == email &&
+                organizador.senha == senhaCriptografada
             );
 
-            if (clienteEncontrado) {
+            if (organizadorEncontrado) {
                 return {
                     status: MESSAGE.SUCCESS_REQUEST.status,
                     status_code: MESSAGE.SUCCESS_REQUEST.status_code,
                     developments: MESSAGE.HEADER.developments,
                     message: MESSAGE.SUCCESS_REQUEST.message,
-                    cliente: clienteEncontrado
+                    organizador: organizadorEncontrado
                 }
             } else {
                 return MESSAGE.ERROR_NOT_FOUND; //404 
@@ -375,10 +373,10 @@ const AutenticarLoginCliente = async function (email, senha) {
 }
 
 module.exports = {
-    listarClientes,
-    buscarClienteId,
-    inserirCliente,
-    atualizarCliente,
-    excluirCliente,
-    AutenticarLoginCliente
+    listarOrganizadores,
+    buscarOrganizadorId,
+    inserirOrganizador,
+    atualizarOrganizador,
+    excluirOrganizador,
+    AutenticarLoginOrganizador
 }

@@ -12,6 +12,18 @@ const eventoDAO = require('../../model/DAO/evento.js')
 //Import da controller que faz o upload da foto
 const UPLOAD = require('../upload/controller_upload_azure.js')
 
+//Import da controller assunto 
+const controllerAssunto = require('../assunto/controller_assunto.js')
+
+//Import da controller categoria 
+const controllerCategoria = require('../categoria/controller_categoria.js')
+
+//Import da controller clienteEvento 
+const controllerClienteEvento = require('../evento/controller_cliente_evento.js')
+
+//Import da controller organizadorEvento 
+const controllerOrganizadorEvento = require('../evento/controller_organizador_evento.js')
+
 //Import do arquivo que padroniza todas as mensagens
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -28,6 +40,64 @@ const listarEventos = async function () {
 
         if (result) {
             if (result.length > 0) {
+
+                for (let evento of result) {
+
+                    const dataInicioOriginal = evento.data_inicio;
+                    const dataTerminoOriginal = evento.data_termino;
+
+                    if (evento.data_inicio) {
+                        evento.data_inicio = new Date(evento.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    }
+                    if (evento.data_termino) {
+                        evento.data_termino = new Date(evento.data_termino).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    }
+                    if (evento.hora_inicio) {
+                        evento.hora_inicio = new Date(evento.hora_inicio).toISOString().substring(11, 16);
+                    }
+                    if (evento.hora_termino) {
+                        evento.hora_termino = new Date(evento.hora_termino).toISOString().substring(11, 16);
+                    }
+
+                    let resultCategoria = await controllerCategoria.buscarCategoriaId(evento.id_categoria)
+
+                    if (resultCategoria.status_code == 200 && resultCategoria.categoria && resultCategoria.categoria.length > 0) {
+                        evento.categoria = resultCategoria.categoria[0].nome
+                        delete evento.id_categoria
+                    }
+
+                    let resultAssunto = await controllerAssunto.buscarAssuntoId(evento.id_assunto)
+                    if (resultAssunto.status_code == 200 && resultAssunto.assunto && resultAssunto.assunto.length > 0) {
+                        evento.assunto = resultAssunto.assunto[0].nome
+                        delete evento.id_assunto
+                    }
+
+                    let resultCliente = await controllerClienteEvento.listarClientesIdEvento(evento.id_evento)
+                    if (resultCliente.status_code == 200 && resultCliente.clientes && resultCliente.clientes.length > 0) {
+                        evento.clientes = resultCliente.clientes
+                    }
+
+                    let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(evento.id_evento)
+                    if (resultOrganizador.status_code == 200 && resultOrganizador.organizadores && resultOrganizador.organizadores.length > 0) {
+                        evento.organizadores = resultOrganizador.organizadores
+                    }
+
+                    if (dataInicioOriginal && dataTerminoOriginal) {
+
+                        let dataInicioObj = new Date(dataInicioOriginal);
+                        let dataTerminoObj = new Date(dataTerminoOriginal);
+
+                        const opcoes = { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' };
+
+                        let textoInicio = dataInicioObj.toLocaleDateString('pt-BR', opcoes);
+                        let textoFim = dataTerminoObj.toLocaleDateString('pt-BR', opcoes);
+
+                        evento.dataRealizacao = {
+                            "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
+                            "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
+                        };
+                    }
+                }
 
                 const jsonResult = {
                     status: MESSAGE.SUCCESS_REQUEST.status,
@@ -46,6 +116,7 @@ const listarEventos = async function () {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
@@ -64,6 +135,65 @@ const buscarEventoId = async function (id) {
             let result = await eventoDAO.getSelectByIdEvent(parseInt(id))
             if (result) {
                 if (result.length > 0) {
+
+                    for (let evento of result) {
+
+                        const dataInicioOriginal = evento.data_inicio;
+                        const dataTerminoOriginal = evento.data_termino;
+
+                        if (evento.data_inicio) {
+                            evento.data_inicio = new Date(evento.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                        }
+                        if (evento.data_termino) {
+                            evento.data_termino = new Date(evento.data_termino).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                        }
+                        if (evento.hora_inicio) {
+                            evento.hora_inicio = new Date(evento.hora_inicio).toISOString().substring(11, 16);
+                        }
+                        if (evento.hora_termino) {
+                            evento.hora_termino = new Date(evento.hora_termino).toISOString().substring(11, 16);
+                        }
+
+                        let resultCategoria = await controllerCategoria.buscarCategoriaId(evento.id_categoria)
+
+                        if (resultCategoria.status_code == 200 && resultCategoria.categoria && resultCategoria.categoria.length > 0) {
+                            evento.categoria = resultCategoria.categoria[0].nome
+                            delete evento.id_categoria
+                        }
+
+                        let resultAssunto = await controllerAssunto.buscarAssuntoId(evento.id_assunto)
+                        if (resultAssunto.status_code == 200 && resultAssunto.assunto && resultAssunto.assunto.length > 0) {
+                            evento.assunto = resultAssunto.assunto[0].nome
+                            delete evento.id_assunto
+                        }
+
+                        let resultCliente = await controllerClienteEvento.listarClientesIdEvento(evento.id_evento)
+                        if (resultCliente.status_code == 200 && resultCliente.clientes && resultCliente.clientes.length > 0) {
+                            evento.clientes = resultCliente.clientes
+                        }
+
+                        let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(evento.id_evento)
+                        if (resultOrganizador.status_code == 200 && resultOrganizador.organizadores && resultOrganizador.organizadores.length > 0) {
+                            evento.organizadores = resultOrganizador.organizadores
+                        }
+
+                        if (dataInicioOriginal && dataTerminoOriginal) {
+
+                            let dataInicioObj = new Date(dataInicioOriginal);
+                            let dataTerminoObj = new Date(dataTerminoOriginal);
+
+                            const opcoes = { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' };
+
+                            let textoInicio = dataInicioObj.toLocaleDateString('pt-BR', opcoes);
+                            let textoFim = dataTerminoObj.toLocaleDateString('pt-BR', opcoes);
+
+                            evento.dataRealizacao = {
+                                "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
+                                "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
+                            };
+                        }
+                    }
+
                     const jsonResult = {
                         status: MESSAGE.SUCCESS_REQUEST.status,
                         status_code: MESSAGE.SUCCESS_REQUEST.status_code,
@@ -88,38 +218,91 @@ const buscarEventoId = async function (id) {
     }
 }
 
-//Insere um nova evento
+//Insere um novo evento
 const inserirEvento = async function (evento, contentType, banner) {
-
-    //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
-    //não interfiram em outras funções
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
+        // Validação de Content-Type
         if (String(contentType).toLowerCase().includes('multipart/form-data')) {
 
+            // Converte IDs e Números
+            if (evento.id_assunto) evento.id_assunto = Number(evento.id_assunto);
+            if (evento.id_categoria) evento.id_categoria = Number(evento.id_categoria);
+            if (evento.quantidade_ingresso) evento.quantidade_ingresso = Number(evento.quantidade_ingresso);
+            if (evento.quantidade_ingresso_comprado) evento.quantidade_ingresso_comprado = Number(evento.quantidade_ingresso_comprado);
 
+            if (evento.is_visible === 'true') evento.is_visible = true;
+            if (evento.is_visible === 'false') evento.is_visible = false;
+
+            if (evento.cliente) {
+                if (typeof evento.cliente === 'string') {
+                    try {
+                        evento.cliente = JSON.parse(evento.cliente);
+                    } catch (e) {
+                        evento.cliente = [];
+                    }
+                }
+            } else {
+                evento.cliente = []; // Garante array vazio se não vier nada
+            }
+
+            if (evento.organizador) {
+                if (typeof evento.organizador === 'string') {
+                    try {
+                        evento.organizador = JSON.parse(evento.organizador);
+                    } catch (e) {
+                        evento.organizador = [];
+                    }
+                }
+            } else {
+                evento.organizador = []; // Garante array vazio se não vier nada
+            }
+
+            //Upload da Imagem
             let urlFoto = await UPLOAD.uploadFiles(banner)
-            if (urlFoto) {
 
+            if (urlFoto) {
                 let urlLimpa = urlFoto.split('?')[0];
                 evento.banner = urlLimpa;
+
                 let validarDados = await validarDadosEvento(evento)
 
                 if (!validarDados) {
 
-
-
-
-                    //Chama a função do DAO para inserir um novo filme
+                    // Insere o Evento Principal no Banco
                     let result = await eventoDAO.setInsertEvent(evento)
 
                     if (result) {
-
-                        //Chama a função para receber o ID gerado no BD
                         let lastIdEvento = await eventoDAO.getSelectLastIdEvent()
 
                         if (lastIdEvento) {
+
+                            if (Array.isArray(evento.cliente) && evento.cliente.length > 0) {
+                                for (let cliente of evento.cliente) {
+                                    if (cliente.id) {
+                                        let clienteEvento = {
+                                            id_evento: lastIdEvento,
+                                            id_cliente: cliente.id
+                                        }
+                                        let resultCliente = await controllerClienteEvento.inserirClienteEvento(clienteEvento, 'application/json');
+
+                                    }
+                                }
+                            }
+
+                            if (Array.isArray(evento.organizador) && evento.organizador.length > 0) {
+                                for (let organizador of evento.organizador) {
+                                    if (organizador.id) {
+                                        let organizadorEvento = {
+                                            id_evento: lastIdEvento,
+                                            id_organizador: organizador.id
+                                        }
+                                        let resultOrganizador = await controllerOrganizadorEvento.inserirOrganizadorEvento(organizadorEvento, 'application/json');
+
+                                    }
+                                }
+                            }
 
                             const jsonResult = {
                                 status: MESSAGE.SUCCESS_CREATED_ITEM.status,
@@ -127,29 +310,26 @@ const inserirEvento = async function (evento, contentType, banner) {
                                 developments: MESSAGE.HEADER.developments,
                                 message: MESSAGE.SUCCESS_CREATED_ITEM.message
                             }
-
-                            return jsonResult //201
+                            return jsonResult // Retorna 201 Created
 
                         } else {
-                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
                         }
                     } else {
-                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
                     }
-
                 } else {
-                    return validarDados //400
+                    return validarDados // Retorna 400 (Erro de validação)
                 }
             } else {
-                return MESSAGE.ERROR_UPLOADED_FILE
+                return MESSAGE.ERROR_UPLOADED_FILE // 415 ou erro de arquivo
             }
         } else {
-            return MESSAGE.ERROR_CONTENT_TYPE //415
+            return MESSAGE.ERROR_CONTENT_TYPE // 415
         }
     } catch (error) {
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
-
 }
 
 //Atualiza um evento filtrando pelo ID
@@ -162,6 +342,39 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
     try {
         //Validação do content-type
         if (String(contentType).toLowerCase().includes('multipart/form-data')) {
+
+            // Converte IDs e Números
+            if (evento.id_assunto) evento.id_assunto = Number(evento.id_assunto);
+            if (evento.id_categoria) evento.id_categoria = Number(evento.id_categoria);
+            if (evento.quantidade_ingresso) evento.quantidade_ingresso = Number(evento.quantidade_ingresso);
+            if (evento.quantidade_ingresso_comprado) evento.quantidade_ingresso_comprado = Number(evento.quantidade_ingresso_comprado);
+
+            if (evento.is_visible === 'true') evento.is_visible = true;
+            if (evento.is_visible === 'false') evento.is_visible = false;
+
+            if (evento.cliente) {
+                if (typeof evento.cliente === 'string') {
+                    try {
+                        evento.cliente = JSON.parse(evento.cliente);
+                    } catch (e) {
+                        evento.cliente = [];
+                    }
+                }
+            } else {
+                evento.cliente = []; // Garante array vazio se não vier nada
+            }
+
+            if (evento.organizador) {
+                if (typeof evento.organizador === 'string') {
+                    try {
+                        evento.organizador = JSON.parse(evento.organizador);
+                    } catch (e) {
+                        evento.organizador = [];
+                    }
+                }
+            } else {
+                evento.organizador = []; // Garante array vazio se não vier nada
+            }
 
             let urlFoto = await UPLOAD.uploadFiles(banner)
             if (urlFoto) {
@@ -187,6 +400,31 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
                         let result = await eventoDAO.setUpdateEvent(evento)
 
                         if (result) {
+
+                            if (Array.isArray(evento.cliente) && evento.cliente.length > 0) {
+                                for (let cliente of evento.cliente) {
+                                    if (cliente.id) {
+                                        let clienteEvento = {
+                                            id_evento: evento.id,
+                                            id_cliente: cliente.id
+                                        }
+                                        let resultCliente = await controllerClienteEvento.inserirClienteEvento(clienteEvento, 'application/json');
+
+                                    }
+                                }
+                            }
+                            if (Array.isArray(evento.organizador) && evento.organizador.length > 0) {
+                                for (let organizador of evento.organizador) {
+                                    if (organizador.id) {
+                                        let organizadorEvento = {
+                                            id_evento: evento.id,
+                                            id_organizador: organizador.id
+                                        }
+                                        let resultOrganizador = await controllerOrganizadorEvento.inserirOrganizadorEvento(organizadorEvento, 'application/json');
+
+                                    }
+                                }
+                            }
 
                             const jsonResult = {
                                 status: MESSAGE.SUCCESS_UPDATED_ITEM.status,
@@ -290,7 +528,7 @@ const validarDadosEvento = async function (evento) {
     } else if (isNaN(evento.quantidade_ingresso_comprado)) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [QUANTIDADE_INGRESSO_COMPRADO] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
-    } else if (evento.is_visible == '' || evento.is_visible == null || evento.is_visible == undefined || evento.is_visible != true && evento.is_visible != false) {
+    } else if (typeof evento.is_visible !== 'boolean') {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [IS_VISIBLE] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
     } else if (evento.id_categoria == '' || evento.id_categoria == null || evento.id_categoria == undefined || isNaN(evento.id_categoria)) {
