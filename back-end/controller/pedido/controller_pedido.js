@@ -51,6 +51,10 @@ const listarPedidos = async function () {
                     if (resultIngresso.status_code == 200) {
                         pedido.ingresso = resultIngresso.ingressos
                     }
+
+                    if (pedido.data_pedido != null) {
+                        pedido.data_pedido = new Date(pedido.data_pedido).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    }
                 }
 
                 const jsonResult = {
@@ -86,6 +90,7 @@ const buscarPedidoId = async function (id) {
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
             //Chama a função para filtrar pelo ID
             let result = await pedidoDAO.getSelectByIdRequest(parseInt(id))
+
             if (result) {
                 if (result.length > 0) {
 
@@ -104,6 +109,10 @@ const buscarPedidoId = async function (id) {
                         let resultIngresso = await controllerItem_Pedido.listarIngressosIdPedido(pedido.id_pedido)
                         if (resultIngresso.status_code == 200) {
                             pedido.ingresso = resultIngresso.ingressos
+                        }
+
+                        if (pedido.data_pedido != null) {
+                            pedido.data_pedido = new Date(pedido.data_pedido).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                         }
 
                     }

@@ -99,6 +99,8 @@ const inserirGenero = async function (genero, contentType) {
 
             if (!validarDados) {
 
+                genero.nome = genero.nome.toUpperCase()
+
                 //Chama a função do DAO para inserir um novo filme
                 let result = await generoDAO.setInsertGenre(genero)
 
@@ -160,6 +162,8 @@ const atualizarGenero = async function (genero, id, contentType) {
 
                     //Adicionando o ID no JSON com os dados do genero
                     genero.id = parseInt(id)
+
+                    genero.nome = genero.nome.toUpperCase()
 
                     //Chama a função do DAO para atualizar um genero
                     let result = await generoDAO.setUpdateGenre(genero)

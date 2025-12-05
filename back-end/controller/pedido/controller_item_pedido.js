@@ -117,7 +117,6 @@ const listarIngressosIdPedido = async function (IdPedido) {
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
         }
     } catch (error) {
-        console.log(error); // Adicionei um log para ajudar no debug
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }

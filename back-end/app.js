@@ -1,7 +1,7 @@
 /********************************************************************************************************************
  * Objetivo: Arquivo responsavel pelas requisições 
  * Data: 03/12/2025
- * Autores: Vitor Miguel  e João Blesa
+ * Autores: Vitor Miguel Rodrigues Cezario
  * Versão: 1.0
  ********************************************************************************************************************/
 
@@ -376,7 +376,7 @@ app.get('/api/v1/unievent/evento/:id', cors(), async function (request, response
 })
 
 //Insere um novo Evento no BD
-app.post('/api/v1/unievent/evento', cors(), bodyParserJSON, upload.single('banner'), async function (request, response) {
+app.post('/api/v1/unievent/evento', cors(), upload.single('banner'), async function (request, response) {
     
     let dadosBody   = request.body
 
@@ -391,7 +391,7 @@ app.post('/api/v1/unievent/evento', cors(), bodyParserJSON, upload.single('banne
 
 })
 
-app.put('/api/v1/unievent/evento/:id', cors(), bodyParserJSON, upload.single('banner'), async function (request, response) {
+app.put('/api/v1/unievent/evento/:id', cors(), upload.single('banner'), async function (request, response) {
     
     dadosBody   = request.body
 

@@ -116,7 +116,6 @@ const listarEventos = async function () {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) {
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
@@ -500,6 +499,14 @@ const excluirEvento = async function (id) {
 const validarDadosEvento = async function (evento) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    if(evento.is_visible == 1) {
+        evento.is_visible = true
+    }
+
+    if(evento.is_visible == 0) {
+        evento.is_visible = false
+    }
 
     if (evento.nome == '' || evento.nome == null || evento.nome == undefined || evento.nome.length > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] invalido!!!'
