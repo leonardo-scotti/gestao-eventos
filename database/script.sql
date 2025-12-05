@@ -355,6 +355,7 @@ END$$
 
 DELIMITER ;
 
+
 DELIMITER $$
 
 CREATE TRIGGER trg_AU_pedido_cancelado_devolver_estoque
