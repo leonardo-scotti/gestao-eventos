@@ -217,7 +217,7 @@ INSERT INTO tbl_evento (nome, descricao, data_inicio, hora_inicio, data_termino,
 ('Maratona da Cidade', 'Corrida de rua anual.', '2026-05-01', '07:00:00', '2026-05-01', '12:00:00', 'banner_maratona.jpg', 2000, 150, TRUE, 4, 5),
 ('Feira de Sustentabilidade', 'Exposição de produtos e serviços ecológicos.', '2026-06-15', '10:00:00', '2026-06-18', '20:00:00', 'banner_sustentavel.jpg', 3000, 100, FALSE, 5, 4);
 
-INSERT INTO tbl_ingresso (nome, preco_unitario, is_alive, id_evento) VALUES
+INSERT INTO tbl_ingresso (nome, preco_unitario, is_ativo, id_evento) VALUES
 ('Pista Comum', 80.00, TRUE, 2),
 ('VIP', 300.00, TRUE, 2),
 ('Acesso Geral', 45.00, TRUE, 4),
@@ -253,14 +253,13 @@ INSERT INTO tbl_cliente_evento (data_inscricao, id_cliente, id_evento) VALUES
 ('2025-11-15 16:30:00', 4, 4),
 ('2025-11-20 09:00:00', 5, 5);
 
+select * from tbl_pedido;
+select * from tbl_ingresso;
+
 INSERT INTO tbl_item_pedido (quantidade, id_pedido, id_ingresso) VALUES
-(2, 1, 4),  -- Pedido 1 comprou 2x Pacote 3 Dias
-(1, 2, 1),  -- Pedido 2 comprou 1x Pista Comum
-(3, 3, 3),  -- Pedido 3 comprou 3x Acesso Geral
-(1, 4, 2),  -- Pedido 4 comprou 1x VIP
-(5, 5, 5);  -- Pedido 5 comprou 5x Entrada Simples
+(2, 8, 2);  -- Pedido 5 comprou 5x Entrada Simples
 
-
+select * from tbl_pedido;
 
 -- TRIGGERS 
 
@@ -280,7 +279,11 @@ BEGIN
 END$$
 DELIMITER ;
 
+UPDATE tbl_item_pedido
+SET quantidade = 10.00
+WHERE id_ingresso = 2;
 
+select * from tbl_pedido;
 
 DELIMITER $$
 CREATE TRIGGER trg_AU_item_pedido_calcular_total_pedido
@@ -297,8 +300,6 @@ BEGIN
     WHERE p.id_pedido = NEW.id_pedido;
 END$$
 DELIMITER ;
-
-
 
 DELIMITER $$
 CREATE TRIGGER trg_AD_item_pedido_calcular_total_pedido
@@ -387,6 +388,7 @@ BEGIN
 END$$
 DELIMITER ;
 
+SHOW TRIGGERS;
 
 DELIMITER $$
 CREATE TRIGGER trg_BI_item_pedido_validar_quantidade_estoque
