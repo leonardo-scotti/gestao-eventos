@@ -450,3 +450,80 @@ select * from tbl_item_pedido;
 INSERT INTO tbl_item_pedido (quantidade, id_pedido, id_ingresso)
         VALUES( 10,'31',
                 '4');
+
+
+DELIMITER $$
+CREATE TRIGGER trg_AI_item_pedido_atualizar_estoque
+AFTER INSERT ON tbl_item_pedido
+FOR EACH ROW
+BEGIN
+   
+    UPDATE tbl_evento e
+    JOIN tbl_ingresso i ON e.id_evento = i.id_evento
+    SET e.quantidade_ingresso_comprado = e.quantidade_ingresso_comprado + NEW.quantidade
+    WHERE i.id_ingresso = NEW.id_ingresso;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER trg_BI_evento_validar_data_fim
+BEFORE INSERT ON tbl_evento
+FOR EACH ROW
+BEGIN
+    IF TIMESTAMP(NEW.data_inicio, NEW.hora_inicio) >= TIMESTAMP(NEW.data_termino, NEW.hora_termino) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'A data/hora de término do evento deve ser posterior à data/hora de início.';
+    END IF;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER trg_BI_cliente_validar_data_nascimento
+BEFORE INSERT ON tbl_cliente
+FOR EACH ROW
+BEGIN
+     
+    IF NEW.data_fundacao IS NULL AND NEW.data_nascimento IS NOT NULL AND NEW.data_nascimento > CURDATE() THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'A data de nascimento não pode ser uma data futura.';
+    END IF;
+    
+    IF NEW.data_fundacao IS NULL AND NEW.cpf IS NULL AND NEW.data_nascimento IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Para pessoa física, é necessário informar CPF ou Data de Nascimento.';
+    END IF;
+END$$
+DELIMITER ;
+
+
+SHOW TRIGGERS;
+
+select * from tbl_item_pedido;
+
+
+SELECT 
+    id_evento, 
+    nome, 
+    quantidade_ingresso AS 'Total', 
+    quantidade_ingresso_comprado AS 'Comprado'
+FROM tbl_evento
+WHERE id_evento = 1;
+
+INSERT INTO tbl_item_pedido (quantidade, id_pedido, id_ingresso) 
+VALUES (451, 1, 4);
+
+INSERT INTO tbl_item_pedido (quantidade, id_pedido, id_ingresso) 
+VALUES (10, 1, 4);
+
+SELECT 
+    quantidade_ingresso_comprado AS 'Comprado'
+FROM tbl_evento
+WHERE id_evento = 1;
+
+
+SHOW TRIGGERS 
+WHERE `Event` = 'INSERT' AND `Table` IN ('tbl_item_pedido', 'tbl_pedido');
+
+DROP TRIGGER IF EXISTS trg_AI_item_pedido_diminuir_estoque;
