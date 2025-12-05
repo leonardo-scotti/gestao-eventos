@@ -488,3 +488,66 @@ SHOW TRIGGERS
 WHERE `Event` = 'INSERT' AND `Table` IN ('tbl_item_pedido', 'tbl_pedido');
 
 DROP TRIGGER IF EXISTS trg_AI_item_pedido_diminuir_estoque;
+
+
+-- views 
+
+CREATE VIEW views_eventos_ativos_simples AS
+SELECT
+    e.id_evento,
+    e.nome AS evento_nome,
+    e.data_inicio,
+    e.hora_inicio,
+    c.nome AS categoria_nome,
+    a.nome AS assunto_nome,
+    e.banner
+FROM tbl_evento e
+JOIN tbl_categoria c ON e.id_categoria = c.id_categoria
+JOIN tbl_assunto a ON e.id_assunto = a.id_assunto
+WHERE e.is_visible = TRUE;
+
+
+CREATE VIEW views_ingressos_por_evento AS
+SELECT
+    i.id_ingresso,
+    e.nome AS evento_nome,
+    i.nome AS ingresso_nome,
+    i.preco_unitario,
+    i.is_ative
+FROM tbl_ingresso i
+JOIN tbl_evento e ON i.id_evento = e.id_evento;
+
+CREATE VIEW views_enderecos_eventos AS
+SELECT
+    ed.id_endereco,
+    e.nome AS evento_nome,
+    ed.logradouro,
+    ed.numero,
+    ed.bairro,
+    ed.cidade,
+    est.sigla AS estado
+FROM tbl_endereco ed
+JOIN tbl_evento e ON ed.id_evento = e.id_evento
+JOIN tbl_estado est ON ed.id_estado = est.id_estado;
+
+CREATE VIEW views_pedidos_resumo AS
+SELECT
+    p.id_pedido,
+    c.nome AS cliente_nome,
+    p.data_pedido,
+    p.status_pedido,
+    p.valor_total
+FROM tbl_pedido p
+JOIN tbl_cliente c ON p.id_cliente = c.id_cliente
+ORDER BY p.data_pedido DESC;
+
+CREATE VIEW views_itens_pedidos_detalhe AS
+SELECT
+    ip.id_item_pedido,
+    ip.id_pedido,
+    i.nome AS ingresso_nome,
+    i.preco_unitario,
+    ip.quantidade,
+    (ip.quantidade * i.preco_unitario) AS subtotal
+FROM tbl_item_pedido ip
+JOIN tbl_ingresso i ON ip.id_ingresso = i.id_ingresso;
