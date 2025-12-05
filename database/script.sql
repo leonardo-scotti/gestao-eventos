@@ -139,16 +139,6 @@ select * from tbl_item_pedido;
 select * from tbl_organizador;
 select * from tbl_pedido;
 
-create table tbl_organizador_evento (
-id_organizador_evento int primary key auto_increment,
-data_inscricao datetime not null,
-id_organizador int not null,
-id_evento int not null,
-foreign key (id_organizador) references tbl_organizador (id_organizador),
-foreign key (id_evento) references tbl_evento (id_evento)
-);
-
-
 -- inserts
 
 INSERT INTO tbl_assunto (nome) VALUES 
