@@ -334,10 +334,6 @@ const validarDadosPedido = async function (pedido) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [STATUS_PEDIDO] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if (pedido.valor_total == '' || pedido.valor_total == null || pedido.valor_total == undefined || Number(pedido.valor_total) < 0 || Number(pedido.valor_total) > 9999999.99 || isNaN(pedido.valor_total)) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [VALOR_TOTAL] invalido!!!'
-        return MESSAGE.ERROR_REQUIRED_FIELDS //400
-
     } else if (pedido.id_organizador == '' || pedido.id_organizador == null || pedido.id_organizador == undefined || isNaN(pedido.id_organizador)) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_ORGANIZADOR] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400

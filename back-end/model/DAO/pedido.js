@@ -73,12 +73,10 @@ const setInsertRequest = async function (pedido) {
     try {
         let sql = `INSERT INTO tbl_pedido (data_pedido,
                                             status_pedido,
-                                            valor_total,
                                             id_organizador,
                                             id_cliente) 
         VALUES('${pedido.data_pedido}',
                 '${pedido.status_pedido}',
-                ${pedido.valor_total},
                 ${pedido.id_organizador},
                 ${pedido.id_cliente});`
 
@@ -101,7 +99,6 @@ const setUpdateRequest = async function (pedido) {
         let sql = `UPDATE tbl_pedido SET 
                         data_pedido         = '${pedido.data_pedido}',
                         status_pedido       =  '${pedido.status_pedido}',
-                        valor_total         =  ${pedido.valor_total},
                         id_organizador      =  ${pedido.id_organizador},
                         id_cliente          =  ${pedido.id_cliente}
                     WHERE id_pedido = ${pedido.id}`
