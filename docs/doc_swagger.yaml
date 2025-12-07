@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: API de Gestão de Eventos
-  description: Documentação da API com FOREIGN KEYS em Request (Array de IDs) e Response (Array de Object Completo/Simples).
-  version: 1.9.0
+  title: API de Gestão de Eventos (UniEvent)
+  description: Documentação corrigida com exemplos exatos de resposta para Endereços e Ingressos.
+  version: 3.1.0
   contact:
     name: Vitor Miguel Rodrigues Cezario
 
@@ -11,55 +11,91 @@ servers:
     description: Servidor Local
 
 tags:
-  - name: Eventos
-  - name: Organizadores
-  - name: Clientes
-  - name: Pedidos
-  - name: Itens Pedido
-  - name: Endereços
-  - name: Estados
-  - name: Ingressos
-  - name: Categorias
-  - name: Assuntos
-  - name: Gêneros
-  
+  - name: Autenticação
+  - name: Evento
+  - name: Categoria
+  - name: Pedido
+  - name: Cliente
+  - name: Organizador
+  - name: Ingresso
+  - name: Endereço
+  - name: Estado
+  - name: Assunto
+  - name: Gênero
+
 paths:
-  # --- EVENTOS ---
-  /evento:
+  # ==========================================
+  #                 LOGIN
+  # ==========================================
+  /cliente/login:
     post:
-      tags: [Eventos]
-      summary: Criar novo evento
+      tags: [Autenticação]
+      summary: Login de Cliente
       requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/EventoRequest'
-      responses:
-        '201':
-          description: Evento criado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseEventoCreate' 
-    put:
-      tags: [Eventos]
-      summary: Atualizar evento
-      requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EventoRequest'
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
-          description: Evento atualizado
+          description: Sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseEventoUpdate'
+                $ref: '#/components/schemas/ResponseClienteLogin'
 
+  /organizador/login:
+    post:
+      tags: [Autenticação]
+      summary: Login de Organizador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOrganizadorLogin'
+
+  # ==========================================
+  #                 LOGOUT
+  # ==========================================
+  /logout/cliente:
+    post:
+      tags: [Autenticação]
+      summary: Logout de Cliente
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseLogout'
+
+  /logout/organizador:
+    post:
+      tags: [Autenticação]
+      summary: Logout de Organizador
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseLogout'
+
+  # ==========================================
+  #                 EVENTO
+  # ==========================================
   /eventos:
     get:
-      tags: [Eventos]
+      tags: [Evento]
       summary: Listar todos os eventos
       responses:
         '200':
@@ -71,8 +107,8 @@ paths:
 
   /evento/{id}:
     get:
-      tags: [Eventos]
-      summary: Obter evento por ID
+      tags: [Evento]
+      summary: Buscar Evento pelo ID
       parameters:
         - in: path
           name: id
@@ -84,17 +120,10 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/ResponseGenericMessage'
-                  - type: object
-                    properties:
-                      evento:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/EventoObject'
+                $ref: '#/components/schemas/ResponseUnicoEvento'
     delete:
-      tags: [Eventos]
-      summary: Deletar evento
+      tags: [Evento]
+      summary: Excluir Evento
       parameters:
         - in: path
           name: id
@@ -102,624 +131,57 @@ paths:
           required: true
       responses:
         '200':
-          description: Deletado com sucesso
+          description: Excluído com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseEventoDelete'
+                $ref: '#/components/schemas/ResponseDelete'
 
-  # --- ORGANIZADORES ---
-  /organizador:
+  /evento:
     post:
-      tags: [Organizadores]
-      summary: Criar organizador
+      tags: [Evento]
+      summary: Inserir novo Evento
       requestBody:
+        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PessoaRequest'
+              $ref: '#/components/schemas/EventoRequest'
       responses:
         '201':
           description: Criado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseOrganizadorCreate' 
+                $ref: '#/components/schemas/ResponseCreate'
     put:
-      tags: [Organizadores]
-      summary: Atualizar organizador
+      tags: [Evento]
+      summary: Atualizar Evento
       requestBody:
+        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               allOf:
                 - type: object
                   properties:
-                    id: { type: integer }
-                - $ref: '#/components/schemas/PessoaRequest'
+                    id_evento: { type: integer }
+                - $ref: '#/components/schemas/EventoRequest'
       responses:
         '200':
           description: Atualizado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseOrganizadorUpdate'
+                $ref: '#/components/schemas/ResponseUpdate'
 
-  /organizadores:
-    get:
-      tags: [Organizadores]
-      summary: Listar todos organizadores
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseListaOrganizadores'
-
-  /organizador/{id}:
-    get:
-      tags: [Organizadores]
-      summary: Obter organizador por ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                # Reutilizando create pois retorna o objeto + mensagem
-                $ref: '#/components/schemas/ResponseOrganizadorCreate' 
-    delete:
-      tags: [Organizadores]
-      summary: Deletar organizador
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseOrganizadorDelete'
-
-  # --- CLIENTES ---
-  /cliente:
-    post:
-      tags: [Clientes]
-      summary: Criar cliente
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PessoaRequest'
-      responses:
-        '201':
-          description: Criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseClienteCreate' 
-    put:
-      tags: [Clientes]
-      summary: Atualizar cliente
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - type: object
-                  properties:
-                    id: { type: integer }
-                - $ref: '#/components/schemas/PessoaRequest'
-      responses:
-        '200':
-          description: Atualizado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseClienteUpdate'
-
-  /clientes:
-    get:
-      tags: [Clientes]
-      summary: Listar todos clientes
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseListaClientes'
-
-  /cliente/{id}:
-    get:
-      tags: [Clientes]
-      summary: Obter cliente por ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseClienteCreate' 
-    delete:
-      tags: [Clientes]
-      summary: Deletar cliente
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseClienteDelete'
-
-  # --- PEDIDOS ---
-  /pedido:
-    post:
-      tags: [Pedidos]
-      summary: Criar pedido
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PedidoRequest'
-      responses:
-        '201':
-          description: Criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponsePedidoCreate' 
-    put:
-      tags: [Pedidos]
-      summary: Atualizar pedido
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - type: object
-                  properties:
-                    id: { type: integer }
-                - $ref: '#/components/schemas/PedidoRequest'
-      responses:
-        '200':
-          description: Atualizado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponsePedidoUpdate'
-
-  /pedidos:
-    get:
-      tags: [Pedidos]
-      summary: Listar pedidos
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseListaPedidos'
-
-  /pedido/{id}:
-    get:
-      tags: [Pedidos]
-      summary: Obter pedido
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponsePedidoCreate' 
-    delete:
-      tags: [Pedidos]
-      summary: Deletar pedido
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponsePedidoDelete'
-
-  # --- ITEM PEDIDO ---
-  /item-pedido:
-    post:
-      tags: [Itens Pedido]
-      summary: Criar item pedido
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ItemPedidoRequest'
-      responses:
-        '201':
-          description: Criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseItemPedidoCreate' 
-    put:
-      tags: [Itens Pedido]
-      summary: Atualizar item pedido
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - type: object
-                  properties:
-                    id: { type: integer }
-                - $ref: '#/components/schemas/ItemPedidoRequest'
-      responses:
-        '200':
-          description: Atualizado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseItemPedidoUpdate'
-
-  /itens-pedidos:
-    get:
-      tags: [Itens Pedido]
-      summary: Listar itens pedidos
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseListaItensPedidos'
-
-  /item-pedido/{id}:
-    get:
-      tags: [Itens Pedido]
-      summary: Obter item pedido
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseItemPedidoCreate' 
-    delete:
-      tags: [Itens Pedido]
-      summary: Deletar item pedido
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseItemPedidoDelete'
-
-  # --- ENDERECO ---
-  /endereco:
-    post:
-      tags: [Endereços]
-      summary: Criar endereço
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EnderecoRequest'
-      responses:
-        '201':
-          description: Criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseEnderecoCreate' 
-    put:
-      tags: [Endereços]
-      summary: Atualizar endereço
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - type: object
-                  properties:
-                    id: { type: integer }
-                - $ref: '#/components/schemas/EnderecoRequest'
-      responses:
-        '200':
-          description: Atualizado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseEnderecoUpdate'
-
-  /enderecos:
-    get:
-      tags: [Endereços]
-      summary: Listar endereços
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseListaEnderecos'
-
-  /endereco/{id}:
-    get:
-      tags: [Endereços]
-      summary: Obter endereço
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseEnderecoCreate' 
-    delete:
-      tags: [Endereços]
-      summary: Deletar endereço
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseEnderecoDelete'
-
-  # --- ESTADO ---
-  /estado:
-    post:
-      tags: [Estados]
-      summary: Criar estado
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [sigla]
-              properties:
-                sigla: { type: string }
-      responses:
-        '201':
-          description: Criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseEstadoCreate' 
-    put:
-      tags: [Estados]
-      summary: Atualizar estado
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [id, sigla]
-              properties:
-                id: { type: integer }
-                sigla: { type: string }
-      responses:
-        '200':
-          description: Atualizado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseEstadoUpdate' 
-
-  /estados:
-    get:
-      tags: [Estados]
-      summary: Listar estados
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseListaEstados'
-
-  /estado/{id}:
-    get:
-      tags: [Estados]
-      summary: Obter estado
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseEstado' 
-    delete:
-      tags: [Estados]
-      summary: Deletar estado
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseEstadoDelete' 
-
-  # --- INGRESSO ---
-  /ingresso:
-    post:
-      tags: [Ingressos]
-      summary: Criar ingresso
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IngressoRequest'
-      responses:
-        '201':
-          description: Criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseIngressoCreate' 
-    put:
-      tags: [Ingressos]
-      summary: Atualizar ingresso
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - type: object
-                  properties:
-                    id: { type: integer }
-                - $ref: '#/components/schemas/IngressoRequest'
-      responses:
-        '200':
-          description: Atualizado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseIngressoUpdate' 
-
-  /ingressos:
-    get:
-      tags: [Ingressos]
-      summary: Listar ingressos
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseListaIngressos'
-
-  /ingresso/{id}:
-    get:
-      tags: [Ingressos]
-      summary: Obter ingresso
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseIngresso' 
-    delete:
-      tags: [Ingressos]
-      summary: Deletar ingresso
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseIngressoDelete' 
-
-  # --- CATEGORIA ---
-  /categoria:
-    post:
-      tags: [Categorias]
-      summary: Criar categoria
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CategoriaAssuntoRequest'
-      responses:
-        '201':
-          description: Criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseCategoriaCreate' 
-    put:
-      tags: [Categorias]
-      summary: Atualizar categoria
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [id, nome]
-              properties:
-                id: { type: integer }
-                nome: { type: string }
-      responses:
-        '200':
-          description: Atualizado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseCategoriaUpdate' 
-
+  # ==========================================
+  #               CATEGORIA
+  # ==========================================
   /categorias:
     get:
-      tags: [Categorias]
-      summary: Listar categorias
+      tags: [Categoria]
+      summary: Listar Categorias
       responses:
         '200':
           description: Sucesso
@@ -730,8 +192,8 @@ paths:
 
   /categoria/{id}:
     get:
-      tags: [Categorias]
-      summary: Obter categoria
+      tags: [Categoria]
+      summary: Buscar Categoria pelo ID
       parameters:
         - in: path
           name: id
@@ -743,10 +205,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseCategoria' 
+                $ref: '#/components/schemas/ResponseUnicaCategoria'
     delete:
-      tags: [Categorias]
-      summary: Deletar categoria
+      tags: [Categoria]
+      summary: Excluir Categoria
       parameters:
         - in: path
           name: id
@@ -754,53 +216,397 @@ paths:
           schema: { type: integer }
       responses:
         '200':
-          description: Sucesso
+          description: Excluído com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseCategoriaDelete' 
+                $ref: '#/components/schemas/ResponseDelete'
 
-  # --- ASSUNTO ---
-  /assunto:
+  /categoria:
     post:
-      tags: [Assuntos]
-      summary: Criar assunto
+      tags: [Categoria]
+      summary: Inserir nova Categoria
       requestBody:
+        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CategoriaAssuntoRequest'
+              $ref: '#/components/schemas/CategoriaRequest'
       responses:
         '201':
           description: Criado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseAssuntoCreate' 
+                $ref: '#/components/schemas/ResponseCreate'
     put:
-      tags: [Assuntos]
-      summary: Atualizar assunto
+      tags: [Categoria]
+      summary: Atualizar Categoria
       requestBody:
+        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              type: object
-              required: [id, nome]
-              properties:
-                id: { type: integer }
-                nome: { type: string }
+              allOf:
+                - type: object
+                  properties:
+                    id_categoria: { type: integer }
+                - $ref: '#/components/schemas/CategoriaRequest'
       responses:
         '200':
           description: Atualizado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseAssuntoUpdate' 
+                $ref: '#/components/schemas/ResponseUpdate'
 
+  # ==========================================
+  #                 PEDIDO
+  # ==========================================
+  /pedidos:
+    get:
+      tags: [Pedido]
+      summary: Listar Pedidos
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaPedidos'
+
+  /pedido/{id}:
+    get:
+      tags: [Pedido]
+      summary: Buscar Pedido pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnicoPedido'
+    delete:
+      tags: [Pedido]
+      summary: Excluir Pedido
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Excluído com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDelete'
+
+  /pedido:
+    post:
+      tags: [Pedido]
+      summary: Inserir novo Pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoRequest'
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCreate'
+    put:
+      tags: [Pedido]
+      summary: Atualizar Pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id_pedido: { type: integer }
+                - $ref: '#/components/schemas/PedidoRequest'
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUpdate'
+
+  # ==========================================
+  #                 CLIENTE
+  # ==========================================
+  /clientes:
+    get:
+      tags: [Cliente]
+      summary: Listar Clientes
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaClientes'
+
+  /cliente/{id}:
+    get:
+      tags: [Cliente]
+      summary: Buscar Cliente pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnicaPessoa'
+    delete:
+      tags: [Cliente]
+      summary: Excluir Cliente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Excluído com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDelete'
+
+  /cliente:
+    post:
+      tags: [Cliente]
+      summary: Inserir novo Cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PessoaRequest'
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCreate'
+    put:
+      tags: [Cliente]
+      summary: Atualizar Cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id_cliente: { type: integer }
+                - $ref: '#/components/schemas/PessoaRequest'
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUpdate'
+
+  # ==========================================
+  #               ORGANIZADOR
+  # ==========================================
+  /organizadores:
+    get:
+      tags: [Organizador]
+      summary: Listar Organizadores
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaOrganizadores'
+
+  /organizador/{id}:
+    get:
+      tags: [Organizador]
+      summary: Buscar Organizador pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnicaPessoa'
+    delete:
+      tags: [Organizador]
+      summary: Excluir Organizador
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Excluído com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDelete'
+
+  /organizador:
+    post:
+      tags: [Organizador]
+      summary: Inserir novo Organizador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PessoaRequest'
+      responses:
+        '201':
+          description: Criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCreate'
+    put:
+      tags: [Organizador]
+      summary: Atualizar Organizador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id_organizador: { type: integer }
+                - $ref: '#/components/schemas/PessoaRequest'
+      responses:
+        '200':
+          description: Atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUpdate'
+
+  # ==========================================
+  #                 GÊNERO
+  # ==========================================
+  /generos:
+    get:
+      tags: [Gênero]
+      summary: Listar Gêneros
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaGeneros'
+
+  /genero/{id}:
+    get:
+      tags: [Gênero]
+      summary: Buscar Gênero pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnicoGenero'
+    delete:
+      tags: [Gênero]
+      summary: Excluir Gênero
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Excluído
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDelete'
+
+  /genero:
+    post:
+      tags: [Gênero]
+      summary: Inserir novo Gênero
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneroRequest'
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCreate'
+    put:
+      tags: [Gênero]
+      summary: Atualizar Gênero
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id_genero: { type: integer }
+                - $ref: '#/components/schemas/GeneroRequest'
+      responses:
+        '200':
+          description: Atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUpdate'
+
+  # ==========================================
+  #                 ASSUNTO
+  # ==========================================
   /assuntos:
     get:
-      tags: [Assuntos]
-      summary: Listar assuntos
+      tags: [Assunto]
+      summary: Listar Assuntos
       responses:
         '200':
           description: Sucesso
@@ -811,8 +617,8 @@ paths:
 
   /assunto/{id}:
     get:
-      tags: [Assuntos]
-      summary: Obter assunto
+      tags: [Assunto]
+      summary: Buscar Assunto pelo ID
       parameters:
         - in: path
           name: id
@@ -824,10 +630,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseAssunto' 
+                $ref: '#/components/schemas/ResponseUnicoAssunto'
     delete:
-      tags: [Assuntos]
-      summary: Deletar assunto
+      tags: [Assunto]
+      summary: Excluir Assunto
       parameters:
         - in: path
           name: id
@@ -835,33 +641,32 @@ paths:
           schema: { type: integer }
       responses:
         '200':
-          description: Sucesso
+          description: Excluído
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseAssuntoDelete' 
-  
-  # --- GÊNERO ---
-  /genero:
+                $ref: '#/components/schemas/ResponseDelete'
+
+  /assunto:
     post:
-      tags: [Gêneros]
-      summary: Cria um novo registro de gênero
+      tags: [Assunto]
+      summary: Inserir novo Assunto
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GeneroRequest'
+              $ref: '#/components/schemas/AssuntoRequest'
       responses:
         '201':
-          description: Gênero criado com sucesso.
+          description: Criado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGeneroCreate'
+                $ref: '#/components/schemas/ResponseCreate'
     put:
-      tags: [Gêneros]
-      summary: Atualiza um registro de gênero pelo ID
+      tags: [Assunto]
+      summary: Atualizar Assunto
       requestBody:
         required: true
         content:
@@ -870,766 +675,949 @@ paths:
               allOf:
                 - type: object
                   properties:
-                    id: { type: integer }
-                - $ref: '#/components/schemas/GeneroRequest'
+                    id_assunto: { type: integer }
+                - $ref: '#/components/schemas/AssuntoRequest'
       responses:
         '200':
-          description: Gênero atualizado com sucesso.
+          description: Atualizado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGeneroUpdate'
+                $ref: '#/components/schemas/ResponseUpdate'
 
-  /generos:
+  # ==========================================
+  #                 INGRESSO
+  # ==========================================
+  /ingressos:
     get:
-      tags: [Gêneros]
-      summary: Retorna todos os registros de gênero
+      tags: [Ingresso]
+      summary: Listar Ingressos
       responses:
         '200':
-          description: Lista de todos os gêneros retornada com sucesso.
+          description: Sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseListaGeneros'
+                $ref: '#/components/schemas/ResponseListaIngressos'
 
-  /genero/{id}:
+  /ingresso/{id}:
     get:
-      tags: [Gêneros]
-      summary: Retorna um registro de gênero pelo ID
+      tags: [Ingresso]
+      summary: Buscar Ingresso pelo ID
       parameters:
         - in: path
           name: id
-          schema:
-            type: integer
           required: true
-          description: O ID do gênero a ser buscado.
+          schema: { type: integer }
       responses:
         '200':
-          description: Gênero retornado com sucesso.
+          description: Sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGenero'
+                $ref: '#/components/schemas/ResponseUnicoIngresso'
     delete:
-      tags: [Gêneros]
-      summary: Deleta um registro de gênero pelo ID
+      tags: [Ingresso]
+      summary: Excluir Ingresso
       parameters:
         - in: path
           name: id
-          schema:
-            type: integer
           required: true
-          description: O ID do gênero a ser deletado.
+          schema: { type: integer }
       responses:
         '200':
-          description: Gênero deletado com sucesso.
+          description: Excluído
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseGeneroDelete'
+                $ref: '#/components/schemas/ResponseDelete'
+
+  /ingresso:
+    post:
+      tags: [Ingresso]
+      summary: Inserir novo Ingresso
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngressoRequest'
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCreate'
+    put:
+      tags: [Ingresso]
+      summary: Atualizar Ingresso
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id_ingresso: { type: integer }
+                - $ref: '#/components/schemas/IngressoRequest'
+      responses:
+        '200':
+          description: Atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUpdate'
+
+  # ==========================================
+  #                 ENDEREÇO
+  # ==========================================
+  /enderecos:
+    get:
+      tags: [Endereço]
+      summary: Listar Endereços
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaEnderecos'
+
+  /endereco/{id}:
+    get:
+      tags: [Endereço]
+      summary: Buscar Endereço pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnicoEndereco'
+    delete:
+      tags: [Endereço]
+      summary: Excluir Endereço
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Excluído
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDelete'
+
+  /endereco:
+    post:
+      tags: [Endereço]
+      summary: Inserir novo Endereço
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnderecoRequest'
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCreate'
+    put:
+      tags: [Endereço]
+      summary: Atualizar Endereço
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id_endereco: { type: integer }
+                - $ref: '#/components/schemas/EnderecoRequest'
+      responses:
+        '200':
+          description: Atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUpdate'
+
+  # ==========================================
+  #                 ESTADO
+  # ==========================================
+  /estados:
+    get:
+      tags: [Estado]
+      summary: Listar Estados
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaEstados'
+
+  /estado/{id}:
+    get:
+      tags: [Estado]
+      summary: Buscar Estado pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnicoEstado'
+    delete:
+      tags: [Estado]
+      summary: Excluir Estado
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Excluído
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDelete'
+
+  /estado:
+    post:
+      tags: [Estado]
+      summary: Inserir novo Estado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EstadoRequest'
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCreate'
+    put:
+      tags: [Estado]
+      summary: Atualizar Estado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id_estado: { type: integer }
+                - $ref: '#/components/schemas/EstadoRequest'
+      responses:
+        '200':
+          description: Atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUpdate'
 
 components:
   schemas:
-    # ====================================================================
-    #           SCHEMAS DE ESTRUTURA E MENSAGENS COMUNS
-    # ====================================================================
+    # --- ENVELOPES DE RESPOSTA (SUCESSO) ---
     
-    # --- COMMON ---
+    ResponseCreate:
+      type: object
+      properties:
+        status: { type: boolean, example: true }
+        status_code: { type: integer, example: 201 }
+        developments: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
+
+    ResponseUpdate:
+      type: object
+      properties:
+        status: { type: boolean, example: true }
+        status_code: { type: integer, example: 200 }
+        developments: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
+
+    ResponseDelete:
+      type: object
+      properties:
+        status: { type: boolean, example: true }
+        status_code: { type: integer, example: 200 }
+        developments: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Item excluído com sucesso!!!" }
+
     ResponseGenericMessage:
       type: object
       properties:
         status: { type: boolean, example: true }
-        status_code: { type: integer, example: 200 } # Alterado de statuscode para status_code
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        status_code: { type: integer, example: 200 }
+        developments: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
         message: { type: string, example: "Requisição bem sucedida!!!" }
 
-    # --- RESPONSE FOREIGN KEY STRUCTURE (SIMPLE OBJECT OUTPUT) ---
-    ResponseFK:
-      type: array
-      items:
-        type: object
-        properties:
-          id: { type: integer, example: 1 }
-          nome: { type: string, example: "Nome do Campo FK" }
+    # ==========================================================
+    #                  REQUEST SCHEMAS
+    # ==========================================================
+    EventoRequest:
+      type: object
+      required: [nome, descricao, data_inicio, hora_inicio, data_termino, hora_termino, quantidade_ingresso, is_visible, id_categoria, id_assunto]
+      properties:
+        nome: 
+          type: string
+          example: "Tech Summit São Paulo 2024"
+        descricao: 
+          type: string
+          example: "O maior evento de inovação..."
+        data_inicio: 
+          type: string
+          example: "2024-11-20"
+        hora_inicio: 
+          type: string
+          example: "09:00:00"
+        data_termino: 
+          type: string
+          example: "2024-11-22"
+        hora_termino: 
+          type: string
+          example: "18:00:00"
+        banner: 
+          type: string
+          format: binary
+        quantidade_ingresso: 
+          type: integer
+          example: 500
+        quantidade_ingresso_comprado: 
+          type: integer
+          example: 0
+        is_visible: 
+          type: boolean
+          example: true
+        id_categoria: 
+          type: integer
+          example: 2
+        id_assunto: 
+          type: integer
+          example: 6
+        cliente:
+          type: string
+          description: "Array de clientes"
+        organizador:
+          type: string
+          description: "Array de organizadores"
 
-    # ====================================================================
-    #           SCHEMAS DE DADOS (REQUEST/OBJECT)
-    # ====================================================================
+    CategoriaRequest:
+      type: object
+      required: [nome, icone]
+      properties:
+        nome: 
+          type: string
+          example: "Tecnologia"
+        icone: 
+          type: string
+          format: binary
+
+    PedidoRequest:
+      type: object
+      required: [data_pedido, status_pedido, valor_total, id_organizador, id_cliente, ingresso]
+      properties:
+        data_pedido: 
+          type: string
+          format: date
+          example: "1967-07-18"
+        status_pedido: 
+          type: string
+          example: "FINALIZADO"
+        valor_total: 
+          type: number
+          format: float
+          example: 10.00
+        id_organizador: 
+          type: integer
+          example: 2
+        id_cliente: 
+          type: integer
+          example: 1
+        ingresso:
+          type: array
+          items:
+            type: object
+            properties:
+              id: 
+                type: integer
+                example: 4
+              quantidade: 
+                type: integer
+                example: 10
+
+    PessoaRequest:
+      type: object
+      required: [nome, email, senha, cpf, id_genero]
+      properties:
+        nome: { type: string, example: "vitor" }
+        email: { type: string, example: "vitor@gmail.com" }
+        senha: { type: string, example: "batatinha123" }
+        cpf: { type: string, example: "803.744.544-93" }
+        cnpj: { type: string, nullable: true, example: null }
+        telefone: { type: string, example: "11993679608" }
+        data_nascimento: { type: string, format: date, example: "1967-07-18" }
+        data_fundacao: { type: string, nullable: true, format: date, example: null }
+        id_genero: { type: integer, example: 1 }
     
-    # --- CATEGORIA/ASSUNTO OBJECTS (Reutilizado) ---
-    CategoriaAssuntoRequest:
+    LoginRequest:
       type: object
-      required: [nome]
+      required: [email, senha]
       properties:
-        nome: { type: string, example: "Palestra" }
+        email: { type: string, example: "Pedro3@gmail.com" }
+        senha: { type: string, example: "batatinha123" }
 
-    CategoriaAssuntoObject:
-      type: object
-      properties:
-        id: { type: integer, example: 1 }
-        nome: { type: string, example: "Workshop" }
-
-    # --- GÊNERO ---
     GeneroRequest:
       type: object
       required: [nome]
       properties:
-        nome: { type: string, example: "Não-binário" }
+        nome: { type: string, example: "HOMEM" }
 
-    GeneroObject:
+    AssuntoRequest:
       type: object
+      required: [nome]
       properties:
-        id: { type: integer, example: 1 }
-        nome: { type: string, example: "Masculino" }
-        
-    # --- EVENTOS ---
-    EventoRequest:
-      type: object
-      required: [nome, descricao, data_inicio, data_fim, localizacao, organizador, categoria, ingresso]
-      properties:
-        nome: { type: string, example: "Show de Rock" }
-        descricao: { type: string, example: "Evento com as melhores bandas de rock." }
-        data_inicio: { type: string, format: date-time }
-        data_fim: { type: string, format: date-time }
-        localizacao: { type: string, example: "Estádio Municipal" }
-        organizador:
-          type: array
-          items:
-            type: object
-            properties:
-              id_organizador: { type: integer }
-        categoria:
-          type: array
-          items:
-            type: object
-            properties:
-              id_categoria: { type: integer }
-        ingresso:
-          type: array
-          items:
-            type: object
-            properties:
-              id_ingresso: { type: integer }
+        nome: { type: string, example: "Tecnologia" }
 
-    EventoObject:
+    EstadoRequest:
+      type: object
+      required: [sigla]
+      properties:
+        sigla: { type: string, example: "SP" }
+
+    IngressoRequest:
+      type: object
+      required: [nome, preco_unitario, is_ativo, id_evento]
+      properties:
+        nome: { type: string, example: "Passaporte 12 dias" }
+        preco_unitario: { type: string, example: "999" }
+        is_ativo: { type: integer, example: 0 }
+        id_evento: { type: integer, example: 1 }
+
+    EnderecoRequest:
+      type: object
+      required: [cep, logradouro, numero, bairro, cidade, estado, id_evento]
+      properties:
+        cep: { type: string, example: "23001000" }
+        logradouro: { type: string, example: "Praça da Sé" }
+        complemento: { type: string, example: "Lado ímpar" }
+        numero: { type: string, example: "100" }
+        bairro: { type: string, example: "Sé" }
+        cidade: { type: string, example: "São Paulo" }
+        estado: { type: string, example: "SP" }
+        id_evento: { type: integer, example: 2 }
+
+    # ==========================================================
+    #                 RESPONSE SCHEMAS
+    # ==========================================================
+
+    # Sub-objetos
+    PessoaResponseObject:
       type: object
       properties:
-        id: { type: integer }
+        id_cliente: { type: integer, example: 24 }
+        id_organizador: { type: integer, example: 2 }
+        nome: { type: string, example: "vitor" }
+        email: { type: string, example: "vitor@gmail.com" }
+        senha: { type: string, example: "11c2e8b8aa8e5d79acb1b80bcc85218c71d699f0" }
+        cpf: { type: string, example: "803.744.544-93" }
+        cnpj: { type: string, nullable: true }
+        telefone: { type: string, example: "11993679608" }
+        data_nascimento: { type: string, example: "18/07/1967" }
+        data_fundacao: { type: string, nullable: true }
+        genero: { type: string, example: "Homem" }
+
+    # Objeto específico para o LOGIN (Resumido)
+    PessoaLoginInfo:
+      type: object
+      properties:
+        nome: { type: string, example: "Pedro" }
+        email: { type: string, example: "Pedr423o@gmail.com" }
+
+    PessoaResumo:
+      type: object
+      properties:
+        id_cliente: { type: integer }
         nome: { type: string }
-        descricao: { type: string }
-        data_inicio: { type: string, format: date-time }
-        data_fim: { type: string, format: date-time }
-        localizacao: { type: string }
-        organizador:
-          $ref: '#/components/schemas/ResponseFK'
-        categoria:
-          $ref: '#/components/schemas/ResponseFK'
-        ingresso:
-          $ref: '#/components/schemas/ResponseFK'
 
-    ResponseListaEventos:
+    DataRealizacao:
       type: object
       properties:
-        status: { type: boolean }
-        status_code: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida!!!" }
-        eventos:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventoObject'
+        data_inicio: { type: string, example: "Quarta-feira, 20 de novembro" }
+        data_termino: { type: string, example: "Sexta-feira, 22 de novembro" }
 
-    # --- PESSOA (Cliente/Organizador) ---
-    PessoaRequest:
-      type: object
-      required: [nome, cpf, email]
-      properties:
-        nome: { type: string, example: "Fulano de Tal" }
-        cpf: { type: string, example: "123.456.789-00" }
-        email: { type: string, format: email, example: "fulano@email.com" }
-        telefone: { type: string, example: "(11) 98765-4321", description: "Opcional" }
-        
-    PessoaObject:
+    EventoResponseObject:
       type: object
       properties:
-        id: { type: integer }
-        nome: { type: string }
-        cpf: { type: string }
-        email: { type: string, format: email }
-        telefone: { type: string }
-        is_active: { type: boolean }
-
-    ResponseListaOrganizadores:
-      type: object
-      properties:
-        status: { type: boolean }
-        status_code: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida!!!" }
-        organizadores:
-          type: array
-          items:
-            $ref: '#/components/schemas/PessoaObject'
-
-    ResponseListaClientes:
-      type: object
-      properties:
-        status: { type: boolean }
-        status_code: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida!!!" }
+        id_evento: { type: integer, example: 24 }
+        nome: { type: string, example: "Tech Summit São Paulo 2024" }
+        descricao: { type: string, example: "O maior evento de inovação e desenvolvimento de software da região." }
+        data_inicio: { type: string, example: "20/11/2024" }
+        hora_inicio: { type: string, example: "09:00" }
+        data_termino: { type: string, example: "22/11/2024" }
+        hora_termino: { type: string, example: "18:00" }
+        banner: { type: string, example: "https://nuvemsenai.blob.core.windows.net/uploudimagens/..." }
+        quantidade_ingresso: { type: integer, example: 500 }
+        quantidade_ingresso_comprado: { type: integer, example: 0 }
+        is_visible: { type: integer, example: 1 }
+        categoria: { type: string, example: "Workshop" }
+        assunto: { type: string, example: "Tech Summit São Paulo 2024" }
         clientes:
           type: array
           items:
-            $ref: '#/components/schemas/PessoaObject'
-            
-    # --- PEDIDOS ---
-    PedidoRequest:
-      type: object
-      required: [data_pedido, valor_total, cliente]
-      properties:
-        data_pedido: { type: string, format: date-time }
-        valor_total: { type: number, format: float }
-        cliente:
-          type: array
-          items:
-            type: object
-            properties:
-              id_cliente: { type: integer }
-              
-    PedidoObject:
-      type: object
-      properties:
-        id: { type: integer }
-        data_pedido: { type: string, format: date-time }
-        valor_total: { type: number, format: float }
-        status_pedido: { type: string, example: "Pendente" }
-        cliente:
-          $ref: '#/components/schemas/ResponseFK'
-          
-    ResponseListaPedidos:
-      type: object
-      properties:
-        status: { type: boolean }
-        status_code: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida!!!" }
-        pedidos:
-          type: array
-          items:
-            $ref: '#/components/schemas/PedidoObject'
+            $ref: '#/components/schemas/PessoaResumo'
+        dataRealizacao:
+          $ref: '#/components/schemas/DataRealizacao'
 
-    # --- ITEM PEDIDO ---
-    ItemPedidoRequest:
+    CategoriaResponseObject:
       type: object
-      required: [quantidade, pedido, ingresso]
       properties:
-        quantidade: { type: integer }
-        pedido:
+        id_categoria: { type: integer, example: 6 }
+        nome: { type: string, example: "Teatro" }
+        icone: { type: string, example: "https://.../icone.png" }
+
+    GeneroResponseObject:
+      type: object
+      properties:
+        id_genero: { type: integer, example: 10 }
+        nome: { type: string, example: "HOMEM" }
+
+    AssuntoResponseObject:
+      type: object
+      properties:
+        id_assunto: { type: integer, example: 7 }
+        nome: { type: string, example: "Tech Summit São Paulo 2024" }
+
+    EstadoResponseObject:
+      type: object
+      properties:
+        id_estado: { type: integer, example: 3 }
+        sigla: { type: string, example: "RJ" }
+
+    IngressoResponseObject:
+      type: object
+      properties:
+        id_ingresso: { type: integer, example: 5 }
+        nome: { type: string, example: "Passaporte 12 dias" }
+        preco_unitario: { type: string, example: "999" }
+        is_ativo: { type: integer, example: 0 }
+        evento:
           type: array
           items:
-            type: object
-            properties:
-              id_pedido: { type: integer }
+            $ref: '#/components/schemas/EventoResponseObject'
+
+    EnderecoResponseObject:
+      type: object
+      properties:
+        id_endereco: { type: integer, example: 3 }
+        cep: { type: string, example: "23001000" }
+        logradouro: { type: string, example: "Praça da Sé" }
+        complemento: { type: string, example: "Lado ímpar" }
+        numero: { type: string, example: "100" }
+        bairro: { type: string, example: "Sé" }
+        cidade: { type: string, example: "São Paulo" }
+        estado: { type: string, example: "SP" }
+        evento:
+          $ref: '#/components/schemas/EventoResponseObject'
+
+    PedidoResponseObject:
+      type: object
+      properties:
+        id_pedido: { type: integer, example: 40 }
+        data_pedido: { type: string, example: "18/07/1967" }
+        status_pedido: { type: string, example: "FINALIZADO" }
+        valor_total: { type: string, example: "9990" }
+        organizador:
+          type: array
+          items:
+            $ref: '#/components/schemas/PessoaResponseObject'
+        cliente:
+          type: array
+          items:
+            $ref: '#/components/schemas/PessoaResponseObject'
         ingresso:
           type: array
           items:
             type: object
             properties:
-              id_ingresso: { type: integer }
-              
-    ItemPedidoObject:
-      type: object
-      properties:
-        id: { type: integer }
-        quantidade: { type: integer }
-        pedido:
-          $ref: '#/components/schemas/ResponseFK'
-        ingresso:
-          $ref: '#/components/schemas/ResponseFK'
+              id_ingresso: { type: integer, example: 4 }
+              nome: { type: string, example: "Passaporte 3 dias" }
+              quantidade: { type: integer, example: 10 }
 
-    ResponseListaItensPedidos:
-      type: object
-      properties:
-        status: { type: boolean }
-        status_code: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida!!!" }
-        items-pedidos:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemPedidoObject'
+    # --- LISTAS (Wrapper com exemplo único) ---
 
-    # --- ENDERECO ---
-    EnderecoRequest:
-      type: object
-      required: [cep, logradouro, numero, bairro, cidade, estado, evento]
-      properties:
-        cep: { type: string }
-        logradouro: { type: string }
-        complemento: { type: string, description: "Opcional" }
-        numero: { type: string }
-        bairro: { type: string }
-        cidade: { type: string }
-        estado:
-          type: array
-          items:
-            type: object
-            properties:
-              id_estado: { type: integer }
-        evento:
-          type: array
-          items:
-            type: object
-            properties:
-              id_evento: { type: integer }
-
-    EnderecoObject:
-      type: object
-      properties:
-        id: { type: integer }
-        cep: { type: string }
-        logradouro: { type: string }
-        complemento: { type: string }
-        numero: { type: string }
-        bairro: { type: string }
-        cidade: { type: string }
-        estado:
-          $ref: '#/components/schemas/ResponseFK'
-        evento:
-          $ref: '#/components/schemas/ResponseFK'
-
-    ResponseListaEnderecos:
-      type: object
-      properties:
-        status: { type: boolean }
-        status_code: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida!!!" }
-        enderecos:
-          type: array
-          items:
-            $ref: '#/components/schemas/EnderecoObject'
-
-    # --- ESTADO (SIMPLES) ---
-    EstadoFK:
-      type: array
-      items:
-        type: object
-        properties:
-          id: { type: integer, example: 1 }
-          sigla: { type: string, example: "SP" }
-          
-    ResponseEstado: 
-      type: object
-      properties:
-        status: { type: boolean }
-        status_code: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida!!!" }
-        estado:
-          $ref: '#/components/schemas/EstadoFK'
-
-    ResponseListaEstados:
-      type: object
-      properties:
-        status: { type: boolean }
-        status_code: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida!!!" }
-        estados:
-          $ref: '#/components/schemas/EstadoFK'
-
-    # --- INGRESSO ---
-    IngressoRequest:
-      type: object
-      required: [nome, preco_unitario, evento]
-      properties:
-        nome: { type: string }
-        preco_unitario: { type: string }
-        evento:
-          type: array
-          items:
-            type: object
-            properties:
-              id_evento: { type: integer }
-              
-    IngressoObject:
-      type: object
-      properties:
-        id: { type: integer }
-        nome: { type: string }
-        preco_unitario: { type: string }
-        is_ative: { type: boolean }
-        evento:
-          $ref: '#/components/schemas/ResponseFK'
-
-    ResponseListaIngressos:
-      type: object
-      properties:
-        status: { type: boolean }
-        status_code: { type: integer, example: 200 }
-        development: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida!!!" }
-        ingressos:
-          type: array
-          items:
-            $ref: '#/components/schemas/IngressoObject'
-            
-    # ====================================================================
-    #           SCHEMAS DE RESPOSTAS (MENSAGENS POR ENTIDADE)
-    # ====================================================================
-
-    # --- EVENTO RESPONSES ---
-    ResponseEventoCreate:
+    ResponseListaEventos:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            evento:
+            eventos:
               type: array
+              example:
+                - id_evento: 24
+                  nome: "Tech Summit São Paulo 2024"
+                  descricao: "O maior evento de inovação e desenvolvimento de software da região."
+                  data_inicio: "20/11/2024"
+                  hora_inicio: "09:00"
+                  data_termino: "22/11/2024"
+                  hora_termino: "18:00"
+                  banner: "https://nuvemsenai.blob.core.windows.net/uploudimagens/1764921270701csm_ft_summit_lotado_e105875933.png"
+                  quantidade_ingresso: 500
+                  quantidade_ingresso_comprado: 0
+                  is_visible: 1
+                  categoria: "Workshop"
+                  assunto: "Tech Summit São Paulo 2024"
+                  clientes:
+                    - id_cliente: 9
+                      nome: "Pedro"
+                    - id_cliente: 14
+                      nome: "Pedro"
+                  dataRealizacao:
+                    data_inicio: "Quarta-feira, 20 de novembro"
+                    data_termino: "Sexta-feira, 22 de novembro"
               items:
-                $ref: '#/components/schemas/EventoObject'
-    ResponseEventoUpdate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseEventoDelete:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
+                $ref: '#/components/schemas/EventoResponseObject'
 
-    # --- ORGANIZADOR RESPONSES ---
-    ResponseOrganizadorCreate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            organizador:
-              type: array
-              items:
-                $ref: '#/components/schemas/PessoaObject'
-    ResponseOrganizadorUpdate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseOrganizadorDelete:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
-
-    # --- CLIENTE RESPONSES ---
-    ResponseClienteCreate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            cliente:
-              type: array
-              items:
-                $ref: '#/components/schemas/PessoaObject'
-    ResponseClienteUpdate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseClienteDelete:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
-
-    # --- PEDIDO RESPONSES ---
-    ResponsePedidoCreate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            pedido:
-              type: array
-              items:
-                $ref: '#/components/schemas/PedidoObject'
-    ResponsePedidoUpdate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponsePedidoDelete:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
-
-    # --- ITEM PEDIDO RESPONSES ---
-    ResponseItemPedidoCreate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            item_pedido:
-              type: array
-              items:
-                $ref: '#/components/schemas/ItemPedidoObject'
-    ResponseItemPedidoUpdate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseItemPedidoDelete:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
-
-    # --- ENDERECO RESPONSES ---
-    ResponseEnderecoCreate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            endereco:
-              type: array
-              items:
-                $ref: '#/components/schemas/EnderecoObject'
-    ResponseEnderecoUpdate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseEnderecoDelete:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
-
-    # --- ESTADO RESPONSES ---
-    ResponseEstadoCreate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            estado:
-              $ref: '#/components/schemas/EstadoFK'
-    ResponseEstadoUpdate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseEstadoDelete:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
-
-    # --- INGRESSO RESPONSES ---
-    ResponseIngressoCreate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            ingresso:
-              type: array
-              items:
-                $ref: '#/components/schemas/IngressoObject'
-    ResponseIngresso:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 200 }
-            message: { type: string, example: "Requisição bem sucedida!!!" }
-            ingresso:
-              type: array
-              items:
-                $ref: '#/components/schemas/IngressoObject'
-    ResponseIngressoUpdate:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseIngressoDelete:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
-
-    # --- CATEGORIA RESPONSES ---
-    ResponseCategoria:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 200 }
-            message: { type: string, example: "Requisição bem sucedida!!!" }
-            categoria:
-              type: array
-              items:
-                $ref: '#/components/schemas/CategoriaAssuntoObject'
-    
     ResponseListaCategorias:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            status_code: { type: integer, example: 200 }
-            message: { type: string, example: "Requisição bem sucedida!!!" }
             categorias:
               type: array
+              example:
+                - id_categoria: 6
+                  nome: "Teatro"
+                  icone: "url_da_imagem"
               items:
-                $ref: '#/components/schemas/CategoriaAssuntoObject'
+                $ref: '#/components/schemas/CategoriaResponseObject'
 
-    ResponseCategoriaCreate:
+    ResponseListaPedidos:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            categoria:
+            pedidos:
               type: array
+              example:
+                - id_pedido: 40
+                  data_pedido: "18/07/1967"
+                  status_pedido: "FINALIZADO"
+                  valor_total: "9990"
+                  organizador:
+                    - id_organizador: 2
+                      nome: "Pedro"
+                      email: "Pedro@gmail.com"
+                      senha: "11c2e8b8aa8e5d79acb1b80bcc85218c71d699f0"
+                      cpf: "263.784.504-23"
+                      cnpj: null
+                      telefone: "11993679608"
+                      data_nascimento: "18/07/1967"
+                      data_fundacao: null
+                      genero: "Homem"
+                  cliente:
+                    - id_cliente: 1
+                      nome: "Melissa"
+                      email: "melissa@gmail.com"
+                      senha: "batatinha123"
+                      cpf: "263.781.480-23"
+                      cnpj: null
+                      telefone: "11993679608"
+                      data_nascimento: "18/07/1967"
+                      data_fundacao: null
+                      genero: "Mulher"
+                  ingresso:
+                    - id_ingresso: 4
+                      nome: "Passaporte 3 dias"
+                      quantidade: 10
               items:
-                $ref: '#/components/schemas/CategoriaAssuntoObject'
-    ResponseCategoriaUpdate: 
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseCategoriaDelete: 
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
+                $ref: '#/components/schemas/PedidoResponseObject'
 
-    # --- ASSUNTO RESPONSES ---
-    ResponseAssunto:
+    ResponseListaClientes:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            status_code: { type: integer, example: 200 }
-            message: { type: string, example: "Requisição bem sucedida!!!" }
-            assunto:
+            clientes:
               type: array
+              example:
+                - id_cliente: 24
+                  nome: "vitor"
+                  email: "vitor@gmail.com"
+                  senha: "11c2e8b8aa8e5d79acb1b80bcc85218c71d699f0"
+                  cpf: "803.744.544-93"
+                  cnpj: null
+                  telefone: "11993679608"
+                  data_nascimento: "18/07/1967"
+                  data_fundacao: null
+                  genero: "Homem"
               items:
-                $ref: '#/components/schemas/CategoriaAssuntoObject'
-    
-    ResponseListaAssuntos:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 200 }
-            message: { type: string, example: "Requisição bem sucedida!!!" }
-            assuntos:
-              type: array
-              items:
-                $ref: '#/components/schemas/CategoriaAssuntoObject'
+                $ref: '#/components/schemas/PessoaResponseObject'
 
-    ResponseAssuntoCreate: 
+    ResponseListaOrganizadores:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-            assunto:
+            organizadores:
               type: array
+              example:
+                - id_organizador: 2
+                  nome: "Pedro"
+                  email: "Pedro@gmail.com"
+                  senha: "11c2e8b8aa8e5d79acb1b80bcc85218c71d699f0"
+                  cpf: "263.784.504-23"
+                  cnpj: null
+                  telefone: "11993679608"
+                  data_nascimento: "18/07/1967"
+                  data_fundacao: null
+                  genero: "Homem"
               items:
-                $ref: '#/components/schemas/CategoriaAssuntoObject'
-    ResponseAssuntoUpdate: 
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseAssuntoDelete: 
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
+                $ref: '#/components/schemas/PessoaResponseObject'
 
-    # --- GÊNERO RESPONSES ---
-    ResponseGenero:
-      allOf:
-        - $ref: '#/components/schemas/ResponseGenericMessage'
-        - type: object
-          properties:
-            status_code: { type: integer, example: 200 }
-            message: { type: string, example: "Requisição bem sucedida!!!" }
-            genero:
-              type: array
-              items:
-                $ref: '#/components/schemas/GeneroObject'
     ResponseListaGeneros:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            status_code: { type: integer, example: 200 }
-            message: { type: string, example: "Requisição bem sucedida!!!" }
             generos:
               type: array
+              example:
+                - id_genero: 10
+                  nome: "HOMEM"
               items:
-                $ref: '#/components/schemas/GeneroObject'
-    ResponseGeneroCreate:
+                $ref: '#/components/schemas/GeneroResponseObject'
+
+    ResponseListaAssuntos:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            status_code: { type: integer, example: 201 }
-            message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
+            assuntos:
+              type: array
+              example:
+                - id_assunto: 7
+                  nome: "Tech Summit São Paulo 2024"
+              items:
+                $ref: '#/components/schemas/AssuntoResponseObject'
+
+    ResponseListaEstados:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            estados:
+              type: array
+              example:
+                - id_estado: 3
+                  sigla: "RJ"
+              items:
+                $ref: '#/components/schemas/EstadoResponseObject'
+
+    ResponseListaIngressos:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            ingressos:
+              type: array
+              example:
+                - id_ingresso: 5
+                  nome: "Passaporte 12 dias"
+                  preco_unitario: "999"
+                  is_ativo: 0
+                  evento:
+                    - id_evento: 1
+                      nome: "Tomorrowland Brasil"
+                      descricao: "Festival de música"
+                      data_inicio: "12/10/2023"
+                      hora_inicio: "14:00"
+                      data_termino: "14/10/2023"
+                      hora_termino: "02:00"
+                      banner: "banner1.jpg"
+                      quantidade_ingresso: 10000
+                      quantidade_ingresso_comprado: 0
+                      is_visible: 1
+                      categoria: "Festival"
+                      assunto: "Música Eletrônica"
+                      dataRealizacao:
+                        data_inicio: "Quinta-feira, 12 de outubro"
+                        data_termino: "Sábado, 14 de outubro"
+              items:
+                $ref: '#/components/schemas/IngressoResponseObject'
+
+    ResponseListaEnderecos:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            enderecos:
+              type: array
+              example:
+                - id_endereco: 3
+                  cep: "23001000"
+                  logradouro: "Praça da Sé"
+                  complemento: "Lado ímpar"
+                  numero: "100"
+                  bairro: "Sé"
+                  cidade: "São Paulo"
+                  estado: "SP"
+                  evento:
+                    id_evento: 2
+                    nome: "Rio Gastronomia"
+                    descricao: "Workshop de Culinária"
+                    data_inicio: "20/11/2023"
+                    hora_inicio: "10:00"
+                    data_termino: "20/11/2023"
+                    hora_termino: "18:00"
+                    banner: "banner2.jpg"
+                    quantidade_ingresso: 500
+                    quantidade_ingresso_comprado: 0
+                    is_visible: 1
+                    categoria: "Workshop"
+                    assunto: "Gastronomia"
+                    clientes:
+                      - id_cliente: 24
+                        nome: "vitor"
+                    dataRealizacao:
+                      data_inicio: "Segunda-feira, 20 de novembro"
+                      data_termino: "Segunda-feira, 20 de novembro"
+              items:
+                $ref: '#/components/schemas/EnderecoResponseObject'
+    
+    # --- OBJETOS ÚNICOS ---
+    
+    ResponseUnicoEvento:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            evento:
+              type: array
+              items:
+                $ref: '#/components/schemas/EventoResponseObject'
+
+    ResponseUnicaCategoria:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            categoria:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoriaResponseObject'
+
+    ResponseUnicoPedido:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            pedido:
+              type: array
+              items:
+                $ref: '#/components/schemas/PedidoResponseObject'
+
+    ResponseUnicaPessoa:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            pessoa:
+              type: array
+              items:
+                $ref: '#/components/schemas/PessoaResponseObject'
+
+    ResponseUnicoGenero:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
             genero:
               type: array
               items:
-                $ref: '#/components/schemas/GeneroObject'
-    ResponseGeneroUpdate:
+                $ref: '#/components/schemas/GeneroResponseObject'
+
+    ResponseUnicoAssunto:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-    ResponseGeneroDelete:
+            assunto:
+              type: array
+              items:
+                $ref: '#/components/schemas/AssuntoResponseObject'
+
+    ResponseUnicoEstado:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            message: { type: string, example: "Item excluído com sucesso!!!" }
+            estado:
+              type: array
+              items:
+                $ref: '#/components/schemas/EstadoResponseObject'
+
+    ResponseUnicoIngresso:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            ingresso:
+              type: array
+              items:
+                $ref: '#/components/schemas/IngressoResponseObject'
+
+    ResponseUnicoEndereco:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            endereco:
+              type: array
+              items:
+                $ref: '#/components/schemas/EnderecoResponseObject'
+
+    # Resposta de Login (Simplificada: nome e email)
+    ResponseClienteLogin:
+      type: object
+      properties:
+        message: { type: string, example: "Login realizado com sucesso" }
+        cliente:
+          $ref: '#/components/schemas/PessoaLoginInfo'
+
+    ResponseOrganizadorLogin:
+      type: object
+      properties:
+        message: { type: string, example: "Login realizado com sucesso" }
+        organizador:
+          $ref: '#/components/schemas/PessoaLoginInfo'
+
+    # Resposta de Logout
+    ResponseLogout:
+      type: object
+      properties:
+        message: { type: string, example: "Logout realizado com sucesso" }
