@@ -6,7 +6,7 @@
  ***************************************************************************************/
 
 //const TOKEN     = 'sp=racwd&st=2025-10-28T11:26:48Z&se=2025-10-28T19:41:48Z&sv=2024-11-04&sr=c&sig=qt443p615EwW90OXSPD3KixCQZo8DKD0lxjY05LibY4%3D'
-const TOKEN     = 'sp=cw&st=2025-12-04T23:23:47Z&se=2025-12-06T00:00:00Z&sv=2024-11-04&sr=c&sig=Ek5%2B4y2abNnrZ80fJS094wpyZr7%2Fl%2BxloaP%2FYgHB8V8%3D'
+const TOKEN     = 'sp=r&st=2025-12-07T02:02:26Z&se=2025-12-12T10:17:26Z&sv=2024-11-04&sr=c&sig=yXPx9URQEADg%2FdJYiEZA0IEaJu%2BV5YvmIZqa4pDDMQ4%3D'
 const ACCOUNT   = 'nuvemsenai'
 const CONTAINER = 'uploudimagens'
 
