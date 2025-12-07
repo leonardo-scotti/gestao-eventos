@@ -23,7 +23,6 @@ const uploadFiles = async function(file){
     //Recebe o tamanho do arquivo e transforma em kb
     let lengthFile = Number(file.size) / 1024
 
-
     //Validação do tipo de extensão e do tamanho do arquivo
     if(arrayAllowTypes.indexOf(mimeType) != -1 && lengthFile.toFixed(1) <= 50000){
 
