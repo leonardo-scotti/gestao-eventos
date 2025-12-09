@@ -83,7 +83,7 @@ create table tbl_ingresso (
     id_ingresso int primary key auto_increment,
     nome varchar(100) not null,
     preco_unitario decimal(10, 2) not null,
-    is_ative boolean not null,
+    is_ativo boolean not null,
     id_evento int not null,
     foreign key (id_evento) references tbl_evento (id_evento)
 );
