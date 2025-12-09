@@ -47,19 +47,6 @@ create table tbl_organizador (
     foreign key (id_genero) references tbl_genero (id_genero)
 );
 
-create table tbl_endereco (
-    id_endereco int primary key auto_increment,
-    cep varchar(8) not null,
-    logradouro varchar(100) not null,
-    complemento varchar(100) null,
-    numero varchar(20) not null,
-    bairro varchar(150) not null,
-    cidade varchar(150) not null,
-    id_estado int not null,
-    id_evento int not null,
-    foreign key (id_estado) references tbl_estado (id_estado),
-    foreign key (id_evento) references tbl_evento (id_evento)
-);
 
 create table tbl_evento (
     id_evento int primary key auto_increment,
@@ -77,6 +64,20 @@ create table tbl_evento (
     id_assunto int not null,
     foreign key (id_categoria) references tbl_categoria (id_categoria),
     foreign key (id_assunto) references tbl_assunto (id_assunto)
+);
+
+create table tbl_endereco (
+    id_endereco int primary key auto_increment,
+    cep varchar(8) not null,
+    logradouro varchar(100) not null,
+    complemento varchar(100) null,
+    numero varchar(20) not null,
+    bairro varchar(150) not null,
+    cidade varchar(150) not null,
+    id_estado int not null,
+    id_evento int not null,
+    foreign key (id_estado) references tbl_estado (id_estado),
+    foreign key (id_evento) references tbl_evento (id_evento)
 );
 
 create table tbl_ingresso (
