@@ -229,6 +229,9 @@ const excluirCategoria = async function (id) {
 
         let validarID = await buscarCategoriaId(id)
 
+        let icone = validarID.categoria[0].icone
+        await UPLOAD.deleteFileByUrl(icone)
+
         if (validarID.status_code == 200) {
 
             let result = await categoriaDAO.setDeleteCategory(id)

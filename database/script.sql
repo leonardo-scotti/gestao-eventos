@@ -1,6 +1,6 @@
-CREATE DATABASE eventos_unievent;
+CREATE DATABASE eventos_teste;
 
-USE eventos_unievent;
+USE eventos_teste;
 
 create table tbl_genero (
     id_genero int primary key auto_increment,
@@ -83,7 +83,7 @@ create table tbl_ingresso (
     id_ingresso int primary key auto_increment,
     nome varchar(100) not null,
     preco_unitario decimal(10, 2) not null,
-    is_alive boolean not null,
+    is_ativo boolean not null,
     id_evento int not null,
     foreign key (id_evento) references tbl_evento (id_evento)
 );
@@ -154,8 +154,8 @@ INSERT INTO tbl_categoria (nome) VALUES
 ('Palestra');
 
 INSERT INTO tbl_endereco (cep, logradouro, complemento, numero, bairro, cidade, id_estado, id_evento) VALUES
-('01310100', 'Av. Paulista', 'Cj 10', '1000', 'Bela Vista', 'São Paulo', 1, 2),
-('20040030', 'Rua da Assembleia', NULL, '50', 'Centro', 'Rio de Janeiro', 2, 2);
+('01310100', 'Av. Paulista', 'Cj 10', '1000', 'Bela Vista', 'São Paulo', 1, 1),
+('20040030', 'Rua da Assembleia', NULL, '50', 'Centro', 'Rio de Janeiro', 2, 1);
 
 INSERT INTO tbl_ingresso (nome, preco_unitario, is_ative, id_evento) VALUES
 ('Passaporte 3 dias', 999.00, TRUE, 1),
@@ -217,7 +217,7 @@ INSERT INTO tbl_evento (nome, descricao, data_inicio, hora_inicio, data_termino,
 ('Maratona da Cidade', 'Corrida de rua anual.', '2026-05-01', '07:00:00', '2026-05-01', '12:00:00', 'banner_maratona.jpg', 2000, 150, TRUE, 4, 5),
 ('Feira de Sustentabilidade', 'Exposição de produtos e serviços ecológicos.', '2026-06-15', '10:00:00', '2026-06-18', '20:00:00', 'banner_sustentavel.jpg', 3000, 100, FALSE, 5, 4);
 
-INSERT INTO tbl_ingresso (nome, preco_unitario, is_ativo, id_evento) VALUES
+INSERT INTO tbl_ingresso (nome, preco_unitario, is_ative, id_evento) VALUES
 ('Pista Comum', 80.00, TRUE, 2),
 ('VIP', 300.00, TRUE, 2),
 ('Acesso Geral', 45.00, TRUE, 4),
@@ -253,13 +253,12 @@ INSERT INTO tbl_cliente_evento (data_inscricao, id_cliente, id_evento) VALUES
 ('2025-11-15 16:30:00', 4, 4),
 ('2025-11-20 09:00:00', 5, 5);
 
-select * from tbl_pedido;
-select * from tbl_ingresso;
-
 INSERT INTO tbl_item_pedido (quantidade, id_pedido, id_ingresso) VALUES
-(2, 8, 2);  -- Pedido 5 comprou 5x Entrada Simples
-
-select * from tbl_pedido;
+(2, 1, 4),  -- Pedido 1 comprou 2x Pacote 3 Dias
+(1, 2, 1),  -- Pedido 2 comprou 1x Pista Comum
+(3, 3, 3),  -- Pedido 3 comprou 3x Acesso Geral
+(1, 4, 2),  -- Pedido 4 comprou 1x VIP
+(5, 5, 5);  -- Pedido 5 comprou 5x Entrada Simples
 
 -- TRIGGERS 
 
@@ -279,11 +278,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-UPDATE tbl_item_pedido
-SET quantidade = 10.00
-WHERE id_ingresso = 2;
 
-select * from tbl_pedido;
 
 DELIMITER $$
 CREATE TRIGGER trg_AU_item_pedido_calcular_total_pedido
@@ -300,6 +295,8 @@ BEGIN
     WHERE p.id_pedido = NEW.id_pedido;
 END$$
 DELIMITER ;
+
+
 
 DELIMITER $$
 CREATE TRIGGER trg_AD_item_pedido_calcular_total_pedido
@@ -336,8 +333,6 @@ BEGIN
 END$$
 DELIMITER ;
 
-
-
 DELIMITER $$
 CREATE TRIGGER trg_BI_item_pedido_validar_quantidade_estoque
 BEFORE INSERT ON tbl_item_pedido
@@ -352,8 +347,8 @@ BEGIN
     END IF;
 
     SELECT 
-        e.quantidade_ingressos, 
-        e.quantidade_ingressos_comprado
+        e.quantidade_ingresso, 
+        e.quantidade_ingresso_comprado
     INTO 
         total_vagas, 
         vagas_compradas
@@ -386,32 +381,6 @@ BEGIN
         
     END IF;
 END$$
-DELIMITER ;
-
-SHOW TRIGGERS;
-
-DELIMITER $$
-CREATE TRIGGER trg_BI_item_pedido_validar_quantidade_estoque
-BEFORE INSERT ON tbl_item_pedido
-FOR EACH ROW
-BEGIN
-    DECLARE total_disponivel INT;
-    DECLARE ingressos_comprados INT;
-    DECLARE evento_id_do_ingresso INT;
-
-    SELECT id_evento INTO evento_id_do_ingresso FROM tbl_ingresso WHERE id_ingresso = NEW.id_ingresso;
-    
-    SELECT quantidade_ingresso, quantidade_ingresso_comprado
-    INTO total_disponivel, ingressos_comprados
-    FROM tbl_evento
-    WHERE id_evento = evento_id_do_ingresso;
-
-    IF ingressos_comprados + NEW.quantidade > total_disponivel THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Estoque insuficiente para a quantidade solicitada.';
-    END IF;
-END$$
-
 DELIMITER ;
 
 
@@ -486,7 +455,65 @@ FROM tbl_evento
 WHERE id_evento = 1;
 
 
-SHOW TRIGGERS 
-WHERE `Event` = 'INSERT' AND `Table` IN ('tbl_item_pedido', 'tbl_pedido');
 
-DROP TRIGGER IF EXISTS trg_AI_item_pedido_diminuir_estoque;
+-- views 
+
+CREATE VIEW views_eventos_ativos_simples AS
+SELECT
+    e.id_evento,
+    e.nome AS evento_nome,
+    e.data_inicio,
+    e.hora_inicio,
+    c.nome AS categoria_nome,
+    a.nome AS assunto_nome,
+    e.banner
+FROM tbl_evento e
+JOIN tbl_categoria c ON e.id_categoria = c.id_categoria
+JOIN tbl_assunto a ON e.id_assunto = a.id_assunto
+WHERE e.is_visible = TRUE;
+
+
+CREATE VIEW views_ingressos_por_evento AS
+SELECT
+    i.id_ingresso,
+    e.nome AS evento_nome,
+    i.nome AS ingresso_nome,
+    i.preco_unitario,
+    i.is_ative
+FROM tbl_ingresso i
+JOIN tbl_evento e ON i.id_evento = e.id_evento;
+
+CREATE VIEW views_enderecos_eventos AS
+SELECT
+    ed.id_endereco,
+    e.nome AS evento_nome,
+    ed.logradouro,
+    ed.numero,
+    ed.bairro,
+    ed.cidade,
+    est.sigla AS estado
+FROM tbl_endereco ed
+JOIN tbl_evento e ON ed.id_evento = e.id_evento
+JOIN tbl_estado est ON ed.id_estado = est.id_estado;
+
+CREATE VIEW views_pedidos_resumo AS
+SELECT
+    p.id_pedido,
+    c.nome AS cliente_nome,
+    p.data_pedido,
+    p.status_pedido,
+    p.valor_total
+FROM tbl_pedido p
+JOIN tbl_cliente c ON p.id_cliente = c.id_cliente
+ORDER BY p.data_pedido DESC;
+
+CREATE VIEW views_itens_pedidos_detalhe AS
+SELECT
+    ip.id_item_pedido,
+    ip.id_pedido,
+    i.nome AS ingresso_nome,
+    i.preco_unitario,
+    ip.quantidade,
+    (ip.quantidade * i.preco_unitario) AS subtotal
+FROM tbl_item_pedido ip
+JOIN tbl_ingresso i ON ip.id_ingresso = i.id_ingresso;

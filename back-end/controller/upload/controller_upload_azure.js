@@ -54,4 +54,30 @@ const uploadFiles = async function(file){
     }
 }
 
-module.exports = {uploadFiles}
+const deleteFileByUrl = async function(fullUrl){
+
+    let urlToDelete = fullUrl
+    
+    if (!fullUrl.includes('?')) {
+        urlToDelete = `${fullUrl}?${AZURE.TOKEN}`
+    }
+
+    try {
+        let response = await fetch(urlToDelete, {
+            method: 'DELETE',
+            headers: {
+                'x-ms-date': new Date().toUTCString()
+            }
+        })
+
+        if (response.status === 202) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+module.exports = {uploadFiles, deleteFileByUrl}
