@@ -47,20 +47,6 @@ create table tbl_organizador (
     foreign key (id_genero) references tbl_genero (id_genero)
 );
 
-create table tbl_endereco (
-    id_endereco int primary key auto_increment,
-    cep varchar(8) not null,
-    logradouro varchar(100) not null,
-    complemento varchar(100) null,
-    numero varchar(20) not null,
-    bairro varchar(150) not null,
-    cidade varchar(150) not null,
-    id_estado int not null,
-    id_evento int not null,
-    foreign key (id_estado) references tbl_estado (id_estado),
-    foreign key (id_evento) references tbl_evento (id_evento)
-);
-
 create table tbl_evento (
     id_evento int primary key auto_increment,
     nome varchar(100) not null,
@@ -79,6 +65,20 @@ create table tbl_evento (
     foreign key (id_assunto) references tbl_assunto (id_assunto)
 );
 
+create table tbl_endereco (
+    id_endereco int primary key auto_increment,
+    cep varchar(8) not null,
+    logradouro varchar(100) not null,
+    complemento varchar(100) null,
+    numero varchar(20) not null,
+    bairro varchar(150) not null,
+    cidade varchar(150) not null,
+    id_estado int not null,
+    id_evento int not null,
+    foreign key (id_estado) references tbl_estado (id_estado),
+    foreign key (id_evento) references tbl_evento (id_evento)
+);
+
 create table tbl_ingresso (
     id_ingresso int primary key auto_increment,
     nome varchar(100) not null,
@@ -86,17 +86,6 @@ create table tbl_ingresso (
     is_ativo boolean not null,
     id_evento int not null,
     foreign key (id_evento) references tbl_evento (id_evento)
-);
-
-create table tbl_pedido (
-    id_pedido int primary key auto_increment,
-    data_pedido date not null,
-    status_pedido enum('EM_ANDAMENTO', 'FINALIZADO', 'CANCELADO') not null,
-    valor_total decimal(10, 2) null,
-    id_cliente int not null,
-    id_organizador int null,
-    foreign key (id_cliente) references tbl_cliente (id_cliente),
-    foreign key (id_organizador) references tbl_organizador (id_organizador)
 );
 
 create table tbl_organizador_evento (
@@ -117,6 +106,17 @@ create table tbl_cliente_evento (
     foreign key (id_evento) references tbl_evento (id_evento)
 );
 
+create table tbl_pedido (
+    id_pedido int primary key auto_increment,
+    data_pedido date not null,
+    status_pedido enum('EM_ANDAMENTO', 'FINALIZADO', 'CANCELADO') not null,
+    valor_total decimal(10, 2) null,
+    id_cliente int not null,
+    id_organizador int null,
+    foreign key (id_cliente) references tbl_cliente (id_cliente),
+    foreign key (id_organizador) references tbl_organizador (id_organizador)
+);
+
 create table tbl_item_pedido (
     id_item_pedido int primary key auto_increment,
     quantidade int not null,
@@ -125,6 +125,7 @@ create table tbl_item_pedido (
     foreign key (id_pedido) references tbl_pedido (id_pedido),
     foreign key (id_ingresso) references tbl_ingresso (id_ingresso)
 );
+
 
 select * from tbl_assunto;
 select * from tbl_categoria;
@@ -260,6 +261,7 @@ INSERT INTO tbl_item_pedido (quantidade, id_pedido, id_ingresso) VALUES
 (1, 4, 2),  -- Pedido 4 comprou 1x VIP
 (5, 5, 5);  -- Pedido 5 comprou 5x Entrada Simples
 
+
 -- TRIGGERS 
 
 DELIMITER $$
@@ -383,6 +385,29 @@ BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE TRIGGER trg_BI_item_pedido_validar_quantidade_estoque
+BEFORE INSERT ON tbl_item_pedido
+FOR EACH ROW
+BEGIN
+    DECLARE total_disponivel INT;
+    DECLARE ingressos_comprados INT;
+    DECLARE evento_id_do_ingresso INT;
+
+    SELECT id_evento INTO evento_id_do_ingresso FROM tbl_ingresso WHERE id_ingresso = NEW.id_ingresso;
+    
+    SELECT quantidade_ingresso, quantidade_ingresso_comprado
+    INTO total_disponivel, ingressos_comprados
+    FROM tbl_evento
+    WHERE id_evento = evento_id_do_ingresso;
+
+    IF ingressos_comprados + NEW.quantidade > total_disponivel THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Estoque insuficiente para a quantidade solicitada.';
+    END IF;
+END$$
+
+DELIMITER ;
 
 DELIMITER $$
 CREATE TRIGGER trg_AI_item_pedido_atualizar_estoque
