@@ -102,3 +102,7 @@ header .user-area img {
 main {
     flex-grow: 1;
 }
+
+.first-section {
+    height: 980px;
+}

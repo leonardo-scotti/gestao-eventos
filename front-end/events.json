@@ -1,0 +1,97 @@
+[
+    {
+      "id_evento": 1,
+      "nome": "Tech Summit São Paulo 2024",
+      "descricao": "O maior evento de inovação e desenvolvimento de software da região.",
+      "data_inicio": "20/11/2024",
+      "hora_inicio": "09:00",
+      "data_termino": "22/11/2024",
+      "hora_termino": "18:00",
+      "banner": "https://nuvemsenai.blob.core.windows.net/uploudimagens/1765304397088istockphoto-597674042-612x612.jpg",
+      "quantidade_ingresso": 500,
+      "quantidade_ingresso_comprado": 150,
+      "is_visible": 1,
+      "categoria": "Tecnologia",
+      "assunto": "INOVACAO",
+      "dataRealizacao": {
+        "data_inicio": "Quarta-feira, 20 de novembro",
+        "data_termino": "Sexta-feira, 22 de novembro"
+      }
+    },
+    {
+      "id_evento": 2,
+      "nome": "Festival Gastronômico Sabor & Arte",
+      "descricao": "Uma experiência culinária única com chefs renomados de todo o país.",
+      "data_inicio": "05/12/2024",
+      "hora_inicio": "12:00",
+      "data_termino": "08/12/2024",
+      "hora_termino": "22:00",
+      "banner": "https://nuvemsenai.blob.core.windows.net/uploudimagens/1765304397088istockphoto-597674042-612x612.jpg",
+      "quantidade_ingresso": 2000,
+      "quantidade_ingresso_comprado": 850,
+      "is_visible": 1,
+      "categoria": "Gastronomia",
+      "assunto": "LAZER",
+      "dataRealizacao": {
+        "data_inicio": "Quinta-feira, 05 de dezembro",
+        "data_termino": "Domingo, 08 de dezembro"
+      }
+    },
+    {
+      "id_evento": 3,
+      "nome": "Workshop de Fotografia Urbana",
+      "descricao": "Aprenda técnicas de composição e iluminação nas ruas da cidade.",
+      "data_inicio": "15/01/2025",
+      "hora_inicio": "14:00",
+      "data_termino": "15/01/2025",
+      "hora_termino": "18:00",
+      "banner": "https://nuvemsenai.blob.core.windows.net/uploudimagens/1765304397088istockphoto-597674042-612x612.jpg",
+      "quantidade_ingresso": 30,
+      "quantidade_ingresso_comprado": 12,
+      "is_visible": 1,
+      "categoria": "Arte",
+      "assunto": "EDUCACAO",
+      "dataRealizacao": {
+        "data_inicio": "Quarta-feira, 15 de janeiro",
+        "data_termino": "Quarta-feira, 15 de janeiro"
+      }
+    },
+    {
+      "id_evento": 4,
+      "nome": "Maratona Internacional de Verão",
+      "descricao": "Desafie seus limites em um percurso de 42km pela orla.",
+      "data_inicio": "10/02/2025",
+      "hora_inicio": "06:00",
+      "data_termino": "10/02/2025",
+      "hora_termino": "13:00",
+      "banner": "https://nuvemsenai.blob.core.windows.net/uploudimagens/1765304397088istockphoto-597674042-612x612.jpg",
+      "quantidade_ingresso": 5000,
+      "quantidade_ingresso_comprado": 4200,
+      "is_visible": 1,
+      "categoria": "Esportes",
+      "assunto": "SAUDE",
+      "dataRealizacao": {
+        "data_inicio": "Segunda-feira, 10 de fevereiro",
+        "data_termino": "Segunda-feira, 10 de fevereiro"
+      }
+    },
+    {
+      "id_evento": 5,
+      "nome": "Congresso de Marketing Digital",
+      "descricao": "Palestras sobre SEO, Tráfego Pago e Branding para 2025.",
+      "data_inicio": "20/03/2025",
+      "hora_inicio": "08:30",
+      "data_termino": "21/03/2025",
+      "hora_termino": "19:00",
+      "banner": "https://nuvemsenai.blob.core.windows.net/uploudimagens/1765304397088istockphoto-597674042-612x612.jpg",
+      "quantidade_ingresso": 300,
+      "quantidade_ingresso_comprado": 0,
+      "is_visible": 0,
+      "categoria": "Negócios",
+      "assunto": "MARKETING",
+      "dataRealizacao": {
+        "data_inicio": "Quinta-feira, 20 de março",
+        "data_termino": "Sexta-feira, 21 de março"
+      }
+    }
+  ]
