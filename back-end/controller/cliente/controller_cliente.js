@@ -150,6 +150,39 @@ const inserirCliente = async function (cliente, contentType) {
 
                             cliente.senha = gerarSha1(cliente.senha)
 
+                            if (cliente.cpf != null) {
+                                if (cliente.cpf.length == 11) {
+
+                                    primeiros3_digitos = cliente.cpf.slice(0, 3)
+                                    segundos3_digitos = cliente.cpf.slice(3, 6)
+                                    terceiros3_digitos = cliente.cpf.slice(6, 9)
+                                    dois_digitos = cliente.cpf.slice(9, 11)
+
+                                    cliente.cpf = primeiros3_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "-" + dois_digitos
+                                }
+                                if (cliente.cpf.length <= 11) {
+                                    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF] invalido!!!'
+                                    return MESSAGE.ERROR_REQUIRED_FIELDS //400
+                                }
+                            }
+
+                            if (cliente.cnpj != null) {
+                                if (cliente.cnpj.length == 14) {
+
+                                    primeiros2_digitos = cliente.cnpj.slice(0, 2)
+                                    segundos3_digitos = cliente.cnpj.slice(2, 5)
+                                    terceiros3_digitos = cliente.cnpj.slice(5, 8)
+                                    quatro_digitos = cliente.cnpj.slice(8, 12)
+                                    dois_digitos = cliente.cnpj.slice(12, 14)
+
+                                    cliente.cnpj = primeiros2_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "/" + quatro_digitos + "-" + dois_digitos
+                                }
+                                if (cliente.cpf.length <= 14) {
+                                    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CNPJ] invalido!!!'
+                                    return MESSAGE.ERROR_REQUIRED_FIELDS //400
+                                }
+
+                            }
                             //Chama a função do DAO para inserir um novo cliente
                             let result = await clienteDAO.setInsertCustomer(cliente)
 
@@ -226,6 +259,39 @@ const atualizarCliente = async function (cliente, id, contentType) {
 
                         //Adicionando o ID no JSON com os dados do cliente
                         cliente.id = parseInt(id)
+                        if (cliente.cpf != null) {
+                            if (cliente.cpf.length == 11) {
+
+                                primeiros3_digitos = cliente.cpf.slice(0, 3)
+                                segundos3_digitos = cliente.cpf.slice(3, 6)
+                                terceiros3_digitos = cliente.cpf.slice(6, 9)
+                                dois_digitos = cliente.cpf.slice(9, 11)
+
+                                cliente.cpf = primeiros3_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "-" + dois_digitos
+                            }
+                            if (cliente.cpf.length <= 11) {
+                                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF] invalido!!!'
+                                return MESSAGE.ERROR_REQUIRED_FIELDS //400
+                            }
+                        }
+
+                        if (cliente.cnpj != null) {
+                            if (cliente.cnpj.length == 14) {
+
+                                primeiros2_digitos = cliente.cnpj.slice(0, 2)
+                                segundos3_digitos = cliente.cnpj.slice(2, 5)
+                                terceiros3_digitos = cliente.cnpj.slice(5, 8)
+                                quatro_digitos = cliente.cnpj.slice(8, 12)
+                                dois_digitos = cliente.cnpj.slice(12, 14)
+
+                                cliente.cnpj = primeiros2_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "/" + quatro_digitos + "-" + dois_digitos
+                            }
+                            if (cliente.cpf.length <= 14) {
+                                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CNPJ] invalido!!!'
+                                return MESSAGE.ERROR_REQUIRED_FIELDS //400
+                            }
+
+                        }
 
                         //Chama a função do DAO para atualizar um cliente
                         let result = await clienteDAO.setUpdateCustomer(cliente)

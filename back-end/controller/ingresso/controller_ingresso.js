@@ -30,6 +30,13 @@ const listarIngressos = async function () {
             if (result.length > 0) {
 
                 for (let ingresso of result) {
+
+                    if (ingresso.preco_unitario != null) {
+                        ingresso.valor_liquido = ingresso.preco_unitario
+                        ingresso.valor_bruto = ingresso.preco_unitario / 0.97
+                        delete ingresso.preco_unitario
+                    }
+
                     let resultIngresso = await controllerEvento.buscarEventoId(ingresso.id_evento)
                     if (resultIngresso.status_code == 200 && resultIngresso.evento && resultIngresso.evento.length > 0) {
                         ingresso.evento = resultIngresso.evento
@@ -74,6 +81,13 @@ const buscarIngressoId = async function (id) {
                 if (result.length > 0) {
 
                     for (let ingresso of result) {
+
+                        if (ingresso.preco_unitario != null) {
+                            ingresso.valor_liquido = ingresso.preco_unitario
+                            ingresso.valor_bruto = ingresso.preco_unitario / 0.97
+                            delete ingresso.preco_unitario
+                        }
+
                         let resultIngresso = await controllerEvento.buscarEventoId(ingresso.id_evento)
                         if (resultIngresso.status_code == 200 && resultIngresso.evento && resultIngresso.evento.length > 0) {
                             ingresso.evento = resultIngresso.evento
@@ -118,6 +132,10 @@ const inserirIngresso = async function (ingresso, contentType) {
             let validarDados = await validarDadosIngresso(ingresso)
 
             if (!validarDados) {
+
+                let valor_bruto = ingresso.preco_unitario
+                let valor_liquido = valor_bruto - (valor_bruto * 0.03)
+                ingresso.preco_unitario = valor_liquido
 
                 //Chama a função do DAO para inserir um novo ingresso
                 let result = await ingressoDAO.setInsertTicket(ingresso)
