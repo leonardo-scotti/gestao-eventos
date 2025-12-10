@@ -148,38 +148,13 @@ const inserirOrganizador = async function (organizador, contentType) {
 
                             organizador.senha = gerarSha1(organizador.senha)
 
-                            if (organizador.cpf != null) {
-                                if (organizador.cpf.length == 11) {
+                            let validaremail = await organizadorDAO.getSelectAllOrganizers()
 
-                                    primeiros3_digitos = organizador.cpf.slice(0, 3)
-                                    segundos3_digitos = organizador.cpf.slice(3, 6)
-                                    terceiros3_digitos = organizador.cpf.slice(6, 9)
-                                    dois_digitos = organizador.cpf.slice(9, 11)
-
-                                    organizador.cpf = primeiros3_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "-" + dois_digitos
-                                }
-                                if (organizador.cpf.length <= 11) {
-                                    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF] invalido!!!'
+                            for (let item of validaremail) {
+                                if (item.email == organizador.email) {
+                                    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'O [EMAIL] já está em uso!!!'
                                     return MESSAGE.ERROR_REQUIRED_FIELDS //400
                                 }
-                            }
-
-                            if (organizador.cnpj != null) {
-                                if (organizador.cnpj.length == 14) {
-
-                                    primeiros2_digitos = organizador.cnpj.slice(0, 2)
-                                    segundos3_digitos = organizador.cnpj.slice(2, 5)
-                                    terceiros3_digitos = organizador.cnpj.slice(5, 8)
-                                    quatro_digitos = organizador.cnpj.slice(8, 12)
-                                    dois_digitos = organizador.cnpj.slice(12, 14)
-
-                                    organizador.cnpj = primeiros2_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "/" + quatro_digitos + "-" + dois_digitos
-                                }
-                                if (organizador.cpf.length <= 14) {
-                                    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CNPJ] invalido!!!'
-                                    return MESSAGE.ERROR_REQUIRED_FIELDS //400
-                                }
-
                             }
 
                             //Chama a função do DAO para inserir um novo organizador
@@ -225,6 +200,7 @@ const inserirOrganizador = async function (organizador, contentType) {
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 
@@ -256,42 +232,19 @@ const atualizarOrganizador = async function (organizador, id, contentType) {
 
                     if (validarGenero.status_code == 200) {
 
+                        organizador.senha = gerarSha1(organizador.senha)
+
+                        let validaremail = await organizadorDAO.getSelectAllOrganizers()
+
+                        for (let item of validaremail) {
+                            if (item.email == organizador.email) {
+                                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'O [EMAIL] já está em uso!!!'
+                                return MESSAGE.ERROR_REQUIRED_FIELDS //400
+                            }
+                        }
+
                         //Adicionando o ID no JSON com os dados do organizador
                         organizador.id = parseInt(id)
-
-                        if (organizador.cpf != null) {
-                            if (organizador.cpf.length == 11) {
-
-                                primeiros3_digitos = organizador.cpf.slice(0, 3)
-                                segundos3_digitos = organizador.cpf.slice(3, 6)
-                                terceiros3_digitos = organizador.cpf.slice(6, 9)
-                                dois_digitos = organizador.cpf.slice(9, 11)
-
-                                organizador.cpf = primeiros3_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "-" + dois_digitos
-                            }
-                            if (organizador.cpf.length <= 11) {
-                                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF] invalido!!!'
-                                return MESSAGE.ERROR_REQUIRED_FIELDS //400
-                            }
-                        }
-
-                        if (organizador.cnpj != null) {
-                            if (organizador.cnpj.length == 14) {
-
-                                primeiros2_digitos = organizador.cnpj.slice(0, 2)
-                                segundos3_digitos = organizador.cnpj.slice(2, 5)
-                                terceiros3_digitos = organizador.cnpj.slice(5, 8)
-                                quatro_digitos = organizador.cnpj.slice(8, 12)
-                                dois_digitos = organizador.cnpj.slice(12, 14)
-
-                                organizador.cnpj = primeiros2_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "/" + quatro_digitos + "-" + dois_digitos
-                            }
-                            if (organizador.cpf.length <= 14) {
-                                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CNPJ] invalido!!!'
-                                return MESSAGE.ERROR_REQUIRED_FIELDS //400
-                            }
-
-                        }
 
                         //Chama a função do DAO para atualizar um organizador
                         let result = await organizadorDAO.setUpdateOrganizer(organizador)
@@ -324,6 +277,7 @@ const atualizarOrganizador = async function (organizador, id, contentType) {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
@@ -373,6 +327,40 @@ const validarDadosOrganizador = async function (organizador) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
+    if (organizador.cpf != null) {
+        if (organizador.cpf.length == 11) {
+
+            primeiros3_digitos = organizador.cpf.slice(0, 3)
+            segundos3_digitos = organizador.cpf.slice(3, 6)
+            terceiros3_digitos = organizador.cpf.slice(6, 9)
+            dois_digitos = organizador.cpf.slice(9, 11)
+
+            organizador.cpf = primeiros3_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "-" + dois_digitos
+        }
+        if (organizador.cpf.length <= 11) {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF] invalido!!!'
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }
+    }
+
+    if (organizador.cnpj != null) {
+        if (organizador.cnpj.length == 14) {
+
+            primeiros2_digitos = organizador.cnpj.slice(0, 2)
+            segundos3_digitos = organizador.cnpj.slice(2, 5)
+            terceiros3_digitos = organizador.cnpj.slice(5, 8)
+            quatro_digitos = organizador.cnpj.slice(8, 12)
+            dois_digitos = organizador.cnpj.slice(12, 14)
+
+            organizador.cnpj = primeiros2_digitos + "." + segundos3_digitos + "." + terceiros3_digitos + "/" + quatro_digitos + "-" + dois_digitos
+        }
+        if (organizador.cnpj.length <= 14) {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CNPJ] invalido!!!'
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }
+
+    }
+
     if (organizador.nome == '' || organizador.nome == null || organizador.nome == undefined || organizador.nome.length > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
@@ -387,6 +375,10 @@ const validarDadosOrganizador = async function (organizador) {
 
     } else if (!organizador.cpf && !organizador.cnpj) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF/CNPJ] invalido!!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+
+    } else if (organizador.email == null || organizador.email == undefined || organizador.email == '') {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
     } else {
