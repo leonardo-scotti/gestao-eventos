@@ -20,6 +20,7 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: #FAFAFA;
 }
 
 header {
@@ -139,11 +140,6 @@ main {
     gap: 35px;
 }
 
-/* .container-categories > h2 {
-    font-size: 36px;
-    font-weight: 600;
-} */
-
 .categories {
     width: 100%;
     display: flex;
@@ -153,8 +149,8 @@ main {
 }
 
 .category {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -165,8 +161,8 @@ main {
 }
 
 .category img {
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
 }
 
 .category p {
@@ -190,13 +186,14 @@ main {
 
 .events {
     width: 100%;
+    padding: 0px 100px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 38px 146px;
 }
 
 .event {
-    width: 500px;
+    width: 400px;
 }
 
 .event img {
@@ -229,4 +226,64 @@ main {
 .date p {
     font-size: 20px;
     font-weight: normal;
+}
+
+.third-section {
+    height: 1080px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 200px 200px;
+}
+
+.container-third {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
+
+.marketing-first {
+    width: 707px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.marketing-first h2 {
+    font-size: 64px;
+    font-weight: 520;
+}
+
+.marketing-first p {
+    font-size: 22px;
+    font-weight: normal;
+}
+
+.marketing-second {
+    width: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.marketing-second img {
+    width: 450px;
+    height: 450px;
+}
+
+.marketing-second button {
+    width: 300px;
+    height: 80px;
+    border-radius: 30px;
+    border: none;
+    background-color: #386DBD;
+    box-shadow: 0px 0px 8px #00000060;
+    font-size: 32px;
+    color: #FAFAFA;
 }
