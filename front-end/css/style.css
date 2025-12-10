@@ -14,6 +14,7 @@ li {
 
 a {
     text-decoration: none;
+    color: inherit;
 }
 
 body {
@@ -301,4 +302,75 @@ main {
     font-size: 32px;
     color: #FAFAFA;
     cursor: pointer;
+}
+
+footer {
+    width: 100%;
+    padding: 20px 120px;
+    background-color: #F5F5F5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: aqua;
+}
+
+.content-footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content-first {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 200px;
+}
+
+.content-first .logo {
+    width: 217px;
+    height: 60px;
+}
+
+.content-first .logo img {
+    width: 100%;
+}
+
+.social-media {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 47px;
+}
+
+.social-media img {
+    width: 40px;
+    height: 40px;
+}
+
+.content-second {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.links-footer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.links-footer h4 {
+    font-size: 30px;
 }
