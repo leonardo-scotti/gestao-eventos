@@ -25,11 +25,13 @@ body {
 
 header {
     height: 100px;
+    min-height: 100px;
+    flex: 0 0 100px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     padding-inline: 50px;
-    /* background-color: aqua; */
+    position: relative;
 }
 
 header .logo {
@@ -50,7 +52,7 @@ header .search-bar label {
     height: 30px;
     width: 30px;
     position: absolute;
-    left: 744px;
+    left: 740px;
     top: 34px;
 }
 
@@ -158,6 +160,13 @@ main {
     background-color: #FAFAFA;
     border-radius: 30px;
     box-shadow: 0px 4px 4px #00000025;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.category:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 2px 8px #00000050;
 }
 
 .category img {
@@ -194,6 +203,11 @@ main {
 
 .event {
     width: 400px;
+    transition: .3s;
+}
+
+.event:hover {
+    transform: scale(1.01);
 }
 
 .event img {
@@ -286,4 +300,5 @@ main {
     box-shadow: 0px 0px 8px #00000060;
     font-size: 32px;
     color: #FAFAFA;
+    cursor: pointer;
 }
