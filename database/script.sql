@@ -30,7 +30,9 @@ CREATE TABLE tbl_cliente (
     id_cliente INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(150) NOT NULL,
     cpf VARCHAR(14) UNIQUE,
+    cnpj VARCHAR(18) UNIQUE,
     telefone VARCHAR(11) NULL,
     data_nascimento DATE NULL,
     data_fundacao DATE NULL,
@@ -42,6 +44,7 @@ CREATE TABLE tbl_organizador (
     id_organizador INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(150) NOT NULL,
     cpf VARCHAR(14) UNIQUE,
     cnpj VARCHAR(18) UNIQUE,
     telefone VARCHAR(11) NULL,
@@ -368,19 +371,19 @@ INSERT INTO tbl_estado (sigla) VALUES
 ('SP'), ('RJ'), ('MG'), ('BA'), ('RS');
 
 -- 5.2. Clientes e Organizadores
-INSERT INTO tbl_cliente (nome, email, cpf, telefone, data_nascimento, data_fundacao, id_genero) VALUES
-('Ana Silva', 'ana.s@email.com', '11122233344', '11987654321', '1990-05-15', NULL, 1),
-('Bruno Santos', 'bruno.s@email.com', '22233344455', '21998765432', '1985-11-20', NULL, 2),
-('Carlos Souza', 'carlos.s@email.com', '33344455566', '31976543210', '1995-03-01', NULL, 2),
-('Empresa A Marketing', 'empresa.a@email.com', NULL, '41965432109', NULL, '2010-01-01', 5),
-('Diana Ferreira', 'diana.f@email.com', '44455566677', '51954321098', '2000-08-25', NULL, 1);
+INSERT INTO tbl_cliente (nome, email, senha, cpf, cnpj, telefone, data_nascimento, data_fundacao, id_genero) VALUES
+('Ana Silva', 'ana.s@email.com', '123456', '11122233344', NULL, '11987654321', '1990-05-15', NULL, 1),
+('Bruno Santos', 'bruno.s@email.com', '123456', '22233344455', NULL, '21998765432', '1985-11-20', NULL, 2),
+('Carlos Souza', 'carlos.s@email.com', '123456', '33344455566', NULL, '31976543210', '1995-03-01', NULL, 2),
+('Empresa A Marketing', 'empresa.a@email.com', '123456', NULL, '12345678000190', '41965432109', NULL, '2010-01-01', 5),
+('Diana Ferreira', 'diana.f@email.com', '123456', '44455566677', NULL, '51954321098', '2000-08-25', NULL, 1);
 
-INSERT INTO tbl_organizador (nome, email, cpf, cnpj, telefone, data_nascimento, data_fundacao, id_genero) VALUES
-('Eventos Prime Ltda', 'prime@eventos.com', NULL, '00011122233344', '1155551234', NULL, '2015-07-10', 5),
-('Gerson Rodrigues', 'gerson@organiza.com', '55566677788', NULL, '2155555678', '1978-04-12', NULL, 2),
-('União Cultural', 'cultura@uniaoc.com', NULL, '11100033344455', '3155559012', NULL, '2005-02-28', 5),
-('Helena Costa', 'helena@eventos.net', '66677788899', NULL, '4155553456', '1992-09-03', NULL, 1),
-('TechMasters Co', 'tech@masters.com', NULL, '22211144455566', '5155557890', NULL, '2018-11-11', 5);
+INSERT INTO tbl_organizador (nome, email, senha, cpf, cnpj, telefone, data_nascimento, data_fundacao, id_genero) VALUES
+('Eventos Prime Ltda', 'prime@eventos.com', '123456', NULL, '00011122233344', '1155551234', NULL, '2015-07-10', 5),
+('Gerson Rodrigues', 'gerson@organiza.com', '123456', '55566677788', NULL, '2155555678', '1978-04-12', NULL, 2),
+('União Cultural', 'cultura@uniaoc.com', '123456', NULL, '11100033344455', '3155559012', NULL, '2005-02-28', 5),
+('Helena Costa', 'helena@eventos.net', '123456', '66677788899', NULL, '4155553456', '1992-09-03', NULL, 1),
+('TechMasters Co', 'tech@masters.com', '123456', NULL, '22211144455566', '5155557890', NULL, '2018-11-11', 5);
 
 -- 5.3. Eventos
 INSERT INTO tbl_evento (nome, descricao, data_inicio, hora_inicio, data_termino, hora_termino, banner, quantidade_ingresso, quantidade_ingresso_comprado, is_visible, id_categoria, id_assunto) VALUES
