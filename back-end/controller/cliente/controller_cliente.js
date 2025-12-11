@@ -38,14 +38,24 @@ const listarClientes = async function () {
                     if (resultClientes.status_code == 200) {
                         cliente.genero = resultClientes.generos[0].nome
                         delete cliente.id_genero
+                    } else {
+                        delete cliente.id_genero
                     }
 
                     if (cliente.data_nascimento != null) {
                         cliente.data_nascimento = new Date(cliente.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                     }
 
-                    if (cliente.fundacao != null) {
-                        cliente.fundacao = new Date(cliente.fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    if (cliente.data_fundacao != null) {
+                        cliente.data_fundacao = new Date(cliente.data_fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    }
+
+                    if (cliente.telefone.length === 11) {
+                        let ddd = cliente.telefone.slice(0, 2)
+                        let parte1 = cliente.telefone.slice(2, 7)
+                        let parte2 = cliente.telefone.slice(7)
+
+                        cliente.telefone = `(${ddd}) ${parte1}-${parte2}`
                     }
 
                 }
@@ -92,14 +102,24 @@ const buscarClienteId = async function (id) {
                         if (resultClientes.status_code == 200) {
                             cliente.genero = resultClientes.generos[0].nome
                             delete cliente.id_genero
+                        } else {
+                            delete cliente.id_genero
                         }
 
                         if (cliente.data_nascimento != null) {
                             cliente.data_nascimento = new Date(cliente.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                         }
 
-                        if (cliente.fundacao != null) {
-                            cliente.fundacao = new Date(cliente.fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                        if (cliente.data_fundacao != null) {
+                            cliente.data_fundacao = new Date(cliente.data_fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                        }
+
+                        if (cliente.telefone.length === 11) {
+                            let ddd = cliente.telefone.slice(0, 2)
+                            let parte1 = cliente.telefone.slice(2, 7)
+                            let parte2 = cliente.telefone.slice(7)
+
+                            cliente.telefone = `(${ddd}) ${parte1}-${parte2}`
                         }
 
                     }
@@ -202,7 +222,6 @@ const inserirCliente = async function (cliente, contentType) {
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
     } catch (error) {
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 
@@ -362,6 +381,36 @@ const validarDadosCliente = async function (cliente) {
 
     }
 
+    if (cliente.telefone.length === 15) {
+        cliente.telefone = cliente.telefone.replace("(", "")
+        cliente.telefone = cliente.telefone.replace(") ", "")
+        cliente.telefone = cliente.telefone.replace("-", "")
+    } else if (cliente.telefone.length === 14) {
+        cliente.telefone = cliente.telefone.replace("(", "")
+        cliente.telefone = cliente.telefone.replace(")", "")
+        cliente.telefone = cliente.telefone.replace("-", "")
+    }
+
+    if (cliente.cpf != null && cliente.cnpj != null) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Você só pode inserir ou um [CPF] ou [CNPJ] !!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+    }
+
+    if (cliente.data_fundacao != null && cliente.data_nascimento != null) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Você só pode inserir ou um [DATA_FUNDACAO] ou [DATA_NASCIMENTO] !!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+    }
+
+    if (cliente.data_fundacao != null && cliente.cpf != null) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Você não pode inserir uma [DATA_FUNDACAO] e um [CPF] simultaneamente !!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+    }
+
+    if (cliente.data_nascimento != null && cliente.cnpj != null) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Você não pode inserir uma [DATA_NASCIMENTO] e um [CNPJ] simultaneamente !!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+    }
+
     if (cliente.nome == '' || cliente.nome == null || cliente.nome == undefined || cliente.nome.length > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
@@ -382,8 +431,33 @@ const validarDadosCliente = async function (cliente) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else {
-        return false
+    } else if (cliente.email) {
+        cliente.email = cliente.email.trim()
+
+        if (cliente.email.indexOf("@") !== -1) {
+            let email = cliente.email
+            let partes = email.split('@')
+
+            if (partes.length == 2) {
+
+                let usuario = partes[0];
+                let dominio = partes[1];
+
+                if (usuario.length === 0 || dominio.length === 0 || !dominio.includes('.') || dominio.startsWith('.') || dominio.endsWith('.')) {
+                    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
+                    return MESSAGE.ERROR_REQUIRED_FIELDS //400
+                } else {
+                    return false
+                }
+
+            } else {
+                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
+                return MESSAGE.ERROR_REQUIRED_FIELDS //400
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }
     }
 
 }

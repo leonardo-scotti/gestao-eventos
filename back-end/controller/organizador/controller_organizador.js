@@ -37,6 +37,8 @@ const listarOrganizadores = async function () {
                     if (resultOrganizadores.status_code == 200) {
                         organizador.genero = resultOrganizadores.generos[0].nome
                         delete organizador.id_genero
+                    } else {
+                        delete organizador.id_genero
                     }
 
                     if (organizador.data_nascimento != null) {
@@ -45,6 +47,14 @@ const listarOrganizadores = async function () {
 
                     if (organizador.data_fundacao != null) {
                         organizador.data_fundacao = new Date(organizador.data_fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    }
+
+                    if (organizador.telefone.length === 11) {
+                        let ddd = organizador.telefone.slice(0, 2)
+                        let parte1 = organizador.telefone.slice(2, 7)
+                        let parte2 = organizador.telefone.slice(7)
+
+                        organizador.telefone = `(${ddd}) ${parte1}-${parte2}`
                     }
 
                 }
@@ -90,6 +100,8 @@ const buscarOrganizadorId = async function (id) {
                         if (resultOrganizadores.status_code == 200) {
                             organizador.genero = resultOrganizadores.generos[0].nome
                             delete organizador.id_genero
+                        } else {
+                            delete organizador.id_genero
                         }
 
                         if (organizador.data_nascimento != null) {
@@ -98,6 +110,14 @@ const buscarOrganizadorId = async function (id) {
 
                         if (organizador.data_fundacao != null) {
                             organizador.data_fundacao = new Date(organizador.data_fundacao).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                        }
+
+                        if (organizador.telefone.length === 11) {
+                            let ddd = organizador.telefone.slice(0, 2)
+                            let parte1 = organizador.telefone.slice(2, 7)
+                            let parte2 = organizador.telefone.slice(7)
+
+                            organizador.telefone = `(${ddd}) ${parte1}-${parte2}`
                         }
 
                     }
@@ -277,7 +297,6 @@ const atualizarOrganizador = async function (organizador, id, contentType) {
         }
 
     } catch (error) {
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
@@ -340,6 +359,7 @@ const validarDadosOrganizador = async function (organizador) {
         if (organizador.cpf.length <= 11) {
             MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF] invalido!!!'
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
+
         }
     }
 
@@ -359,6 +379,36 @@ const validarDadosOrganizador = async function (organizador) {
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
         }
 
+    }
+
+    if (organizador.telefone.length === 15) {
+        organizador.telefone = organizador.telefone.replace("(", "")
+        organizador.telefone = organizador.telefone.replace(") ", "")
+        organizador.telefone = organizador.telefone.replace("-", "")
+    } else if (organizador.telefone.length === 14) {
+        organizador.telefone = organizador.telefone.replace("(", "")
+        organizador.telefone = organizador.telefone.replace(")", "")
+        organizador.telefone = organizador.telefone.replace("-", "")
+    }
+
+    if (organizador.cpf != null && organizador.cnpj != null) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Você só pode inserir ou um [CPF] ou [CNPJ] !!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+    }
+
+    if (organizador.data_fundacao != null && organizador.data_nascimento != null) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Você só pode inserir ou um [DATA_FUNDACAO] ou [DATA_NASCIMENTO] !!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+    }
+
+    if (organizador.data_fundacao != null && organizador.cpf != null) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Você não pode inserir uma [DATA_FUNDACAO] e um [CPF] simultaneamente !!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+    }
+
+    if (organizador.data_nascimento != null && organizador.cnpj != null) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Você não pode inserir uma [DATA_NASCIMENTO] e um [CNPJ] simultaneamente !!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
     }
 
     if (organizador.nome == '' || organizador.nome == null || organizador.nome == undefined || organizador.nome.length > 100) {
@@ -381,10 +431,36 @@ const validarDadosOrganizador = async function (organizador) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else {
-        return false
-    }
+    } else if (organizador.email) {
+        organizador.email = organizador.email.trim()
 
+        if (organizador.email.indexOf("@") !== -1) {
+            let email = organizador.email
+            let partes = email.split('@')
+
+            if (partes.length == 2) {
+
+                let usuario = partes[0];
+                let dominio = partes[1];
+
+                if (usuario.length === 0 || dominio.length === 0 || !dominio.includes('.') || dominio.startsWith('.') || dominio.endsWith('.')) {
+                    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
+                    return MESSAGE.ERROR_REQUIRED_FIELDS //400
+                } else {
+                    return false
+                }
+
+            } else {
+                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
+                return MESSAGE.ERROR_REQUIRED_FIELDS //400
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }
+
+
+    }
 }
 
 //Função para criptografar informações

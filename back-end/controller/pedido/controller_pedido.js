@@ -18,6 +18,9 @@ const controllerOrganizador = require('../organizador/controller_organizador.js'
 //Import da controller item_pedido 
 const controllerItem_Pedido = require('../pedido/controller_item_pedido.js')
 
+//Import da controller item_pedido 
+const controllerIngresso = require('../ingresso/controller_ingresso.js')
+
 //Import do arquivo que padroniza todas as mensagens
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -48,12 +51,50 @@ const listarPedidos = async function () {
                     }
 
                     let resultIngresso = await controllerItem_Pedido.listarIngressosIdPedido(pedido.id_pedido)
+
                     if (resultIngresso.status_code == 200) {
+
+                        for (let item of resultIngresso.ingressos) {
+                            let detalhesIngresso = await controllerIngresso.buscarIngressoId(item.id_ingresso)
+
+                            if (detalhesIngresso.status_code == 200 && detalhesIngresso.ingressos) {
+
+                                let dadosPreco = detalhesIngresso.ingressos[0] || detalhesIngresso.ingressos;
+
+                                item.valor_liquido = dadosPreco.valor_liquido
+                                item.valor_bruto = dadosPreco.valor_bruto
+                            }
+                        }
+
                         pedido.ingresso = resultIngresso.ingressos
                     }
 
                     if (pedido.data_pedido != null) {
                         pedido.data_pedido = new Date(pedido.data_pedido).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    }
+
+                    let strValor = String(pedido.valor_total);
+
+                    if (!strValor.includes(".")) {
+                        strValor = strValor + ".00"
+
+                        let formatado_valor = new Intl.NumberFormat('pt-BR', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }).format(strValor)
+
+                        pedido.valor_total = "R$" + formatado_valor
+                    }
+                    // Se tiver ponto, mas só 1 casa decimal 
+                    else {
+                        strValor = parseFloat(strValor).toFixed(2)
+
+                        let formatado_valor = new Intl.NumberFormat('pt-BR', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }).format(strValor)
+
+                        pedido.valor_total = "R$" + formatado_valor
                     }
                 }
 
@@ -107,12 +148,50 @@ const buscarPedidoId = async function (id) {
                         }
 
                         let resultIngresso = await controllerItem_Pedido.listarIngressosIdPedido(pedido.id_pedido)
+
                         if (resultIngresso.status_code == 200) {
+
+                            for (let item of resultIngresso.ingressos) {
+                                let detalhesIngresso = await controllerIngresso.buscarIngressoId(item.id_ingresso)
+
+                                if (detalhesIngresso.status_code == 200 && detalhesIngresso.ingressos) {
+
+                                    let dadosPreco = detalhesIngresso.ingressos[0] || detalhesIngresso.ingressos
+
+                                    item.valor_liquido = dadosPreco.valor_liquido
+                                    item.valor_bruto = dadosPreco.valor_bruto
+                                }
+                            }
+
                             pedido.ingresso = resultIngresso.ingressos
                         }
 
                         if (pedido.data_pedido != null) {
-                            pedido.data_pedido = new Date(pedido.data_pedido).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                            pedido.data_pedido = new Date(pedido.data_pedido).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
+                        }
+
+                        let strValor = String(pedido.valor_total);
+
+                        if (!strValor.includes(".")) {
+                            strValor = strValor + ".00"
+
+                            let formatado_valor = new Intl.NumberFormat('pt-BR', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }).format(strValor)
+
+                            pedido.valor_total = "R$" + formatado_valor
+                        }
+                        // Se tiver ponto, mas só 1 casa decimal 
+                        else {
+                            strValor = parseFloat(strValor).toFixed(2)
+
+                            let formatado_valor = new Intl.NumberFormat('pt-BR', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }).format(strValor)
+
+                            pedido.valor_total = "R$" + formatado_valor
                         }
 
                     }
@@ -339,7 +418,15 @@ const validarDadosPedido = async function (pedido) {
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
     } else if (pedido.id_cliente == '' || pedido.id_cliente == null || pedido.id_cliente == undefined || isNaN(pedido.id_cliente)) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_ORGANIZADOR] invalido!!!'
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_CLIENTE] invalido!!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+
+    } else if (pedido.ingresso[0].id == '' || pedido.ingresso[0].id == null || pedido.ingresso[0].id == undefined || isNaN(pedido.ingresso[0].id)) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] do ingresso invalido!!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+
+    } else if (pedido.ingresso[0].quantidade == '' || pedido.ingresso[0].quantidade == null || pedido.ingresso[0].quantidade == undefined || isNaN(pedido.ingresso[0].quantidade)) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [QUANTIDADE] do ingresso invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
     } else {

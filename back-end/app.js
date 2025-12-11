@@ -64,6 +64,26 @@ const controllerEstado = require('./controller/estado/controller_estado.js')
 const controllerEndereco = require('./controller/endereco/controller_endereco.js')
 const controllerIngresso = require('./controller/ingresso/controller_ingresso.js')
 const controllerPedido = require('./controller/pedido/controller_pedido.js')
+const MESSAGE_DEFAULT = require('./controller/modulo/config_messages.js')
+
+//Um objeto para validar a sintaxe do body
+const validarBody = async function (err, req, res, next) {
+
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json(
+           MESSAGE.ERROR_INVALID_BODY_SYNTAX 
+        );
+    }
+
+    if (err instanceof multer.MulterError) {
+        return res.status(400).json(
+            MESSAGE.ERROR_INVALID_BODY_SYNTAX 
+        );
+    }
+    next()
+};
 
 //Endpoint para o CRUD do Evento
 
@@ -89,7 +109,7 @@ app.get('/api/v1/unievent/genero/:id', async function (request, response) {
 })
 
 //Insere um novo Genero no BD
-app.post('/api/v1/unievent/genero', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/genero', bodyParserJSON, validarBody, async function (request, response) {
 
     let dadosBody = request.body
 
@@ -102,7 +122,7 @@ app.post('/api/v1/unievent/genero', bodyParserJSON, async function (request, res
 
 })
 
-app.put('/api/v1/unievent/genero/:id', bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/genero/:id', bodyParserJSON, validarBody, async function (request, response) {
 
     dadosBody = request.body
 
@@ -150,7 +170,7 @@ app.get('/api/v1/unievent/categoria/:id', async function (request, response) {
 })
 
 //Insere um novo Categoria no BD
-app.post('/api/v1/unievent/categoria', bodyParserJSON, upload.single('icone'), async function (request, response) {
+app.post('/api/v1/unievent/categoria', validarBody, upload.single('icone'), async function (request, response) {
 
     let dadosBody = request.body
 
@@ -165,7 +185,7 @@ app.post('/api/v1/unievent/categoria', bodyParserJSON, upload.single('icone'), a
 
 })
 
-app.put('/api/v1/unievent/categoria/:id', bodyParserJSON, upload.single('icone'), async function (request, response) {
+app.put('/api/v1/unievent/categoria/:id', validarBody, upload.single('icone'), async function (request, response) {
 
     dadosBody = request.body
 
@@ -215,7 +235,7 @@ app.get('/api/v1/unievent/cliente/:id', async function (request, response) {
 })
 
 //Insere um novo cliente no BD
-app.post('/api/v1/unievent/cliente', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/cliente', bodyParserJSON, validarBody, async function (request, response) {
 
     let dadosBody = request.body
 
@@ -228,7 +248,7 @@ app.post('/api/v1/unievent/cliente', bodyParserJSON, async function (request, re
 
 })
 
-app.put('/api/v1/unievent/cliente/:id', bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/cliente/:id', bodyParserJSON, validarBody, async function (request, response) {
 
     dadosBody = request.body
 
@@ -255,7 +275,7 @@ app.delete('/api/v1/unievent/cliente/:id', async function (request, response) {
 })
 
 // Rota de Login (Autenticação) Cliente
-app.post('/api/v1/unievent/login/cliente', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/login/cliente', bodyParserJSON, validarBody, async function (request, response) {
 
     let { email, senha } = request.body
 
@@ -311,7 +331,7 @@ app.get('/api/v1/unievent/assunto/:id', async function (request, response) {
 })
 
 //Insere um novo Assunto no BD
-app.post('/api/v1/unievent/assunto', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/assunto', bodyParserJSON, validarBody, async function (request, response) {
 
     let dadosBody = request.body
 
@@ -324,7 +344,7 @@ app.post('/api/v1/unievent/assunto', bodyParserJSON, async function (request, re
 
 })
 
-app.put('/api/v1/unievent/assunto/:id', bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/assunto/:id', bodyParserJSON, validarBody, async function (request, response) {
 
     dadosBody = request.body
 
@@ -372,7 +392,7 @@ app.get('/api/v1/unievent/evento/:id', async function (request, response) {
 })
 
 //Insere um novo Evento no BD
-app.post('/api/v1/unievent/evento', upload.single('banner'), async function (request, response) {
+app.post('/api/v1/unievent/evento', validarBody, upload.single('banner'), async function (request, response) {
 
     let dadosBody = request.body
 
@@ -387,7 +407,7 @@ app.post('/api/v1/unievent/evento', upload.single('banner'), async function (req
 
 })
 
-app.put('/api/v1/unievent/evento/:id', upload.single('banner'), async function (request, response) {
+app.put('/api/v1/unievent/evento/:id', validarBody, upload.single('banner'), async function (request, response) {
 
     dadosBody = request.body
 
@@ -437,7 +457,7 @@ app.get('/api/v1/unievent/estado/:id', async function (request, response) {
 })
 
 //Insere um novo Estado no BD
-app.post('/api/v1/unievent/estado', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/estado', bodyParserJSON, validarBody, async function (request, response) {
 
     let dadosBody = request.body
 
@@ -450,7 +470,7 @@ app.post('/api/v1/unievent/estado', bodyParserJSON, async function (request, res
 
 })
 
-app.put('/api/v1/unievent/estado/:id', bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/estado/:id', bodyParserJSON, validarBody, async function (request, response) {
 
     dadosBody = request.body
 
@@ -498,7 +518,7 @@ app.get('/api/v1/unievent/endereco/:id', async function (request, response) {
 })
 
 //Insere um novo Endereco no BD
-app.post('/api/v1/unievent/endereco', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/endereco', bodyParserJSON, validarBody, async function (request, response) {
 
     let dadosBody = request.body
 
@@ -511,7 +531,7 @@ app.post('/api/v1/unievent/endereco', bodyParserJSON, async function (request, r
 
 })
 
-app.put('/api/v1/unievent/endereco/:id', bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/endereco/:id', bodyParserJSON, validarBody, async function (request, response) {
 
     dadosBody = request.body
 
@@ -559,7 +579,7 @@ app.get('/api/v1/unievent/ingresso/:id', async function (request, response) {
 })
 
 //Insere um novo Ingresso no BD
-app.post('/api/v1/unievent/ingresso', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/ingresso', bodyParserJSON, validarBody, async function (request, response) {
 
     let dadosBody = request.body
 
@@ -572,7 +592,7 @@ app.post('/api/v1/unievent/ingresso', bodyParserJSON, async function (request, r
 
 })
 
-app.put('/api/v1/unievent/ingresso/:id', bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/ingresso/:id', bodyParserJSON, validarBody, async function (request, response) {
 
     dadosBody = request.body
 
@@ -621,7 +641,7 @@ app.get('/api/v1/unievent/organizador/:id', async function (request, response) {
 })
 
 //Insere um novo organizador no BD
-app.post('/api/v1/unievent/organizador', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/organizador', bodyParserJSON, validarBody, async function (request, response) {
 
     let dadosBody = request.body
 
@@ -634,7 +654,7 @@ app.post('/api/v1/unievent/organizador', bodyParserJSON, async function (request
 
 })
 
-app.put('/api/v1/unievent/organizador/:id', bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/organizador/:id', bodyParserJSON, validarBody, async function (request, response) {
 
     dadosBody = request.body
 
@@ -661,7 +681,7 @@ app.delete('/api/v1/unievent/organizador/:id', async function (request, response
 })
 
 // Rota de Login (Autenticação) Organizador
-app.post('/api/v1/unievent/login/organizador', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/login/organizador', bodyParserJSON, validarBody, async function (request, response) {
 
     let { email, senha } = request.body
 
@@ -717,20 +737,20 @@ app.get('/api/v1/unievent/pedido/:id', async function (request, response) {
 })
 
 //Insere um novo Pedido no BD
-app.post('/api/v1/unievent/pedido', bodyParserJSON, async function (request, response) {
+app.post('/api/v1/unievent/pedido', bodyParserJSON, validarBody, async function (request, response) {
 
-    let dadosBody = request.body
+        let dadosBody = request.body
 
-    let contentType = request.headers['content-type']
+        let contentType = request.headers['content-type']
 
-    let pedido = await controllerPedido.inserirPedido(dadosBody, contentType)
+        let pedido = await controllerPedido.inserirPedido(dadosBody, contentType)
 
-    response.status(pedido.status_code)
-    response.json(pedido)
+        response.status(pedido.status_code)
+        response.json(pedido)
 
 })
 
-app.put('/api/v1/unievent/pedido/:id', bodyParserJSON, async function (request, response) {
+app.put('/api/v1/unievent/pedido/:id', bodyParserJSON, validarBody, async function (request, response) {
 
     dadosBody = request.body
 

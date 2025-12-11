@@ -21,7 +21,8 @@ const ERROR_INTERNAL_SERVER_MODEL       =   {status: false, status_code: 500, me
 const ERROR_INTERNAL_SERVER_CONTROLLER  =   {status: false, status_code: 500, message: 'Não foi possível processar a requisição, devido a problemas na camada de CONTROLE de dados !!!'}
 const ERROR_REQUIRED_FIELDS             =   {status: false, status_code: 400, message: 'Não foi possível processar a requisição, devido a campos obrigatórios que não foram enviados corretamente, conforme a documentação da API !!!'}
 const ERROR_CONTENT_TYPE                =   {status: false, status_code: 415, message: 'Não foi possível processar a requisição, pois o tipo de conteúdo enviado no body não é permitido!!!'}
-const ERROR_UPLOADED_FILE               =   {status: false, status_code: 400, message: 'Não foi possível processar a requisição, pois o arquivo de imagem enviado está com problemas, encaminhe novamente  !!!'}
+const ERROR_UPLOADED_FILE               =   {status: false, status_code: 400, message: 'Não foi possível processar a requisição, pois o arquivo de imagem enviado está com problemas, encaminhe novamente !!!'}
+const ERROR_INVALID_BODY_SYNTAX         =   {status: false, status_code: 400, message: 'Não foi possível processar a requisição, pois a sintaxe do body está incorreta, encaminhe novamente  !!!'}
 
 /************************* MENSAGENS DE SUCESSO DO PROJETO ******************************** */
 const SUCCESS_REQUEST           =   {status: true, status_code: 200, message: 'Requisição bem sucedida!!!' }
@@ -41,5 +42,5 @@ module.exports = {
                     ERROR_REQUIRED_FIELDS,
                     ERROR_CONTENT_TYPE,
                     ERROR_UPLOADED_FILE,
-                    
+                    ERROR_INVALID_BODY_SYNTAX
 }

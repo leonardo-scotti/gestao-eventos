@@ -492,7 +492,6 @@ const excluirEvento = async function (id) {
         }
 
     } catch (error) {
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 

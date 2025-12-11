@@ -92,9 +92,9 @@ const setInsertCustomer = async function (cliente) {
                 return true
             else
                 return false
-        } else {
+        } else if (cliente.cnpj == null) {
 
-              let sql = `INSERT INTO tbl_cliente (nome, email, senha, cpf, cnpj, telefone, data_nascimento, data_fundacao, id_genero) 
+            let sql = `INSERT INTO tbl_cliente (nome, email, senha, cpf, cnpj, telefone, data_nascimento, data_fundacao, id_genero) 
         VALUES('${cliente.nome}',
                 '${cliente.email}',
                 '${cliente.senha}',
@@ -125,7 +125,7 @@ const setUpdateCustomer = async function (cliente) {
 
         if (cliente.cpf == null) {
 
-        let sql = `UPDATE tbl_cliente SET 
+            let sql = `UPDATE tbl_cliente SET 
                         nome                = '${cliente.nome}',
                         email               = '${cliente.email}',
                         senha               = '${cliente.senha}',
@@ -137,16 +137,16 @@ const setUpdateCustomer = async function (cliente) {
                         id_genero           = '${cliente.id_genero}'
                     WHERE id_cliente = ${cliente.id}`
 
-        // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
-        let result = await prisma.$executeRawUnsafe(sql)
+            // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
+            let result = await prisma.$executeRawUnsafe(sql)
 
-        if (result)
-            return true
-        else
-            return false
-        } else {
+            if (result)
+                return true
+            else
+                return false
+        } else if (cliente.cnpj == null) {
 
-             let sql = `UPDATE tbl_cliente SET 
+            let sql = `UPDATE tbl_cliente SET 
                         nome                = '${cliente.nome}',
                         email               = '${cliente.email}',
                         senha               = '${cliente.senha}',
@@ -158,14 +158,13 @@ const setUpdateCustomer = async function (cliente) {
                         id_genero           = '${cliente.id_genero}'
                     WHERE id_cliente = ${cliente.id}`
 
-        // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
-        let result = await prisma.$executeRawUnsafe(sql)
+            // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
+            let result = await prisma.$executeRawUnsafe(sql)
 
-        if (result)
-            return true
-        else
-            return false
-
+            if (result)
+                return true
+            else
+                return false
         }
     } catch (error) {
         return false

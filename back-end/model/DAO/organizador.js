@@ -92,7 +92,7 @@ const setInsertOrganizer = async function (organizador) {
                 return true
             else
                 return false
-        } else {
+        } else if (organizador.cnpj == null) {
 
               let sql = `INSERT INTO tbl_organizador (nome, email, senha, cpf, cnpj, telefone, data_nascimento, data_fundacao, id_genero) 
         VALUES('${organizador.nome}',
@@ -144,7 +144,7 @@ const setUpdateOrganizer = async function (organizador) {
             return true
         else
             return false
-        } else {
+        } else if (organizador.cnpj == null) {
 
              let sql = `UPDATE tbl_organizador SET 
                         nome                = '${organizador.nome}',

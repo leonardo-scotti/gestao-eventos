@@ -32,9 +32,48 @@ const listarIngressos = async function () {
                 for (let ingresso of result) {
 
                     if (ingresso.preco_unitario != null) {
-                        ingresso.valor_liquido = ingresso.preco_unitario
-                        ingresso.valor_bruto = ingresso.preco_unitario / 0.97
+
+                        let strValor = String(ingresso.preco_unitario);
+
+                        let valorliquido = String(ingresso.preco_unitario);
+                        let valorbruto = String(ingresso.preco_unitario / 0.97)
                         delete ingresso.preco_unitario
+
+                        if (!strValor.includes(".")) {
+                            valorliquido = valorliquido + ".00"
+                            valorbruto = valorbruto + ".00"
+
+                            let formatado_valorliquido = new Intl.NumberFormat('pt-BR', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }).format(valorliquido)
+
+                            let formatado_valorbruto = new Intl.NumberFormat('pt-BR', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }).format(valorbruto)
+
+                            ingresso.valor_liquido = "R$" + formatado_valorliquido
+                            ingresso.valor_bruto = "R$" + formatado_valorbruto
+                        }
+                        // Se tiver ponto, mas só 1 casa decimal 
+                        else {
+                            valorliquido = parseFloat(valorliquido).toFixed(2)
+                            valorbruto = parseFloat(valorbruto).toFixed(2)
+
+                            let formatado_valorliquido = new Intl.NumberFormat('pt-BR', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }).format(valorliquido)
+
+                            let formatado_valorbruto = new Intl.NumberFormat('pt-BR', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }).format(valorbruto)
+
+                            ingresso.valor_liquido = "R$" + formatado_valorliquido
+                            ingresso.valor_bruto = "R$" + formatado_valorbruto
+                        }
                     }
 
                     let resultIngresso = await controllerEvento.buscarEventoId(ingresso.id_evento)
@@ -42,6 +81,7 @@ const listarIngressos = async function () {
                         ingresso.evento = resultIngresso.evento
                         delete ingresso.id_evento
                     }
+
                 }
 
                 const jsonResult = {
@@ -83,9 +123,48 @@ const buscarIngressoId = async function (id) {
                     for (let ingresso of result) {
 
                         if (ingresso.preco_unitario != null) {
-                            ingresso.valor_liquido = ingresso.preco_unitario
-                            ingresso.valor_bruto = ingresso.preco_unitario / 0.97
+
+                            let strValor = String(ingresso.preco_unitario);
+
+                            let valorliquido = String(ingresso.preco_unitario);
+                            let valorbruto = String(ingresso.preco_unitario / 0.97)
                             delete ingresso.preco_unitario
+
+                            if (!strValor.includes(".")) {
+                                valorliquido = valorliquido + ".00"
+                                valorbruto = valorbruto + ".00"
+
+                                let formatado_valorliquido = new Intl.NumberFormat('pt-BR', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(valorliquido)
+
+                                let formatado_valorbruto = new Intl.NumberFormat('pt-BR', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(valorbruto)
+
+                                ingresso.valor_liquido = "R$" + formatado_valorliquido
+                                ingresso.valor_bruto = "R$" + formatado_valorbruto
+                            }
+                            // Se tiver ponto, mas só 1 casa decimal 
+                            else {
+                                valorliquido = parseFloat(valorliquido).toFixed(2)
+                                valorbruto = parseFloat(valorbruto).toFixed(2)
+
+                                let formatado_valorliquido = new Intl.NumberFormat('pt-BR', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(valorliquido)
+
+                                let formatado_valorbruto = new Intl.NumberFormat('pt-BR', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(valorbruto)
+
+                                ingresso.valor_liquido = "R$" + formatado_valorliquido
+                                ingresso.valor_bruto = "R$" + formatado_valorbruto
+                            }
                         }
 
                         let resultIngresso = await controllerEvento.buscarEventoId(ingresso.id_evento)
@@ -93,6 +172,7 @@ const buscarIngressoId = async function (id) {
                             ingresso.evento = resultIngresso.evento
                             delete ingresso.id_evento
                         }
+
                     }
 
                     const jsonResult = {
@@ -169,7 +249,6 @@ const inserirIngresso = async function (ingresso, contentType) {
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
     } catch (error) {
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 

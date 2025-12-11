@@ -38,13 +38,18 @@ const listarEnderecos = async function () {
                         endereco.estado = resultEndereco.estado[0].sigla
                         delete endereco.id_estado
                     }
-                }
 
-                for (let endereco of result) {
                     let resultEvento = await controllerEvento.buscarEventoId(endereco.id_evento)
                     if (resultEvento.status_code == 200 && resultEvento.evento && resultEvento.evento.length > 0) {
                         endereco.evento = resultEvento.evento[0]
                         delete endereco.id_evento
+                    }
+
+                    if (endereco.cep) {
+                        let ultimos3digitos = endereco.cep.slice(-3)
+                        let primeiros5digitos = endereco.cep.slice(0, 5)
+
+                        endereco.cep = primeiros5digitos + "-" + ultimos3digitos
                     }
                 }
 
@@ -65,7 +70,6 @@ const listarEnderecos = async function () {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) {
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
@@ -86,20 +90,30 @@ const buscarEnderecoId = async function (id) {
                 if (result.length > 0) {
 
                     for (let endereco of result) {
+
                         let resultEndereco = await controllerEstado.buscarEstadoId(endereco.id_estado)
+
                         if (resultEndereco.status_code == 200 && resultEndereco.estado && resultEndereco.estado.length > 0) {
                             endereco.estado = resultEndereco.estado[0].sigla
                             delete endereco.id_estado
                         }
-                    }
 
-                    for (let endereco of result) {
                         let resultEvento = await controllerEvento.buscarEventoId(endereco.id_evento)
+
                         if (resultEvento.status_code == 200 && resultEvento.evento && resultEvento.evento.length > 0) {
                             endereco.evento = resultEvento.evento[0]
                             delete endereco.id_evento
                         }
+
+                        if (endereco.cep) {
+                            let ultimos3digitos = endereco.cep.slice(-3)
+                            let primeiros5digitos = endereco.cep.slice(0, 5)
+
+                            endereco.cep = primeiros5digitos + "-" + ultimos3digitos
+                        }
+
                     }
+
 
                     const jsonResult = {
                         status: MESSAGE.SUCCESS_REQUEST.status,
@@ -278,6 +292,13 @@ const validarDadosEndereco = async function (endereco) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
+    if (endereco.cep.length == 9) {
+        let ultimos3digitos = endereco.cep.slice(-3)
+        let primeiros5digitos = endereco.cep.slice(0, 5)
+
+        endereco.cep = primeiros5digitos + ultimos3digitos
+    }
+
     if (endereco.cep == '' || endereco.cep == null || endereco.cep == undefined || endereco.cep.length > 9) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CEP] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
@@ -311,6 +332,21 @@ const validarDadosEndereco = async function (endereco) {
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
     } else {
+
+        let validarid_estado = await controllerEstado.buscarEstadoId(endereco.id_estado)
+
+        let validarid_evento = await controllerEvento.buscarEventoId(endereco.id_evento)
+
+        if (validarid_estado.status_code !== 200) {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_ESTADO] invalido!!!'
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }
+        
+        if (validarid_evento.status_code !== 200) {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_EVENTO] invalido!!!'
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }
+
         return false
     }
 
