@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiko:wght@400;600;700&display=swap');
+
 * {
     padding: 0;
     margin: 0;
@@ -30,34 +31,45 @@ header {
     flex: 0 0 100px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding-inline: 50px;
     position: relative;
 }
 
-header .logo {
+nav {
+    width: 90%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.logo {
     height: 40px;
 }
 
-header .logo img {
+.logo img {
     height: 100%;
     width: 100%;
 }
 
-header .search-bar {
+.search-bar {
     height: 40px;
     width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-header .search-bar label {
+.search-bar label {
     height: 30px;
     width: 30px;
-    position: absolute;
-    left: 740px;
-    top: 34px;
+    position: relative;
+    left: 40px;
 }
 
-header .search-bar input {
+.search-bar input {
     width: 100%;
     height: 100%;
     border: none;
@@ -67,7 +79,7 @@ header .search-bar input {
     font-size: 20px;
 }
 
-header .search-bar input:focus {
+.search-bar input:focus {
     outline: none;
 }
 
@@ -79,7 +91,7 @@ input[type="search"]::-webkit-search-results-decoration {
     display: none;
 }
 
-header .user-area {
+.user-area {
     width: 90px;
     height: 40px;
     border: 1px solid #00000020;
@@ -88,26 +100,87 @@ header .user-area {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: .3s;
 }
 
-header .user-area button {
+.user-area button {
     height: 40px;
     width: 40px;
     border: none;
     background-color: transparent;
 }
 
-header .user-area img {
+.user-area img {
     height: 40px;
     width: 40px;
 }
+
+nav menu {
+    display: block;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+    background-color: #FAFAFA;
+    border-radius: 20px;
+    box-shadow: 0px 2px 8px #00000060;
+    left: 1460px;
+    top: 160px;
+    padding:10px 20px;
+    opacity: 0;
+    transition: .3s;
+}
+
+nav:has(menu.active) .user-area {
+    border: 1px solid #009DDD;
+}
+
+nav menu.active {
+    display: flex;
+    /* justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+    background-color: #FAFAFA;
+    border-radius: 20px;
+    box-shadow: 0px 2px 8px #00000060;
+    left: 1460px; */
+    top: 80px;
+    opacity: 100; 
+}
+
+nav menu.active a {
+    width: 140px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
 
 main {
     flex-grow: 1;
 }
 
 .first-section {
-    height: 980px;
+    height: 811px;
+    background-image: url(../assets/img/fundo-home.jpg);
+    padding-top: 300px;
+    padding-inline: 100px;
+}
+
+.slogan {
+    width: 50%;
+    color: #FAFAFA;
+}
+
+.slogan h1 {
+    font-size: 64px;
+}
+
+.slogan p {
+    font-size: 24px;
 }
 
 .second-section {
@@ -120,7 +193,7 @@ main {
 }
 
 .container-second {
-    width: 100%;
+    width: 90%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -166,7 +239,7 @@ main {
 }
 
 .category:hover {
-    transform: scale(1.02);
+    transform: scale(1.01);
     box-shadow: 0px 2px 8px #00000050;
 }
 
@@ -176,7 +249,7 @@ main {
 }
 
 .category p {
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 400;
 }
 
@@ -222,8 +295,8 @@ main {
     flex-direction: column;
 }
 
-.info > h4 {
-    font-size: 30px;
+.info>h4 {
+    font-size: 28px;
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
@@ -239,7 +312,7 @@ main {
 }
 
 .date p {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: normal;
 }
 
@@ -253,7 +326,7 @@ main {
 }
 
 .container-third {
-    width: 100%;
+    width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -319,7 +392,7 @@ footer {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: aqua;
+    gap: 100px;
 }
 
 .content-footer {
@@ -362,6 +435,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 110px;
 }
 
 .links-footer {
@@ -369,8 +443,24 @@ footer {
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
+    gap: 16px;
 }
 
 .links-footer h4 {
     font-size: 30px;
+}
+
+.links-footer menu {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.copyrigth {
+    width: 60%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
