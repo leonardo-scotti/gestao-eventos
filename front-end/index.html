@@ -19,14 +19,36 @@
                 <input type="search" id="search-bar" placeholder="Pesquise um evento...">
             </div>
             <div class="user-area">
-                <button id="small-menu"><img src="./assets/icons/small-menu.svg" alt="Menu de Opções"></button>
+                <button id="small-menu" on><img src="./assets/icons/small-menu.svg" alt="Menu de Opções"></button>
                 <img src="./assets/icons/circle-user.svg" alt="Foto usuário">
             </div>
-            <menu>
+            <menu id="menu">
                 <li><a href="#"><img src="./assets/icons/user.svg" alt="Minha Conta">Minha Conta</a></li>
                 <li><a href="#"><img src="./assets/icons/events.svg" alt="Meus Eventos">Meus Eventos</a></li>
                 <li><a href="#"><img src="./assets/icons/logout.svg" alt="Sair">Sair</a></li>
             </menu>
+            <script>
+                const btnMenu = document.getElementById('small-menu');
+                const menu = document.getElementById('menu');
+
+                btnMenu.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    toggleMenu();
+                });
+
+                function toggleMenu() {
+                    menu.classList.toggle('active');
+                }
+
+                document.addEventListener('click', (event) => {
+                    if (menu.classList.contains('active')) {
+
+                        if (!menu.contains(event.target) && !btnMenu.contains(event.target)) {
+                            menu.classList.remove('active');
+                        }
+                    }
+                });
+            </script>
         </nav>
     </header>
     <main>
@@ -159,7 +181,9 @@
             </section>
         </div>
         <!-- ==================================================================== -->
-         
+        <div class="evento">
+            
+        </div>
     </main>
     <footer>
         <div class="container-footer">
