@@ -1,0 +1,86 @@
+main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-login {
+    width: 1000px;
+    height: 800px;
+    border-radius: 50px;
+    box-shadow: 0px 0px 8px #00000040;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 50px;
+}
+
+form h1 {
+    font-size: 48px;
+}
+
+form .inputs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.inputs .input {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.inputs .input label {
+    font-size: 22px;
+}
+
+.inputs .input input {
+    width: 380px;
+    height: 60px;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0px 0px 8px #00000040;
+}
+
+form button {
+    width: 240px;
+    height: 60px;
+    border: none;
+    background-color: #009DDD;
+    border-radius: 50px;
+    font-size: 32px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+form .forgot {
+    font-size: 18px;
+}
+
+form .forgot span {
+    color: #009DDD;
+}
+
+.side-bar {
+    width: 50%;
+    height: 100%;
+    border-radius: 0px 50px 50px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #009DDD;
+}

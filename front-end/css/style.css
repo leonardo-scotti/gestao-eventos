@@ -163,6 +163,14 @@ main {
     flex-grow: 1;
 }
 
+#home {
+    display: none;
+}
+
+main #home.active {
+    display: block;
+}
+
 .first-section {
     height: 811px;
     background-image: url(../assets/img/fundo-home.jpg);
