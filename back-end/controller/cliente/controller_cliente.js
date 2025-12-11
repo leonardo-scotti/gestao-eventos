@@ -213,7 +213,8 @@ const inserirCliente = async function (cliente, contentType) {
                                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                             }
                         } else {
-                            return validarGenero //400
+                            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_GENERO] invalido!!!'
+                            return MESSAGE.ERROR_REQUIRED_FIELDS //400
                         }
                     } else {
                         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Este [CPF] já está em uso!!!'
@@ -301,7 +302,8 @@ const atualizarCliente = async function (cliente, id, contentType) {
                             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                         }
                     } else {
-                        return validarGenero
+                        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_GENERO] invalido!!!'
+                        return MESSAGE.ERROR_REQUIRED_FIELDS //400
                     }
                 } else {
                     return validarID //Retorno da função de buscarclienteId (400 ou 404 ou 500)
