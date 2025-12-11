@@ -170,6 +170,14 @@ const inserirCliente = async function (cliente, contentType) {
 
                             cliente.senha = gerarSha1(cliente.senha)
 
+                            let email = cliente.email
+                            let partes = email.split('@')
+
+                            let usuario = partes[0]
+                            let dominio = partes[1].toLowerCase()
+
+                            cliente.email = usuario + dominio
+
                             let validaremail = await clienteDAO.getSelectAllCustomers()
 
                             for (let item of validaremail) {
@@ -254,6 +262,14 @@ const atualizarCliente = async function (cliente, id, contentType) {
                     if (validarGenero.status_code == 200) {
 
                         cliente.senha = gerarSha1(cliente.senha)
+
+                        let email = cliente.email
+                        let partes = email.split('@')
+
+                        let usuario = partes[0]
+                        let dominio = partes[1].toLowerCase()
+
+                        cliente.email = usuario + dominio
 
                         let validaremail = await clienteDAO.getSelectAllCustomers()
 
@@ -440,8 +456,8 @@ const validarDadosCliente = async function (cliente) {
 
             if (partes.length == 2) {
 
-                let usuario = partes[0];
-                let dominio = partes[1];
+                let usuario = partes[0]
+                let dominio = partes[1]
 
                 if (usuario.length === 0 || dominio.length === 0 || !dominio.includes('.') || dominio.startsWith('.') || dominio.endsWith('.')) {
                     MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'

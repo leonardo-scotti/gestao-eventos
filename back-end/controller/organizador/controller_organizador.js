@@ -168,6 +168,14 @@ const inserirOrganizador = async function (organizador, contentType) {
 
                             organizador.senha = gerarSha1(organizador.senha)
 
+                            let email = organizador.email
+                            let partes = email.split('@')
+
+                            let usuario = partes[0]
+                            let dominio = partes[1].toLowerCase()
+
+                            organizador.email = usuario + dominio
+
                             let validaremail = await organizadorDAO.getSelectAllOrganizers()
 
                             for (let item of validaremail) {
@@ -253,6 +261,14 @@ const atualizarOrganizador = async function (organizador, id, contentType) {
                     if (validarGenero.status_code == 200) {
 
                         organizador.senha = gerarSha1(organizador.senha)
+
+                        let email = organizador.email
+                        let partes = email.split('@')
+
+                        let usuario = partes[0]
+                        let dominio = partes[1].toLowerCase()
+
+                        organizador.email = usuario + dominio
 
                         let validaremail = await organizadorDAO.getSelectAllOrganizers()
 
@@ -440,8 +456,8 @@ const validarDadosOrganizador = async function (organizador) {
 
             if (partes.length == 2) {
 
-                let usuario = partes[0];
-                let dominio = partes[1];
+                let usuario = partes[0]
+                let dominio = partes[1]
 
                 if (usuario.length === 0 || dominio.length === 0 || !dominio.includes('.') || dominio.startsWith('.') || dominio.endsWith('.')) {
                     MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
