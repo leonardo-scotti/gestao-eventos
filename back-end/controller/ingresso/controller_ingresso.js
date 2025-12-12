@@ -33,47 +33,22 @@ const listarIngressos = async function () {
 
                     if (ingresso.preco_unitario != null) {
 
-                        let strValor = String(ingresso.preco_unitario);
+                        let precoNumerico = parseFloat(String(ingresso.preco_unitario).replace(',', '.'))
 
-                        let valorliquido = String(ingresso.preco_unitario);
-                        let valorbruto = String(ingresso.preco_unitario / 0.97)
+                        let valorLiquidoNum = precoNumerico
+                        let valorBrutoNum = precoNumerico / 0.97
+
                         delete ingresso.preco_unitario
 
-                        if (!strValor.includes(".")) {
-                            valorliquido = valorliquido + ".00"
-                            valorbruto = valorbruto + ".00"
+                        let formatador = new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
 
-                            let formatado_valorliquido = new Intl.NumberFormat('pt-BR', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }).format(valorliquido)
-
-                            let formatado_valorbruto = new Intl.NumberFormat('pt-BR', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }).format(valorbruto)
-
-                            ingresso.valor_liquido = "R$" + formatado_valorliquido
-                            ingresso.valor_bruto = "R$" + formatado_valorbruto
-                        }
-                        // Se tiver ponto, mas só 1 casa decimal 
-                        else {
-                            valorliquido = parseFloat(valorliquido).toFixed(2)
-                            valorbruto = parseFloat(valorbruto).toFixed(2)
-
-                            let formatado_valorliquido = new Intl.NumberFormat('pt-BR', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }).format(valorliquido)
-
-                            let formatado_valorbruto = new Intl.NumberFormat('pt-BR', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }).format(valorbruto)
-
-                            ingresso.valor_liquido = "R$" + formatado_valorliquido
-                            ingresso.valor_bruto = "R$" + formatado_valorbruto
-                        }
+                        ingresso.valor_liquido = formatador.format(valorLiquidoNum)
+                        ingresso.valor_bruto = formatador.format(valorBrutoNum)
                     }
 
                     let resultIngresso = await controllerEvento.buscarEventoId(ingresso.id_evento)
@@ -124,47 +99,22 @@ const buscarIngressoId = async function (id) {
 
                         if (ingresso.preco_unitario != null) {
 
-                            let strValor = String(ingresso.preco_unitario);
+                            let precoNumerico = parseFloat(String(ingresso.preco_unitario).replace(',', '.'))
 
-                            let valorliquido = String(ingresso.preco_unitario);
-                            let valorbruto = String(ingresso.preco_unitario / 0.97)
+                            let valorLiquidoNum = precoNumerico
+                            let valorBrutoNum = precoNumerico / 0.97
+
                             delete ingresso.preco_unitario
 
-                            if (!strValor.includes(".")) {
-                                valorliquido = valorliquido + ".00"
-                                valorbruto = valorbruto + ".00"
+                            let formatador = new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL',
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            });
 
-                                let formatado_valorliquido = new Intl.NumberFormat('pt-BR', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }).format(valorliquido)
-
-                                let formatado_valorbruto = new Intl.NumberFormat('pt-BR', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }).format(valorbruto)
-
-                                ingresso.valor_liquido = "R$" + formatado_valorliquido
-                                ingresso.valor_bruto = "R$" + formatado_valorbruto
-                            }
-                            // Se tiver ponto, mas só 1 casa decimal 
-                            else {
-                                valorliquido = parseFloat(valorliquido).toFixed(2)
-                                valorbruto = parseFloat(valorbruto).toFixed(2)
-
-                                let formatado_valorliquido = new Intl.NumberFormat('pt-BR', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }).format(valorliquido)
-
-                                let formatado_valorbruto = new Intl.NumberFormat('pt-BR', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }).format(valorbruto)
-
-                                ingresso.valor_liquido = "R$" + formatado_valorliquido
-                                ingresso.valor_bruto = "R$" + formatado_valorbruto
-                            }
+                            ingresso.valor_liquido = formatador.format(valorLiquidoNum);
+                            ingresso.valor_bruto = formatador.format(valorBrutoNum);
                         }
 
                         let resultIngresso = await controllerEvento.buscarEventoId(ingresso.id_evento)

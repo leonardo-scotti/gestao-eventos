@@ -517,6 +517,15 @@ app.get('/api/v1/unievent/endereco/:id', async function (request, response) {
 
 })
 
+//Retorna a lista de cidades
+app.get('/api/v1/unievent/cidade', async function (request, response) {
+
+    let endereco = await controllerEndereco.listarCidades()
+
+    response.status(endereco.status_code)
+    response.json(endereco)
+})
+
 //Insere um novo Endereco no BD
 app.post('/api/v1/unievent/endereco', bodyParserJSON, validarBody, async function (request, response) {
 
