@@ -175,6 +175,60 @@ const buscarEnderecoId = async function (id) {
     }
 }
 
+const buscarEnderecoByIdEvento = async function (idEvent) {
+    //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
+    //não interfiram em outras funções
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+        //Validação de campo obrigatório
+        if (idEvent != '' && idEvent != null && idEvent != undefined && !isNaN(idEvent) && idEvent > 0) {
+            //Chama a função para filtrar pelo ID
+            let result = await enderecoDAO.getSelectAddressByIdEvent(parseInt(idEvent))
+            if (result) {
+                if (result.length > 0) {
+
+                    for (let endereco of result) {
+
+                        let resultEndereco = await controllerEstado.buscarEstadoId(endereco.id_estado)
+
+                        if (resultEndereco.status_code == 200 && resultEndereco.estado && resultEndereco.estado.length > 0) {
+                            endereco.estado = resultEndereco.estado[0].sigla
+                            delete endereco.id_estado
+                        }
+
+                        if (endereco.cep) {
+                            let ultimos3digitos = endereco.cep.slice(-3)
+                            let primeiros5digitos = endereco.cep.slice(0, 5)
+
+                            endereco.cep = primeiros5digitos + "-" + ultimos3digitos
+                        }
+                    }
+
+                    const jsonResult = {
+                        status: MESSAGE.SUCCESS_REQUEST.status,
+                        status_code: MESSAGE.SUCCESS_REQUEST.status_code,
+                        developments: MESSAGE.HEADER.developments,
+                        message: MESSAGE.SUCCESS_REQUEST.message,
+                        endereco: result
+                    }
+
+                    return jsonResult //200
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND //404
+                }
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] invalido!!'
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 //Insere um novo endereco
 const inserirEndereco = async function (endereco, contentType) {
 
@@ -392,6 +446,7 @@ module.exports = {
     listarEnderecos,
     listarCidades,
     buscarEnderecoId,
+    buscarEnderecoByIdEvento,
     inserirEndereco,
     atualizarEndereco,
     excluirEndereco

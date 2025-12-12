@@ -24,6 +24,9 @@ const controllerClienteEvento = require('../evento/controller_cliente_evento.js'
 //Import da controller organizadorEvento 
 const controllerOrganizadorEvento = require('../evento/controller_organizador_evento.js')
 
+//Import da controller endereco
+const controllerEndereco = require('../endereco/controller_endereco.js')
+
 //Import do arquivo que padroniza todas as mensagens
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -96,6 +99,11 @@ const listarEventos = async function () {
                             "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
                             "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
                         };
+                    }
+
+                    let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(evento.id_evento)
+                    if (resultEndereco.status_code == 200) {
+                        evento.endereco = resultEndereco.endereco
                     }
                 }
 
@@ -190,6 +198,11 @@ const buscarEventoId = async function (id) {
                                 "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
                                 "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
                             };
+                        }
+
+                        let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(evento.id_evento)
+                        if (resultEndereco.status_code == 200) {
+                            evento.endereco = resultEndereco.endereco
                         }
                     }
 
@@ -502,11 +515,11 @@ const validarDadosEvento = async function (evento) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
-    if(evento.is_visible == 1) {
+    if (evento.is_visible == 1) {
         evento.is_visible = true
     }
 
-    if(evento.is_visible == 0) {
+    if (evento.is_visible == 0) {
         evento.is_visible = false
     }
 
