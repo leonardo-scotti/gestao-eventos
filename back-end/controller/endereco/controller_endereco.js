@@ -75,6 +75,42 @@ const listarEnderecos = async function () {
 
 }
 
+//Retorna uma lista de cidades
+const listarCidades = async function () {
+    //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
+    //não interfiram em outras funções
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+
+        //Chama a função do DAO para retornar a lista de enderecos
+        let result = await enderecoDAO.getSelectAllCities()
+
+        if (result) {
+            if (result.length > 0) {
+
+                const jsonResult = {
+                    status: MESSAGE.SUCCESS_REQUEST.status,
+                    status_code: MESSAGE.SUCCESS_REQUEST.status_code,
+                    developments: MESSAGE.HEADER.developments,
+                    message: MESSAGE.SUCCESS_REQUEST.message,
+                    cidades: result
+                }
+
+                return jsonResult //200
+
+            } else {
+                return MESSAGE.ERROR_NOT_FOUND //404
+            }
+        } else {
+            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+        }
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
+}
+
 //Retorna um endereco filtrando pelo ID
 const buscarEnderecoId = async function (id) {
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
@@ -408,6 +444,7 @@ const validarDadosEndereco = async function (endereco) {
 
 module.exports = {
     listarEnderecos,
+    listarCidades,
     buscarEnderecoId,
     buscarEnderecoByIdEvento,
     inserirEndereco,

@@ -1,15 +1,13 @@
 openapi: 3.0.0
 info:
   title: API de Gestão de Eventos (UniEvent)
-  description: Documentação corrigida com exemplos exatos de resposta para Endereços e Ingressos.
+  description: Documentação definitiva API UniEvent
   version: 3.1.0
   contact:
     name: Vitor Miguel Rodrigues Cezario
-
 servers:
   - url: http://localhost:8080/api/v1/unievent
     description: Servidor Local
-
 tags:
   - name: Autenticação
   - name: Evento
@@ -22,11 +20,7 @@ tags:
   - name: Estado
   - name: Assunto
   - name: Gênero
-
 paths:
-  # ==========================================
-  #                 LOGIN
-  # ==========================================
   /cliente/login:
     post:
       tags: [Autenticação]
@@ -44,7 +38,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseClienteLogin'
-
   /organizador/login:
     post:
       tags: [Autenticação]
@@ -62,10 +55,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseOrganizadorLogin'
-
-  # ==========================================
-  #                 LOGOUT
-  # ==========================================
   /logout/cliente:
     post:
       tags: [Autenticação]
@@ -77,7 +66,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseLogout'
-
   /logout/organizador:
     post:
       tags: [Autenticação]
@@ -89,10 +77,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseLogout'
-
-  # ==========================================
-  #                 EVENTO
-  # ==========================================
   /eventos:
     get:
       tags: [Evento]
@@ -104,7 +88,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaEventos'
-
   /evento/{id}:
     get:
       tags: [Evento]
@@ -136,7 +119,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /evento:
     post:
       tags: [Evento]
@@ -174,10 +156,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
-  # ==========================================
-  #               CATEGORIA
-  # ==========================================
   /categorias:
     get:
       tags: [Categoria]
@@ -189,7 +167,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaCategorias'
-
   /categoria/{id}:
     get:
       tags: [Categoria]
@@ -221,7 +198,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /categoria:
     post:
       tags: [Categoria]
@@ -259,10 +235,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
-  # ==========================================
-  #                 PEDIDO
-  # ==========================================
   /pedidos:
     get:
       tags: [Pedido]
@@ -274,7 +246,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaPedidos'
-
   /pedido/{id}:
     get:
       tags: [Pedido]
@@ -306,7 +277,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /pedido:
     post:
       tags: [Pedido]
@@ -344,10 +314,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
-  # ==========================================
-  #                 CLIENTE
-  # ==========================================
   /clientes:
     get:
       tags: [Cliente]
@@ -359,7 +325,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaClientes'
-
   /cliente/{id}:
     get:
       tags: [Cliente]
@@ -375,7 +340,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseUnicaPessoa'
+                $ref: '#/components/schemas/ResponseUnicoCliente'
     delete:
       tags: [Cliente]
       summary: Excluir Cliente
@@ -391,7 +356,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /cliente:
     post:
       tags: [Cliente]
@@ -429,10 +393,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
-  # ==========================================
-  #               ORGANIZADOR
-  # ==========================================
   /organizadores:
     get:
       tags: [Organizador]
@@ -444,7 +404,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaOrganizadores'
-
   /organizador/{id}:
     get:
       tags: [Organizador]
@@ -460,7 +419,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseUnicaPessoa'
+                $ref: '#/components/schemas/ResponseUnicoOrganizador'
     delete:
       tags: [Organizador]
       summary: Excluir Organizador
@@ -476,7 +435,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /organizador:
     post:
       tags: [Organizador]
@@ -514,10 +472,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
-  # ==========================================
-  #                 GÊNERO
-  # ==========================================
   /generos:
     get:
       tags: [Gênero]
@@ -529,7 +483,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaGeneros'
-
   /genero/{id}:
     get:
       tags: [Gênero]
@@ -561,7 +514,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /genero:
     post:
       tags: [Gênero]
@@ -599,10 +551,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
-  # ==========================================
-  #                 ASSUNTO
-  # ==========================================
   /assuntos:
     get:
       tags: [Assunto]
@@ -614,7 +562,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaAssuntos'
-
   /assunto/{id}:
     get:
       tags: [Assunto]
@@ -646,7 +593,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /assunto:
     post:
       tags: [Assunto]
@@ -684,10 +630,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
-  # ==========================================
-  #                 INGRESSO
-  # ==========================================
   /ingressos:
     get:
       tags: [Ingresso]
@@ -699,7 +641,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaIngressos'
-
   /ingresso/{id}:
     get:
       tags: [Ingresso]
@@ -731,7 +672,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /ingresso:
     post:
       tags: [Ingresso]
@@ -769,10 +709,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
-  # ==========================================
-  #                 ENDEREÇO
-  # ==========================================
   /enderecos:
     get:
       tags: [Endereço]
@@ -784,7 +720,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaEnderecos'
-
+  /cidades:
+    get:
+      tags: [Endereço]
+      summary: Listar todas as Cidades
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseListaCidades'
   /endereco/{id}:
     get:
       tags: [Endereço]
@@ -816,7 +762,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /endereco:
     post:
       tags: [Endereço]
@@ -854,10 +799,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
-  # ==========================================
-  #                 ESTADO
-  # ==========================================
   /estados:
     get:
       tags: [Estado]
@@ -869,7 +810,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseListaEstados'
-
   /estado/{id}:
     get:
       tags: [Estado]
@@ -901,7 +841,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDelete'
-
   /estado:
     post:
       tags: [Estado]
@@ -939,35 +878,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
-
 components:
   schemas:
-    # --- ENVELOPES DE RESPOSTA (SUCESSO) ---
-    
-    ResponseCreate:
-      type: object
-      properties:
-        status: { type: boolean, example: true }
-        status_code: { type: integer, example: 201 }
-        developments: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
-
-    ResponseUpdate:
-      type: object
-      properties:
-        status: { type: boolean, example: true }
-        status_code: { type: integer, example: 200 }
-        developments: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Requisição bem sucedida, objeto atualizado com sucesso !!!" }
-
-    ResponseDelete:
-      type: object
-      properties:
-        status: { type: boolean, example: true }
-        status_code: { type: integer, example: 200 }
-        developments: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
-        message: { type: string, example: "Item excluído com sucesso!!!" }
-
     ResponseGenericMessage:
       type: object
       properties:
@@ -975,282 +887,142 @@ components:
         status_code: { type: integer, example: 200 }
         developments: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
         message: { type: string, example: "Requisição bem sucedida!!!" }
-
-    # ==========================================================
-    #                  REQUEST SCHEMAS
-    # ==========================================================
-    EventoRequest:
-      type: object
-      required: [nome, descricao, data_inicio, hora_inicio, data_termino, hora_termino, quantidade_ingresso, is_visible, id_categoria, id_assunto]
-      properties:
-        nome: 
-          type: string
-          example: "Tech Summit São Paulo 2024"
-        descricao: 
-          type: string
-          example: "O maior evento de inovação..."
-        data_inicio: 
-          type: string
-          example: "2024-11-20"
-        hora_inicio: 
-          type: string
-          example: "09:00:00"
-        data_termino: 
-          type: string
-          example: "2024-11-22"
-        hora_termino: 
-          type: string
-          example: "18:00:00"
-        banner: 
-          type: string
-          format: binary
-        quantidade_ingresso: 
-          type: integer
-          example: 500
-        quantidade_ingresso_comprado: 
-          type: integer
-          example: 0
-        is_visible: 
-          type: boolean
-          example: true
-        id_categoria: 
-          type: integer
-          example: 2
-        id_assunto: 
-          type: integer
-          example: 6
-        cliente:
-          type: string
-          description: "Array de clientes"
-        organizador:
-          type: string
-          description: "Array de organizadores"
-
-    CategoriaRequest:
-      type: object
-      required: [nome, icone]
-      properties:
-        nome: 
-          type: string
-          example: "Tecnologia"
-        icone: 
-          type: string
-          format: binary
-
-    PedidoRequest:
-      type: object
-      required: [data_pedido, status_pedido, valor_total, id_organizador, id_cliente, ingresso]
-      properties:
-        data_pedido: 
-          type: string
-          format: date
-          example: "1967-07-18"
-        status_pedido: 
-          type: string
-          example: "FINALIZADO"
-        valor_total: 
-          type: number
-          format: float
-          example: 10.00
-        id_organizador: 
-          type: integer
-          example: 2
-        id_cliente: 
-          type: integer
-          example: 1
-        ingresso:
-          type: array
-          items:
-            type: object
-            properties:
-              id: 
-                type: integer
-                example: 4
-              quantidade: 
-                type: integer
-                example: 10
-
-    PessoaRequest:
-      type: object
-      required: [nome, email, senha, cpf, id_genero]
-      properties:
-        nome: { type: string, example: "vitor" }
-        email: { type: string, example: "vitor@gmail.com" }
-        senha: { type: string, example: "batatinha123" }
-        cpf: { type: string, example: "803.744.544-93" }
-        cnpj: { type: string, nullable: true, example: null }
-        telefone: { type: string, example: "11993679608" }
-        data_nascimento: { type: string, format: date, example: "1967-07-18" }
-        data_fundacao: { type: string, nullable: true, format: date, example: null }
-        id_genero: { type: integer, example: 1 }
-    
-    LoginRequest:
-      type: object
-      required: [email, senha]
-      properties:
-        email: { type: string, example: "Pedro3@gmail.com" }
-        senha: { type: string, example: "batatinha123" }
-
-    GeneroRequest:
-      type: object
-      required: [nome]
-      properties:
-        nome: { type: string, example: "HOMEM" }
-
-    AssuntoRequest:
-      type: object
-      required: [nome]
-      properties:
-        nome: { type: string, example: "Tecnologia" }
-
-    EstadoRequest:
-      type: object
-      required: [sigla]
-      properties:
-        sigla: { type: string, example: "SP" }
-
-    IngressoRequest:
-      type: object
-      required: [nome, preco_unitario, is_ativo, id_evento]
-      properties:
-        nome: { type: string, example: "Passaporte 12 dias" }
-        preco_unitario: { type: string, example: "999" }
-        is_ativo: { type: integer, example: 0 }
-        id_evento: { type: integer, example: 1 }
-
-    EnderecoRequest:
-      type: object
-      required: [cep, logradouro, numero, bairro, cidade, estado, id_evento]
-      properties:
-        cep: { type: string, example: "23001000" }
-        logradouro: { type: string, example: "Praça da Sé" }
-        complemento: { type: string, example: "Lado ímpar" }
-        numero: { type: string, example: "100" }
-        bairro: { type: string, example: "Sé" }
-        cidade: { type: string, example: "São Paulo" }
-        estado: { type: string, example: "SP" }
-        id_evento: { type: integer, example: 2 }
-
-    # ==========================================================
-    #                 RESPONSE SCHEMAS
-    # ==========================================================
-
-    # Sub-objetos
-    PessoaResponseObject:
-      type: object
-      properties:
-        id_cliente: { type: integer, example: 24 }
-        id_organizador: { type: integer, example: 2 }
-        nome: { type: string, example: "vitor" }
-        email: { type: string, example: "vitor@gmail.com" }
-        senha: { type: string, example: "11c2e8b8aa8e5d79acb1b80bcc85218c71d699f0" }
-        cpf: { type: string, example: "803.744.544-93" }
-        cnpj: { type: string, nullable: true }
-        telefone: { type: string, example: "11993679608" }
-        data_nascimento: { type: string, example: "18/07/1967" }
-        data_fundacao: { type: string, nullable: true }
-        genero: { type: string, example: "Homem" }
-
-    # Objeto específico para o LOGIN (Resumido)
+    ResponseCreate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            status_code: { type: integer, example: 201 }
+            message: { type: string, example: "Objeto criado com sucesso !!!" }
+    ResponseUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Objeto atualizado com sucesso !!!" }
+    ResponseDelete:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            message: { type: string, example: "Item excluído com sucesso!!!" }
     PessoaLoginInfo:
       type: object
       properties:
         nome: { type: string, example: "Pedro" }
-        email: { type: string, example: "Pedr423o@gmail.com" }
-
-    PessoaResumo:
+        email: { type: string, example: "Pedro@gmail.com" }
+    ClienteResumo:
       type: object
       properties:
-        id_cliente: { type: integer }
-        nome: { type: string }
-
+        id_cliente: { type: integer, example: 5 }
+        nome: { type: string, example: "Diana Ferreira" }
+    OrganizadorResumo:
+      type: object
+      properties:
+        id_organizador: { type: integer, example: 5 }
+        nome: { type: string, example: "TechMasters Co" }
     DataRealizacao:
       type: object
       properties:
-        data_inicio: { type: string, example: "Quarta-feira, 20 de novembro" }
-        data_termino: { type: string, example: "Sexta-feira, 22 de novembro" }
-
+        data_inicio: { type: string, example: "Segunda-feira, 15 de junho" }
+        data_termino: { type: string, example: "Quinta-feira, 18 de junho" }
+    PessoaResponseObject:
+      type: object
+      properties:
+        id_cliente: { type: integer, example: 24 }
+        id_organizador: { type: integer, example: 5 }
+        nome: { type: string, example: "TechMasters Co" }
+        email: { type: string, example: "tech@masters.com" }
+        senha: { type: string, example: "123456" }
+        cpf: { type: string, nullable: true, example: "66677788899" }
+        cnpj: { type: string, nullable: true, example: "22211144455566" }
+        telefone: { type: string, example: "5155557890" }
+        data_nascimento: { type: string, nullable: true, example: "03/09/1992" }
+        data_fundacao: { type: string, nullable: true, example: "11/11/2018" }
+        genero: { type: string, example: "Não Informado" }
     EventoResponseObject:
       type: object
       properties:
-        id_evento: { type: integer, example: 24 }
-        nome: { type: string, example: "Tech Summit São Paulo 2024" }
-        descricao: { type: string, example: "O maior evento de inovação e desenvolvimento de software da região." }
-        data_inicio: { type: string, example: "20/11/2024" }
-        hora_inicio: { type: string, example: "09:00" }
-        data_termino: { type: string, example: "22/11/2024" }
-        hora_termino: { type: string, example: "18:00" }
-        banner: { type: string, example: "https://nuvemsenai.blob.core.windows.net/uploudimagens/..." }
-        quantidade_ingresso: { type: integer, example: 500 }
-        quantidade_ingresso_comprado: { type: integer, example: 0 }
-        is_visible: { type: integer, example: 1 }
-        categoria: { type: string, example: "Workshop" }
-        assunto: { type: string, example: "Tech Summit São Paulo 2024" }
+        id_evento: { type: integer, example: 5 }
+        nome: { type: string, example: "Feira de Sustentabilidade" }
+        descricao: { type: string, example: "Exposição de produtos e serviços ecológicos." }
+        data_inicio: { type: string, example: "15/06/2026" }
+        hora_inicio: { type: string, example: "10:00" }
+        data_termino: { type: string, example: "18/06/2026" }
+        hora_termino: { type: string, example: "20:00" }
+        banner: { type: string, example: "banner_sustentavel.jpg" }
+        quantidade_ingresso: { type: integer, example: 3000 }
+        quantidade_ingresso_comprado: { type: integer, example: 105 }
+        is_visible: { type: integer, example: 0 }
+        categoria: { type: string, example: "Feiras e Exposições" }
+        assunto: { type: string, example: "Saúde e Bem-Estar" }
         clientes:
           type: array
           items:
-            $ref: '#/components/schemas/PessoaResumo'
+            $ref: '#/components/schemas/ClienteResumo'
+        organizadores:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizadorResumo'
         dataRealizacao:
           $ref: '#/components/schemas/DataRealizacao'
-
     CategoriaResponseObject:
       type: object
       properties:
         id_categoria: { type: integer, example: 6 }
         nome: { type: string, example: "Teatro" }
         icone: { type: string, example: "https://.../icone.png" }
-
     GeneroResponseObject:
       type: object
       properties:
         id_genero: { type: integer, example: 10 }
         nome: { type: string, example: "HOMEM" }
-
     AssuntoResponseObject:
       type: object
       properties:
         id_assunto: { type: integer, example: 7 }
-        nome: { type: string, example: "Tech Summit São Paulo 2024" }
-
+        nome: { type: string, example: "Tecnologia" }
     EstadoResponseObject:
       type: object
       properties:
         id_estado: { type: integer, example: 3 }
-        sigla: { type: string, example: "RJ" }
-
+        sigla: { type: string, example: "SP" }
+    CidadeResponseObject:
+      type: object
+      properties:
+        cidade: { type: string, example: "São Paulo" }
     IngressoResponseObject:
       type: object
       properties:
-        id_ingresso: { type: integer, example: 5 }
-        nome: { type: string, example: "Passaporte 12 dias" }
-        preco_unitario: { type: string, example: "999" }
-        is_ativo: { type: integer, example: 0 }
+        id_ingresso: { type: integer, example: 8 }
+        nome: { type: string, example: "Entrada Simples" }
+        is_ativo: { type: integer, example: 1 }
+        valor_liquido: { type: string, example: "R$ 15,00" }
+        valor_bruto: { type: string, example: "R$ 15,46" }
         evento:
           type: array
           items:
             $ref: '#/components/schemas/EventoResponseObject'
-
     EnderecoResponseObject:
       type: object
       properties:
-        id_endereco: { type: integer, example: 3 }
-        cep: { type: string, example: "23001000" }
-        logradouro: { type: string, example: "Praça da Sé" }
-        complemento: { type: string, example: "Lado ímpar" }
-        numero: { type: string, example: "100" }
-        bairro: { type: string, example: "Sé" }
-        cidade: { type: string, example: "São Paulo" }
-        estado: { type: string, example: "SP" }
+        id_endereco: { type: integer, example: 5 }
+        cep: { type: string, example: "90010-000" }
+        logradouro: { type: string, example: "Rua dos Andradas" }
+        complemento: { type: string, example: "Edifício Comercial" }
+        numero: { type: string, example: "123" }
+        bairro: { type: string, example: "Centro" }
+        cidade: { type: string, example: "Porto Alegre" }
+        estado: { type: string, example: "RS" }
         evento:
           $ref: '#/components/schemas/EventoResponseObject'
-
     PedidoResponseObject:
       type: object
       properties:
-        id_pedido: { type: integer, example: 40 }
-        data_pedido: { type: string, example: "18/07/1967" }
-        status_pedido: { type: string, example: "FINALIZADO" }
-        valor_total: { type: string, example: "9990" }
+        id_pedido: { type: integer, example: 5 }
+        data_pedido: { type: string, example: "02/12/2025" }
+        status_pedido: { type: string, example: "EM_ANDAMENTO" }
+        valor_total: { type: string, example: "R$ 75,00" }
         organizador:
           type: array
           items:
@@ -1264,12 +1036,11 @@ components:
           items:
             type: object
             properties:
-              id_ingresso: { type: integer, example: 4 }
-              nome: { type: string, example: "Passaporte 3 dias" }
-              quantidade: { type: integer, example: 10 }
-
-    # --- LISTAS (Wrapper com exemplo único) ---
-
+              id_ingresso: { type: integer, example: 8 }
+              nome: { type: string, example: "Entrada Simples" }
+              quantidade: { type: integer, example: 5 }
+              valor_liquido: { type: string, example: "R$ 15,00" }
+              valor_bruto: { type: string, example: "R$ 15,46" }
     ResponseListaEventos:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1277,31 +1048,8 @@ components:
           properties:
             eventos:
               type: array
-              example:
-                - id_evento: 24
-                  nome: "Tech Summit São Paulo 2024"
-                  descricao: "O maior evento de inovação e desenvolvimento de software da região."
-                  data_inicio: "20/11/2024"
-                  hora_inicio: "09:00"
-                  data_termino: "22/11/2024"
-                  hora_termino: "18:00"
-                  banner: "https://nuvemsenai.blob.core.windows.net/uploudimagens/1764921270701csm_ft_summit_lotado_e105875933.png"
-                  quantidade_ingresso: 500
-                  quantidade_ingresso_comprado: 0
-                  is_visible: 1
-                  categoria: "Workshop"
-                  assunto: "Tech Summit São Paulo 2024"
-                  clientes:
-                    - id_cliente: 9
-                      nome: "Pedro"
-                    - id_cliente: 14
-                      nome: "Pedro"
-                  dataRealizacao:
-                    data_inicio: "Quarta-feira, 20 de novembro"
-                    data_termino: "Sexta-feira, 22 de novembro"
               items:
                 $ref: '#/components/schemas/EventoResponseObject'
-
     ResponseListaCategorias:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1309,13 +1057,8 @@ components:
           properties:
             categorias:
               type: array
-              example:
-                - id_categoria: 6
-                  nome: "Teatro"
-                  icone: "url_da_imagem"
               items:
                 $ref: '#/components/schemas/CategoriaResponseObject'
-
     ResponseListaPedidos:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1323,40 +1066,8 @@ components:
           properties:
             pedidos:
               type: array
-              example:
-                - id_pedido: 40
-                  data_pedido: "18/07/1967"
-                  status_pedido: "FINALIZADO"
-                  valor_total: "9990"
-                  organizador:
-                    - id_organizador: 2
-                      nome: "Pedro"
-                      email: "Pedro@gmail.com"
-                      senha: "11c2e8b8aa8e5d79acb1b80bcc85218c71d699f0"
-                      cpf: "263.784.504-23"
-                      cnpj: null
-                      telefone: "11993679608"
-                      data_nascimento: "18/07/1967"
-                      data_fundacao: null
-                      genero: "Homem"
-                  cliente:
-                    - id_cliente: 1
-                      nome: "Melissa"
-                      email: "melissa@gmail.com"
-                      senha: "batatinha123"
-                      cpf: "263.781.480-23"
-                      cnpj: null
-                      telefone: "11993679608"
-                      data_nascimento: "18/07/1967"
-                      data_fundacao: null
-                      genero: "Mulher"
-                  ingresso:
-                    - id_ingresso: 4
-                      nome: "Passaporte 3 dias"
-                      quantidade: 10
               items:
                 $ref: '#/components/schemas/PedidoResponseObject'
-
     ResponseListaClientes:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1364,20 +1075,8 @@ components:
           properties:
             clientes:
               type: array
-              example:
-                - id_cliente: 24
-                  nome: "vitor"
-                  email: "vitor@gmail.com"
-                  senha: "11c2e8b8aa8e5d79acb1b80bcc85218c71d699f0"
-                  cpf: "803.744.544-93"
-                  cnpj: null
-                  telefone: "11993679608"
-                  data_nascimento: "18/07/1967"
-                  data_fundacao: null
-                  genero: "Homem"
               items:
                 $ref: '#/components/schemas/PessoaResponseObject'
-
     ResponseListaOrganizadores:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1385,20 +1084,8 @@ components:
           properties:
             organizadores:
               type: array
-              example:
-                - id_organizador: 2
-                  nome: "Pedro"
-                  email: "Pedro@gmail.com"
-                  senha: "11c2e8b8aa8e5d79acb1b80bcc85218c71d699f0"
-                  cpf: "263.784.504-23"
-                  cnpj: null
-                  telefone: "11993679608"
-                  data_nascimento: "18/07/1967"
-                  data_fundacao: null
-                  genero: "Homem"
               items:
                 $ref: '#/components/schemas/PessoaResponseObject'
-
     ResponseListaGeneros:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1406,12 +1093,8 @@ components:
           properties:
             generos:
               type: array
-              example:
-                - id_genero: 10
-                  nome: "HOMEM"
               items:
                 $ref: '#/components/schemas/GeneroResponseObject'
-
     ResponseListaAssuntos:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1419,12 +1102,8 @@ components:
           properties:
             assuntos:
               type: array
-              example:
-                - id_assunto: 7
-                  nome: "Tech Summit São Paulo 2024"
               items:
                 $ref: '#/components/schemas/AssuntoResponseObject'
-
     ResponseListaEstados:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1432,12 +1111,8 @@ components:
           properties:
             estados:
               type: array
-              example:
-                - id_estado: 3
-                  sigla: "RJ"
               items:
                 $ref: '#/components/schemas/EstadoResponseObject'
-
     ResponseListaIngressos:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1445,31 +1120,8 @@ components:
           properties:
             ingressos:
               type: array
-              example:
-                - id_ingresso: 5
-                  nome: "Passaporte 12 dias"
-                  preco_unitario: "999"
-                  is_ativo: 0
-                  evento:
-                    - id_evento: 1
-                      nome: "Tomorrowland Brasil"
-                      descricao: "Festival de música"
-                      data_inicio: "12/10/2023"
-                      hora_inicio: "14:00"
-                      data_termino: "14/10/2023"
-                      hora_termino: "02:00"
-                      banner: "banner1.jpg"
-                      quantidade_ingresso: 10000
-                      quantidade_ingresso_comprado: 0
-                      is_visible: 1
-                      categoria: "Festival"
-                      assunto: "Música Eletrônica"
-                      dataRealizacao:
-                        data_inicio: "Quinta-feira, 12 de outubro"
-                        data_termino: "Sábado, 14 de outubro"
               items:
                 $ref: '#/components/schemas/IngressoResponseObject'
-
     ResponseListaEnderecos:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1477,40 +1129,17 @@ components:
           properties:
             enderecos:
               type: array
-              example:
-                - id_endereco: 3
-                  cep: "23001000"
-                  logradouro: "Praça da Sé"
-                  complemento: "Lado ímpar"
-                  numero: "100"
-                  bairro: "Sé"
-                  cidade: "São Paulo"
-                  estado: "SP"
-                  evento:
-                    id_evento: 2
-                    nome: "Rio Gastronomia"
-                    descricao: "Workshop de Culinária"
-                    data_inicio: "20/11/2023"
-                    hora_inicio: "10:00"
-                    data_termino: "20/11/2023"
-                    hora_termino: "18:00"
-                    banner: "banner2.jpg"
-                    quantidade_ingresso: 500
-                    quantidade_ingresso_comprado: 0
-                    is_visible: 1
-                    categoria: "Workshop"
-                    assunto: "Gastronomia"
-                    clientes:
-                      - id_cliente: 24
-                        nome: "vitor"
-                    dataRealizacao:
-                      data_inicio: "Segunda-feira, 20 de novembro"
-                      data_termino: "Segunda-feira, 20 de novembro"
               items:
                 $ref: '#/components/schemas/EnderecoResponseObject'
-    
-    # --- OBJETOS ÚNICOS ---
-    
+    ResponseListaCidades:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            cidades:
+              type: array
+              items:
+                $ref: '#/components/schemas/CidadeResponseObject'
     ResponseUnicoEvento:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1520,7 +1149,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/EventoResponseObject'
-
     ResponseUnicaCategoria:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1530,7 +1158,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/CategoriaResponseObject'
-
     ResponseUnicoPedido:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1540,17 +1167,24 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/PedidoResponseObject'
-
-    ResponseUnicaPessoa:
+    ResponseUnicoCliente:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            pessoa:
+            cliente:
               type: array
               items:
                 $ref: '#/components/schemas/PessoaResponseObject'
-
+    ResponseUnicoOrganizador:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            organizador:
+              type: array
+              items:
+                $ref: '#/components/schemas/PessoaResponseObject'
     ResponseUnicoGenero:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1560,7 +1194,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/GeneroResponseObject'
-
     ResponseUnicoAssunto:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1570,7 +1203,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/AssuntoResponseObject'
-
     ResponseUnicoEstado:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1580,17 +1212,15 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/EstadoResponseObject'
-
     ResponseUnicoIngresso:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
         - type: object
           properties:
-            ingresso:
+            ingressos:
               type: array
               items:
                 $ref: '#/components/schemas/IngressoResponseObject'
-
     ResponseUnicoEndereco:
       allOf:
         - $ref: '#/components/schemas/ResponseGenericMessage'
@@ -1600,24 +1230,101 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/EnderecoResponseObject'
-
-    # Resposta de Login (Simplificada: nome e email)
     ResponseClienteLogin:
       type: object
       properties:
         message: { type: string, example: "Login realizado com sucesso" }
         cliente:
           $ref: '#/components/schemas/PessoaLoginInfo'
-
     ResponseOrganizadorLogin:
       type: object
       properties:
         message: { type: string, example: "Login realizado com sucesso" }
         organizador:
           $ref: '#/components/schemas/PessoaLoginInfo'
-
-    # Resposta de Logout
     ResponseLogout:
       type: object
       properties:
         message: { type: string, example: "Logout realizado com sucesso" }
+    LoginRequest:
+      type: object
+      required: [email, senha]
+      properties:
+        email: { type: string, example: "usuario@email.com" }
+        senha: { type: string, example: "senha123" }
+    PessoaRequest:
+      type: object
+      required: [nome, email, senha, telefone, id_genero]
+      properties:
+        nome: { type: string, example: "Pedro" }
+        email: { type: string, example: "Pedr423o@gmail.com" }
+        senha: { type: string, example: "batatinha123" }
+        cpf: { type: string, nullable: true, example: "523.791.504-23" }
+        cnpj: { type: string, nullable: true, example: null }
+        telefone: { type: string, example: "(11)99367-9608" }
+        data_nascimento: { type: string, format: date, nullable: true, example: "1967-07-18" }
+        data_fundacao: { type: string, format: date, nullable: true, example: null }
+        id_genero: { type: integer, example: 1 }
+    EventoRequest:
+      type: object
+      properties:
+        nome: { type: string }
+        descricao: { type: string }
+        data_inicio: { type: string }
+        hora_inicio: { type: string }
+        data_termino: { type: string }
+        hora_termino: { type: string }
+        quantidade_ingresso: { type: integer }
+        is_visible: { type: boolean }
+        id_categoria: { type: integer }
+        id_assunto: { type: integer }
+        banner: { type: string, format: binary }
+    CategoriaRequest:
+      type: object
+      properties:
+        nome: { type: string }
+        icone: { type: string, format: binary }
+    PedidoRequest:
+      type: object
+      properties:
+        data_pedido: { type: string, format: date, example: "1967-07-18" }
+        status_pedido: { type: string, example: "FINALIZADO" }
+        id_organizador: { type: integer, example: 2 }
+        id_cliente: { type: integer, example: 1 }
+        ingresso:
+          type: array
+          items:
+            type: object
+            properties:
+               id: { type: integer, example: 8 }
+               quantidade: { type: integer, example: 20 }
+    GeneroRequest:
+      type: object
+      properties:
+        nome: { type: string }
+    AssuntoRequest:
+      type: object
+      properties:
+        nome: { type: string }
+    EstadoRequest:
+      type: object
+      properties:
+        sigla: { type: string }
+    IngressoRequest:
+      type: object
+      properties:
+        nome: { type: string, example: "Passaporte 3 dias" }
+        preco_unitario: { type: number, format: double, example: 999.00 }
+        is_ativo: { type: boolean, example: true }
+        id_evento: { type: integer, example: 1 }
+    EnderecoRequest:
+      type: object
+      properties:
+        cep: { type: string, example: "01001-000" }
+        logradouro: { type: string, example: "Praça da Sé" }
+        complemento: { type: string, example: "Lado ímpar" }
+        numero: { type: string, example: "100" }
+        bairro: { type: string, example: "Sé" }
+        cidade: { type: string, example: "São Paulo" }
+        id_estado: { type: integer, example: 2 }
+        id_evento: { type: integer, example: 2 }
