@@ -23,28 +23,7 @@
                 <li><a href="#"><img src="./assets/icons/events.svg" alt="Meus Eventos">Meus Eventos</a></li>
                 <li><a href="#"><img src="./assets/icons/logout.svg" alt="Sair">Sair</a></li>
             </menu>
-            <script>
-                const btnMenu = document.getElementById('small-menu');
-                const menu = document.getElementById('menu');
-
-                btnMenu.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    toggleMenu();
-                });
-
-                function toggleMenu() {
-                    menu.classList.toggle('active');
-                }
-
-                document.addEventListener('click', (event) => {
-                    if (menu.classList.contains('active')) {
-
-                        if (!menu.contains(event.target) && !btnMenu.contains(event.target)) {
-                            menu.classList.remove('active');
-                        }
-                    }
-                });
-            </script>
+            <script src="./js/components/header.js"></script>
         </nav>
     </header>
     <main>
@@ -177,47 +156,49 @@
             </section>
         </div>
         <!-- ======================= EVENTO ========================== -->
-        <div id="evento" class="evento">
+        <div id="evento" class="evento active">
             <section class="fourth-section">
                 <div class="container-fourth">
                     <div class="info" id="info_evento">
                         <h4>Ney Matogrosso homem com h | o musical</h4>
-                            <div class="date">
-                                <p>31 de jan - 2025 > 32 de jan - 18:00</p>
-                                <p>São Paulo</p>
-                         </div>
-                         <div class="description">
+                        <div class="date">
+                            <p>31 de jan - 2025 > 32 de jan - 18:00</p>
+                            <p>São Paulo</p>
+                        </div>
+                        <div class="description">
                             <h5>DESCRIÇÃO</h5>
-                            <p>Lorem ipsum dolor sit amet et delectus accommodare his consul copiosae 
+                            <p>Lorem ipsum dolor sit amet et delectus accommodare his consul copiosae
                                 legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos
-                                cu eum an brute copiosae hendrerit. Eos erant dolorum an. Per facer 
+                                cu eum an brute copiosae hendrerit. Eos erant dolorum an. Per facer
                                 affert ut. Mei iisque mentitum moderatius cu. Sit munere facilis accusam
-                                eu dicat falli consulatu at vis. Te facilisis mnesarchum qui posse 
+                                eu dicat falli consulatu at vis. Te facilisis mnesarchum qui posse
                                 omnium mediocritatem est cu. Modus argumentum ne qui tation efficiendi
                                 in eos. Ei mea falli legere efficiantur et tollit aliquip debitis mei.
-                                No deserunt mediocritatem mel. Lorem ipsum dolor sit amet et delectus 
-                                accommodare his consul copiosae legendos at vix ad putent delectus delicata 
+                                No deserunt mediocritatem mel. Lorem ipsum dolor sit amet et delectus
+                                accommodare his consul copiosae legendos at vix ad putent delectus delicata
                                 usu. Vidit dissentiet eos cu eum an brute copiosae hendrerit. Eos erant dolorum
-                                an. Per facer affert ut. Mei iisque mentitum moderatius cu. Sit munere facilis 
-                                accusam eu dicat falli consulatu at vis. Te facilisis mnesarchum qui posse omnium 
-                                mediocritatem est cu. Modus argumentum ne qui tation efficiendi in eos. Ei mea falli 
+                                an. Per facer affert ut. Mei iisque mentitum moderatius cu. Sit munere facilis
+                                accusam eu dicat falli consulatu at vis. Te facilisis mnesarchum qui posse omnium
+                                mediocritatem est cu. Modus argumentum ne qui tation efficiendi in eos. Ei mea falli
                                 legere efficiantur et tollit aliquip debitis mei. No deserunt mediocritatem mel. Lorem
-                                ipsum dolor sit amet et delectus accommodare his consul copiosae legendos at vix 
-                                ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute copiosae hendrerit.
+                                ipsum dolor sit amet et delectus accommodare his consul copiosae legendos at vix
+                                ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute copiosae
+                                hendrerit.
                                 Eos erant dolorum an. Per facer affert ut. Mei iisque mentitum moderatius cu. Sit munere
-                                facilis accusam eu dicat falli consulatu at vis. Te facilisis mnesarchum qui posse omnium 
+                                facilis accusam eu dicat falli consulatu at vis. Te facilisis mnesarchum qui posse
+                                omnium
                                 mediocritatem est cu. Modus argumentum ne qui tation</p>
-                         </div>
-                    </div>
-                        <div class="event-media">
-                                <img src="./assets/img/img-carrossel1.png" alt="Ney Matogrosso homem com h | o musical">
-                            <div class="ingresso">
-                                <div class="inscription">
-                                    <h4>Inscrições</h4>
-                                </div>
-                                <button type="submit">Inscrever-se</button>
                         </div>
-                    </div>     
+                    </div>
+                    <div class="event-media">
+                        <img src="./assets/img/img-carrossel1.png" alt="Ney Matogrosso homem com h | o musical">
+                        <div class="ingresso">
+                            <div class="inscription">
+                                <h4>Inscrições</h4>
+                            </div>
+                            <button type="submit">Inscrever-se</button>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
