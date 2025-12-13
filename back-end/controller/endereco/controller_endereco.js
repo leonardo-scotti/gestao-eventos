@@ -39,11 +39,11 @@ const listarEnderecos = async function () {
                         delete endereco.id_estado
                     }
 
-                    let resultEvento = await controllerEvento.buscarEventoId(endereco.id_evento)
-                    if (resultEvento.status_code == 200 && resultEvento.evento && resultEvento.evento.length > 0) {
-                        endereco.evento = resultEvento.evento[0]
-                        delete endereco.id_evento
-                    }
+                    // let resultEvento = await controllerEvento.buscarEventoId(endereco.id_evento)
+                    // if (resultEvento.status_code == 200 && resultEvento.evento && resultEvento.evento.length > 0) {
+                    //     endereco.evento = resultEvento.evento[0]
+                    //     delete endereco.id_evento
+                    // }
 
                     if (endereco.cep) {
                         let ultimos3digitos = endereco.cep.slice(-3)
@@ -395,7 +395,7 @@ const validarDadosEndereco = async function (endereco) {
             MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_ESTADO] invalido!!!'
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
         }
-        
+
         if (validarid_evento.status_code !== 200) {
             MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_EVENTO] invalido!!!'
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
