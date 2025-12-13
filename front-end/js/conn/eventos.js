@@ -5,7 +5,7 @@ export async function lerEventos() {
 
     const response = await fetch(url);
     const events = await response.json();
-    console.log(events)
+
     return events
 }
 
@@ -18,7 +18,7 @@ export async function inserirEvento(event) {
     };
 
     const response = await fetch(url, options)
-    
+
     return response.ok;
 }
 
@@ -43,6 +43,6 @@ export async function deletarEvento(id) {
     };
 
     const response = await fetch(url, options);
-    
+
     return response.ok;
 }

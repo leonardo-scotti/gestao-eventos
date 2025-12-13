@@ -15,9 +15,20 @@ export function criarCardEvento(evento) {
     nomeEvento.textContent = evento.nome
     info.appendChild(nomeEvento)
 
-    const date = document.getElementById('div')
+    const date = document.createElement('div')
     date.classList.add('date')
 
     const cidade = document.createElement('p')
-    
+    cidade.textContent = `${evento.endereco.cidade} - ${evento.endereco.estado}`
+    date.appendChild(cidade)
+
+    const data = document.createElement('p')
+    data.textContent = evento.dataRealizacao.data_inicio
+    date.appendChild(data)
+
+    info.appendChild(date)
+
+    card.appendChild(info)
+
+    return card
 }
