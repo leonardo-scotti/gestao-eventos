@@ -4,10 +4,10 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; 
+    position: relative;
 }
 
-.inicio_organizador {
+.organizador {
     height: 100%;
     width: 100%;
 }
@@ -30,14 +30,14 @@ main {
     margin-bottom: 20px;
 }
 
-.inicio_organizador .side-bar {
+.organizador .side-bar {
     height: calc(100vh - 100px);
     width: 282px;
     justify-content: center;
     align-items: center;
 }
 
-.side-bar ul .nav-item{
+.side-bar ul .nav-item {
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -54,10 +54,210 @@ main {
     width: 96px;
 }
 
+.nav-item {
+    transition: filter 0.3s ease-in-out;
+}
+
+.nav-item:hover {
+    filter: invert(53%) sepia(4%) saturate(12%) hue-rotate(356deg) brightness(93%) contrast(87%);
+}
+
 .side-bar ul {
     margin-bottom: 150px;
 }
 
 header {
     background-color: #F5F5F5;
+}
+
+#inicio_organizador {
+    display: none;
+}
+
+main #inicio_organizador.active {
+    display: block;
+}
+
+.container-sixth {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sixth-section h1 {
+    margin-left: 131px;
+    margin-bottom: 43px;
+    font-size: 60px;
+}
+
+.sixth-section {
+    margin: 0 103px 0;
+}
+
+.table-participants {
+    height: 268px;
+    width: 80%;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container-sixth table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-participants thead, 
+.table-participants tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.container-sixth table tbody {
+    display: block;
+    height: 200px;
+    overflow-y: overlay;
+    scrollbar-width: 20px;
+}
+
+
+.container-sixth caption {
+    height: 75px;
+    font-size: 30px;
+    background-color: #386DBD;
+    border-radius: 15px 15px 0 0;
+    color: white;
+    text-align: center;
+    line-height: 75px; 
+    caption-side: top;
+}
+
+.container-sixth table thead {
+    background-color: #D9D9D9;
+}
+
+table tr th {
+    height: 42px;
+    border: 1px solid #0000002d;
+    font-size: 25px;
+}
+
+.container-sixth table th:nth-child(1) {
+    width: 15%;
+}
+
+.container-sixth table th:nth-child(5) {
+    width: 20%;
+}
+
+.details {
+    height: 296px;
+    width: 532px;
+    background-color: #009edd10;
+    border-radius: 20px;
+    border: solid 1px black;
+}
+
+.details h2 {
+    margin-top: 23px;
+    margin-bottom: 31px;
+    margin-inline: 68px;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.details ul li h3 {
+    margin-left: 53px;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.details ul li div {
+    margin-left: 20px;
+    font-size: 25px;
+    display: flex;
+}
+
+.icon-status-good {
+    height: 13px;
+    width: 13px;
+    background-color: #00971C;
+    border-radius: 100px;
+    margin-right: 4px;
+    margin-top: 10px;
+}
+
+.icon-status-in-progress {
+    height: 13px;
+    width: 13px;
+    background-color: #d46018;
+    border-radius: 100px;
+    margin-right: 4px;
+    margin-top: 10px;
+}
+
+.icon-status-bad {
+    height: 13px;
+    width: 13px;
+    background-color: #c00202;
+    border-radius: 100px;
+    margin-right: 4px;
+    margin-top: 10px;
+}
+
+.financial {
+    height: 296px;
+    width: 532px;
+    background-color: #009edd10;
+    border-radius: 20px;
+    border: solid 1px black;
+}
+
+.financial ul {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.financial span {
+    font-size: 17px;
+}
+
+.financial ul li:nth-child(1) {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.financial ul li:nth-child(2) {
+    width: 50%;
+}
+
+.financial ul li:nth-child(3) {
+    width: 50%;
+}
+
+.financial h2 {
+    margin-top: 31px;
+    margin-bottom: 31px;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.financial ul li h3 {
+    font-size: 28px;
+}
+
+.sixth-section {
+    width: 95%;
+}
+
+#dashboard-organizador {
+    display: none;
+}
+
+main #dashboard-organizador.active {
+    display: block;
 }
