@@ -138,7 +138,7 @@ const buscarOrganizadorId = async function (id) {
                             delete organizador.data_fundacao
                         }
 
-                        if(organizador.genero == null) {
+                        if (organizador.genero == null) {
                             delete organizador.genero
                         }
 
@@ -538,6 +538,7 @@ const AutenticarLoginOrganizador = async function (email, senha) {
             );
 
             if (organizadorEncontrado) {
+                delete organizadorEncontrado.senha
                 return {
                     status: MESSAGE.SUCCESS_REQUEST.status,
                     status_code: MESSAGE.SUCCESS_REQUEST.status_code,
