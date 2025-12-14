@@ -57,6 +57,15 @@ const listarOrganizadores = async function () {
                         organizador.telefone = `(${ddd}) ${parte1}-${parte2}`
                     }
 
+                    if (organizador.cpf == null && organizador.data_nascimento == null) {
+                        delete organizador.cpf
+                        delete organizador.data_nascimento
+                    }
+                    if (organizador.cnpj == null && organizador.data_fundacao == null) {
+                        delete organizador.cnpj
+                        delete organizador.data_fundacao
+                    }
+
                 }
 
                 const jsonResult = {
@@ -118,6 +127,19 @@ const buscarOrganizadorId = async function (id) {
                             let parte2 = organizador.telefone.slice(7)
 
                             organizador.telefone = `(${ddd}) ${parte1}-${parte2}`
+                        }
+
+                        if (organizador.cpf == null && organizador.data_nascimento == null) {
+                            delete organizador.cpf
+                            delete organizador.data_nascimento
+                        }
+                        if (organizador.cnpj == null && organizador.data_fundacao == null) {
+                            delete organizador.cnpj
+                            delete organizador.data_fundacao
+                        }
+
+                        if(organizador.genero == null) {
+                            delete organizador.genero
                         }
 
                     }
@@ -445,7 +467,11 @@ const validarDadosOrganizador = async function (organizador) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF/CNPJ] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if (organizador.email == null || organizador.email == undefined || organizador.email == '') {
+    } else if (organizador.senha == null || organizador.senha == undefined || organizador.senha == '' || organizador.senha > 150) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [SENHA] invalido!!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+
+    } else if (organizador.email == null || organizador.email == undefined || organizador.email == '' || organizador.email > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
@@ -499,6 +525,12 @@ const AutenticarLoginOrganizador = async function (email, senha) {
             let listaReal = dadosOrganizadores.organizadores;
 
             let senhaCriptografada = gerarSha1(senha);
+
+            let partes = email.split('@')
+            let usuario = partes[0]
+            let dominio = partes[1].toLowerCase()
+
+            email = usuario + dominio
 
             let organizadorEncontrado = listaReal.find(organizador =>
                 organizador.email == email &&

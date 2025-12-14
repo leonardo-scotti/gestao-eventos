@@ -73,29 +73,18 @@ const listarPedidos = async function () {
                         pedido.data_pedido = new Date(pedido.data_pedido).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                     }
 
-                    let strValor = String(pedido.valor_total);
+                    let precoNumerico = parseFloat(String(pedido.valor_total).replace(',', '.'))
 
-                    if (!strValor.includes(".")) {
-                        strValor = strValor + ".00"
+                    let valorTotalNum = precoNumerico
 
-                        let formatado_valor = new Intl.NumberFormat('pt-BR', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        }).format(strValor)
+                    let formatador = new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })
 
-                        pedido.valor_total = "R$" + formatado_valor
-                    }
-                    // Se tiver ponto, mas só 1 casa decimal 
-                    else {
-                        strValor = parseFloat(strValor).toFixed(2)
-
-                        let formatado_valor = new Intl.NumberFormat('pt-BR', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        }).format(strValor)
-
-                        pedido.valor_total = "R$" + formatado_valor
-                    }
+                    pedido.valor_total = formatador.format(valorTotalNum)
                 }
 
                 const jsonResult = {
@@ -170,29 +159,18 @@ const buscarPedidoId = async function (id) {
                             pedido.data_pedido = new Date(pedido.data_pedido).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
                         }
 
-                        let strValor = String(pedido.valor_total);
+                        let precoNumerico = parseFloat(String(pedido.valor_total).replace(',', '.'))
 
-                        if (!strValor.includes(".")) {
-                            strValor = strValor + ".00"
+                        let valorTotalNum = precoNumerico
 
-                            let formatado_valor = new Intl.NumberFormat('pt-BR', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }).format(strValor)
+                        let formatador = new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
 
-                            pedido.valor_total = "R$" + formatado_valor
-                        }
-                        // Se tiver ponto, mas só 1 casa decimal 
-                        else {
-                            strValor = parseFloat(strValor).toFixed(2)
-
-                            let formatado_valor = new Intl.NumberFormat('pt-BR', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }).format(strValor)
-
-                            pedido.valor_total = "R$" + formatado_valor
-                        }
+                        pedido.valor_total = formatador.format(valorTotalNum)
 
                     }
 

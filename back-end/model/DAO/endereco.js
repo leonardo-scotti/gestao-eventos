@@ -30,6 +30,25 @@ const getSelectAllAddresses = async function () {
     }
 }
 
+//Retorna todos as cidades do banco de dados
+const getSelectAllCities = async function () {
+    try {
+        //Script SQL
+        let sql = `SELECT DISTINCT cidade FROM tbl_endereco`
+
+        //Executa no BD o script SQL
+        let result = await prisma.$queryRawUnsafe(sql)
+        
+        //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
+        if (Array.isArray(result))
+            return result
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
 //Retorna um endereco filtrando pelo ID do banco de dados
 const getSelectByIdAddress = async function (id) {
     try {
@@ -163,6 +182,7 @@ const setDeleteAddress = async function (id) {
 
 module.exports = {
     getSelectAllAddresses,
+    getSelectAllCities,
     getSelectByIdAddress,
     getSelectAddressByIdEvent,
     getSelectLastIdAddress,

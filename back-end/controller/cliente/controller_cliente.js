@@ -58,6 +58,15 @@ const listarClientes = async function () {
                         cliente.telefone = `(${ddd}) ${parte1}-${parte2}`
                     }
 
+                    if (cliente.cpf == null && cliente.data_nascimento == null) {
+                        delete cliente.cpf
+                        delete cliente.data_nascimento
+                    }
+                    if (cliente.cnpj == null && cliente.data_fundacao == null) {
+                        delete cliente.cnpj
+                        delete cliente.data_fundacao
+                    }
+
                 }
 
                 const jsonResult = {
@@ -120,6 +129,18 @@ const buscarClienteId = async function (id) {
                             let parte2 = cliente.telefone.slice(7)
 
                             cliente.telefone = `(${ddd}) ${parte1}-${parte2}`
+                        }
+
+                        if (cliente.cpf == null && cliente.data_nascimento == null) {
+                            delete cliente.cpf
+                            delete cliente.data_nascimento
+                        }
+                        if (cliente.cnpj == null && cliente.data_fundacao == null) {
+                            delete cliente.cnpj
+                            delete cliente.data_fundacao
+                        }
+                        if(cliente.genero == null) {
+                            delete cliente.genero
                         }
 
                     }
@@ -445,7 +466,11 @@ const validarDadosCliente = async function (cliente) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF/CNPJ] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if (cliente.email == null || cliente.email == undefined || cliente.email == '') {
+    } else if (cliente.senha == null || cliente.senha == undefined || cliente.senha == '' || cliente.senha > 150) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [SENHA] invalido!!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+
+    }  else if (cliente.email == null || cliente.email == undefined || cliente.email == '' || cliente.email > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
@@ -498,6 +523,12 @@ const AutenticarLoginCliente = async function (email, senha) {
             let listaReal = dadosClientes.clientes;
 
             let senhaCriptografada = gerarSha1(senha);
+
+            let partes = email.split('@')
+            let usuario = partes[0]
+            let dominio = partes[1].toLowerCase()
+
+            email = usuario + dominio
 
             let clienteEncontrado = listaReal.find(cliente =>
                 cliente.email == email &&
