@@ -2,9 +2,8 @@ main {
     width: 100vw;
     height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+    flex-direction: column; 
+    overflow-y: auto;
 }
 
 .organizador {
@@ -70,11 +69,11 @@ header {
     background-color: #F5F5F5;
 }
 
-#inicio_organizador {
+#inicio-organizador {
     display: none;
 }
 
-main #inicio_organizador.active {
+main #inicio-organizador.active {
     display: block;
 }
 
@@ -259,5 +258,175 @@ table tr th {
 }
 
 main #dashboard-organizador.active {
+    display: block;
+}
+
+#criar-evento-organizador {
+    display: none;
+}
+
+main #criar-evento-organizador.active {
+    display: block;
+}
+
+.container-formulario-evento {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-formulario-evento form {
+    height: auto;
+    width: 1481px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.20);
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.inputs {
+    width: 1245px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column; 
+    gap: 30px;
+}
+
+.inputs label {
+    font-size: 26px;
+}
+
+.inputs input[type="text"], input[type="number"] {
+    height: 60px;
+    width: 100%;
+    text-align: left;
+    font-size: 26px;
+    border-radius: 20px;
+    outline: 0;
+    border: 0;
+    text-indent: 20px;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+}
+
+.inputs textarea {
+    height: 100px;
+    width: 100%;
+    text-align: left;
+    font-size: 26px;
+    padding: 10px 15px 10px 15px;    
+    border-radius: 20px;
+    outline: 0;
+    border: 0;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+}
+
+.date-inputs {
+    height: 211px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.date-inputs .input {
+    height: 95px;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+.date-inputs .input input {
+    height: 60px;
+    width: auto;
+    font-size: 26px;
+    border-radius: 20px;
+    outline: 0;
+    border: 0;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+}
+
+.inputs .input select {
+    height: 60px;
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+    outline: 0;
+    border: 0;
+    font-size: 26px;
+    text-indent: 20px;
+}
+
+.banner {
+    position: relative;
+    width: 464px;
+    height: 187px;
+    background-color: #386DBD;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.banner-input {
+    display: none;
+}
+.banner-image {
+    height: 91px;
+    width: 101px;
+}
+
+.uploud {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-label {
+    position:absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.inputs button {
+    width: 240px;
+    height: 60px;
+    border: none;
+    background-color: #386DBD;
+    border-radius: 50px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.inputs button:hover {
+    background-color: #4a7ac2;
+}
+
+.button-ingressos {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.event-create h1 {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    margin-top: 47px;
+}
+
+#criar-ingresso-evento-organizador {
+    display: none;
+}
+
+main #criar-ingresso-evento-organizador.active {
     display: block;
 }
