@@ -97,3 +97,8 @@ export function verificarLogin() {
         }
     }
 }
+
+export function getAuth() {
+    const auth = sessionStorage.getItem('auth');
+    return auth ? JSON.parse(auth) : null;
+}

@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/register.css">
+    <script src="./js/register.js" defer type="module"></script>
+    <script src="./js/components/header.js" defer></script>
     <title>Uni.Event</title>
 </head>
 
@@ -99,90 +101,6 @@
                 </form>
             </div>
         </div>
-        <!-- ======================= MINHA-CONTA ========================== -->
-        <div id="minha-conta" class="">
-            <header>
-                <nav>
-                    <div class="logo">
-                        <a href="index.html"><img src="./assets/icons/logo.svg" alt="Uni.Event"></a>
-                    </div>
-                    <div class="user-area">
-                        <button id="small-menu" on><img src="./assets/icons/small-menu.svg"
-                                alt="Menu de Opções"></button>
-                        <img src="./assets/icons/circle-user.svg" alt="Foto usuário">
-                    </div>
-                    <menu id="menu">
-                        <li><a href="#"><img src="./assets/icons/user.svg" alt="Minha Conta">Minha Conta</a></li>
-                        <li><a href="#"><img src="./assets/icons/events.svg" alt="Meus Eventos">Meus Eventos</a></li>
-                        <li><a href="#"><img src="./assets/icons/logout.svg" alt="Sair">Sair</a></li>
-                    </menu>
-                    <script>
-                        const btnMenu = document.getElementById('small-menu');
-                        const menu = document.getElementById('menu');
-
-                        btnMenu.addEventListener('click', (event) => {
-                            event.stopPropagation();
-                            toggleMenu();
-                        });
-
-                        function toggleMenu() {
-                            menu.classList.toggle('active');
-                        }
-
-                        document.addEventListener('click', (event) => {
-                            if (menu.classList.contains('active')) {
-
-                                if (!menu.contains(event.target) && !btnMenu.contains(event.target)) {
-                                    menu.classList.remove('active');
-                                }
-                            }
-                        });
-                    </script>
-                </nav>
-            </header>
-            <div class="container-minha-conta">
-                <button type="button" onclick="habilitarEdicao()" class="btn-editar">Editar</button>
-                <form>
-                    <div class="person">
-                        <div class="inputs">
-                            <div class="input">
-                                <label for="cpf_cnpj">CPF</label>
-                                <input type="text" id="cpf_cnpj">
-                            </div>
-                            <div class="name-gender">
-                                <div class="input-name">
-                                    <label for="nome">Nome</label>
-                                    <input type="text" id="nome-account">
-                                </div>
-                                <div class="input-gender">
-                                    <label for="genero">Gênero</label>
-                                    <select id="genero-account" name="genero">
-                                        <option value="" disabled selected>Selecione...</option>
-                                        <option value="feminino">Feminino</option>
-                                        <option value="masculino">Masculino</option>
-                                        <option value="outros">Outros</option>
-                                        <option value="prefiro-nao">Prefiro não informar</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="input">
-                                <label for="data_nascimento">Data de Nascimento</label>
-                                <input type="date" id="data_account" max="aaaa-12-12" autocomplete="bday">
-                            </div>
-                            <div class="input">
-                                <label for="email">E-mail</label>
-                                <input type="email" id="email-account">
-                            </div>
-                            <div class="input">
-                                <label for="password">Senha</label>
-                                <input type="password" id="password-account">
-                            </div>
-                        </div>
-                    </div>
-                    <button style="display: none;">Salvar</button>
-                </form>
-            </div>
-        </div>
         <script>
             const customerRadio = document.getElementById('customer');
             const organizerRadio = document.getElementById('organizer');
@@ -225,7 +143,6 @@
                     await loginOrganizer(email.value, password.value);
                 }
             });
-
         </script>
     </main>
 </body>

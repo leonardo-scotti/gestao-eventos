@@ -2,6 +2,7 @@
 
 import { inserirEvento } from "./conn/eventos.js"
 import { protegerPagina, apenasOrganizador } from './components/guards.js';
+import { logout } from "./auth.js";
 
 const inicio_organizador = document.getElementById('inicio-organizador')
 const dashboard_organizador = document.getElementById('dashboard-organizador')
@@ -119,6 +120,11 @@ async function PublicarEvento(e) {
     dados.append('complemento', complemento.value);
     const sucesso = await inserirEvento(dados);
 }
+
+const sair = document.getElementById('logout')
+sair.addEventListener('click', async (event) => {
+    await logout('cliente')
+})
 
 protegerPagina()
 apenasOrganizador()

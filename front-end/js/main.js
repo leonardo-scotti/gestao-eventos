@@ -24,3 +24,16 @@ const sair = document.getElementById('logout')
 sair.addEventListener('click', async (event) => {
     await logout('cliente')
 })
+
+const myAccount = document.getElementById('my-account')
+myAccount.addEventListener('click', (event) => {
+    const register = document.getElementById('register')
+    if(register.classList.contains('active')) {
+        register.classList.remove('active')
+    }
+
+    const account = document.getElementById('minha-conta')
+    if(!account.classList.contains('active')) {
+        account.classList.add('active')
+    }
+})
