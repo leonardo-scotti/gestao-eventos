@@ -11,19 +11,22 @@ const express_session = require('express-session')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const multer = require('multer')
+const path = require('path');
+const fs = require('fs'); 
 
 //Configuração do diskmanager para o MULTER
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // Define o diretório onde os arquivos serão salvos.
-        // Certifique-se de que o diretório 'uploads/' existe na raiz do seu projeto!
-        cb(null, 'uploads/');
-
+        cb(null, path.join(__dirname, 'uploads')); 
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, uniqueSuffix + '-' + file.originalname)
     }
 });
 
 // Inicializa o Multer com a configuração de armazenamento
-const upload = multer();
+const upload = multer({ storage: storage });
 
 //Define a porta padrão da API, se for em um servidor de nuvem não temos acesso a porta
 // em execução local podemos definir uma porta livre
@@ -415,7 +418,7 @@ app.get('/api/v1/unievent/dia/evento/', async function (request, response) {
 })
 
 //Insere um novo Evento no BD
-app.post('/api/v1/unievent/evento', validarBody, upload.single('banner'), async function (request, response) {
+app.post('/api/v1/unievent/evento', upload.single('banner'), async function (request, response) {
 
     let dadosBody = request.body
 

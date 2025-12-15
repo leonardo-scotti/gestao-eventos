@@ -1,8 +1,8 @@
 main {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     overflow-y: auto;
 }
 
@@ -15,6 +15,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: auto;
 }
 
 .organizador-section {
@@ -30,8 +31,6 @@ main {
 }
 
 .organizador .side-bar {
-    height: calc(100vh - 100px);
-    width: 282px;
     justify-content: center;
     align-items: center;
 }
@@ -60,11 +59,6 @@ main {
 .nav-item:hover {
     filter: invert(53%) sepia(4%) saturate(12%) hue-rotate(356deg) brightness(93%) contrast(87%);
 }
-
-.side-bar ul {
-    margin-bottom: 150px;
-}
-
 header {
     background-color: #F5F5F5;
 }
@@ -107,7 +101,7 @@ main #inicio-organizador.active {
     border-collapse: collapse;
 }
 
-.table-participants thead, 
+.table-participants thead,
 .table-participants tbody tr {
     display: table;
     width: 100%;
@@ -129,7 +123,7 @@ main #inicio-organizador.active {
     border-radius: 15px 15px 0 0;
     color: white;
     text-align: center;
-    line-height: 75px; 
+    line-height: 75px;
     caption-side: top;
 }
 
@@ -291,7 +285,7 @@ main #criar-evento-organizador.active {
     width: 1245px;
     margin-top: 40px;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     gap: 30px;
 }
 
@@ -299,7 +293,8 @@ main #criar-evento-organizador.active {
     font-size: 26px;
 }
 
-.inputs input[type="text"], input[type="number"] {
+.inputs input[type="text"],
+input[type="number"] {
     height: 60px;
     width: 100%;
     text-align: left;
@@ -316,7 +311,7 @@ main #criar-evento-organizador.active {
     width: 100%;
     text-align: left;
     font-size: 26px;
-    padding: 10px 15px 10px 15px;    
+    padding: 10px 15px 10px 15px;
     border-radius: 20px;
     outline: 0;
     border: 0;
@@ -375,9 +370,10 @@ main #criar-evento-organizador.active {
 .banner-input {
     display: none;
 }
+
 .banner-image {
-    height: 91px;
-    width: 101px;
+    height: 200px;
+    width: 150px;
 }
 
 .uploud {
@@ -388,7 +384,7 @@ main #criar-evento-organizador.active {
 }
 
 .banner-label {
-    position:absolute;
+    position: absolute;
     display: block;
     width: 100%;
     height: 100%;
@@ -430,3 +426,42 @@ main #criar-evento-organizador.active {
 main #criar-ingresso-evento-organizador.active {
     display: block;
 }
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    width: 100%;
+}
+
+
+.inputs .buttons button {
+    width: 357px;
+    height: 69px;
+    border: none;
+    background-color: #386DBD;
+    border-radius: 50px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.main-structure {
+    display: flex;
+    margin-inline: 5%;
+}
+
+.cancel-element {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    border: solid 1px black;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: -50px;
+    font-size: 20px;
+}
+
