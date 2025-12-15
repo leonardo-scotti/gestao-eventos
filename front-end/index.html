@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./js/main.js" defer type="module"></script>
-    <script src="./js/auth.js" defer></script>
+    <script src="./js/components/header.js" defer></script>
     <title>Uni.Event</title>
 </head>
 
@@ -25,13 +25,10 @@
                 <img src="./assets/icons/circle-user.svg" alt="Foto usuário">
             </div>
             <menu id="menu">
-                <li><a href="register.html"><img src="./assets/icons/user.svg" alt="Minha Conta">Minha Conta</a></li>
-                <li><a href="#"><img src="./assets/icons/events.svg" alt="Meus Eventos">Meus Eventos</a></li>
+                <li id="my-account"><a href="account.html"><img src="./assets/icons/user.svg" alt="Minha Conta">Minha Conta</a></li>
+                <li><a href="./login.html"><img src="./assets/icons/events.svg" alt="Meus Eventos">Meus Eventos</a></li>
                 <li id="logout"><a href="#"><img src="./assets/icons/logout.svg" alt="Sair">Sair</a></li>
             </menu>
-            <script>
-
-            </script>
         </nav>
     </header>
     <main>
@@ -170,7 +167,7 @@
                     <div class="info" id="info_evento">
                         <h4>Ney Matogrosso homem com h | o musical</h4>
                         <div class="date">
-                            <p>31 de jan - 2025 > 32 de jan - 18:00</p>
+                            <p><img src="./assets/icons/" alt="">31 de jan - 2025 > 32 de jan - 18:00</p>
                             <p>São Paulo</p>
                         </div>
                         <div class="description">
