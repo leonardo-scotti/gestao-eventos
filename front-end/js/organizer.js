@@ -1,6 +1,7 @@
 'use strict'
 
 import { inserirEvento } from "./conn/eventos.js"
+import { protegerPagina, apenasOrganizador } from './components/guards.js';
 
 const inicio_organizador = document.getElementById('inicio-organizador')
 const dashboard_organizador = document.getElementById('dashboard-organizador')
@@ -118,3 +119,6 @@ async function PublicarEvento(e) {
     dados.append('complemento', complemento.value);
     const sucesso = await inserirEvento(dados);
 }
+
+protegerPagina()
+apenasOrganizador()

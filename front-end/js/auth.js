@@ -60,26 +60,29 @@ export async function registerCustomer(customer) {
     }
 }
 
-async function logout(type) {
+export async function logout(type) {
     try {
-        await fetch('http://localhost:3000/api/v1/unievent/cliente/logout', {
+        await fetch(`http://localhost:8080/api/v1/unievent/${type}/logout`, {
             method: 'POST',
-            credentials: 'include'
+            credentials: 'include' // MUITO IMPORTANTE (cookie da sessão)
         });
+
+        // Limpa os dados do usuário no front
+        sessionStorage.clear();
+
+        // Redireciona para o login
+        window.location.href = '../login.html';
+
     } catch (error) {
-        console.warn('Erro ao encerrar sessão no backend');
+        console.error('Erro ao fazer logout', error);
+        alert('Erro ao sair da conta');
     }
-
-    // Remove controle visual do front
-    sessionStorage.removeItem('logado');
-
-    // Redireciona
-    window.location.assign('./login.html');
 }
 
 export function verificarLogin() {
-    const logado = sessionStorage.getItem('logado');
-    if (!logado) {
-        window.location.replace('./login.html');
+    const auth = JSON.parse(sessionStorage.getItem('auth'));
+
+    if (!auth || !auth.logado) {
+        window.location.replace('../login.html');
     }
 }

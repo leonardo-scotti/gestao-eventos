@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./js/main.js" defer type="module"></script>
-    <script src="./js/auth.js" defer>
+    <script src="./js/auth.js" defer type="module">
         import { verificarLogin } from "./js/auth.js"
         verificarLogin()
     </script>
@@ -33,6 +33,12 @@
                 <li id="logout"><a href="#"><img src="./assets/icons/logout.svg" alt="Sair">Sair</a></li>
             </menu>
             <script src="./js/components/header.js"></script>
+            <script src="./js/auth.js">
+                const sair = document.getElementById('logout')
+                sair.addEventListener('click', async (event) => {
+                    await logout('cliente')
+                })
+            </script>
         </nav>
     </header>
     <main>
