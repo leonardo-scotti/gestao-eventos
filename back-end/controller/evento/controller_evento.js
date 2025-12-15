@@ -230,6 +230,189 @@ const buscarEventoId = async function (id) {
     }
 }
 
+const buscarEventosPelaCidade = async function (cidade) {
+
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+
+        if (cidade != '' && cidade != null && cidade != undefined) {
+
+
+            if (cidade) {
+                cidade = cidade.replace(/['"]/g, '');
+            }
+
+            let result = await eventoDAO.getSelectEventByCity(cidade)
+
+            if (result == null) {
+                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ESTADO] invalido!!!'
+                return MESSAGE.ERROR_REQUIRED_FIELDS //400
+            }
+
+            if (result) {
+
+                for (let evento of result) {
+
+                    const dataInicioOriginal = evento.data_inicio;
+                    const dataTerminoOriginal = evento.data_termino;
+
+                    if (evento.data_inicio) {
+                        evento.data_inicio = new Date(evento.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    }
+                    if (evento.data_termino) {
+                        evento.data_termino = new Date(evento.data_termino).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    }
+                    if (evento.hora_inicio) {
+                        evento.hora_inicio = evento.hora_inicio.substring(0, 5);
+                    }
+                    if (evento.hora_termino) {
+                        evento.hora_termino = evento.hora_termino.substring(0, 5);
+                    }
+
+                    let idParaBusca = evento.id || evento.id_evento;
+
+                    let resultCliente = await controllerClienteEvento.listarClientesIdEvento(idParaBusca)
+                    if (resultCliente.status_code == 200 && resultCliente.clientes && resultCliente.clientes.length > 0) {
+                        evento.clientes = resultCliente.clientes
+                    }
+
+                    let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(idParaBusca)
+                    if (resultOrganizador.status_code == 200 && resultOrganizador.organizadores && resultOrganizador.organizadores.length > 0) {
+                        evento.organizadores = resultOrganizador.organizadores
+                    }
+
+                    if (dataInicioOriginal && dataTerminoOriginal) {
+
+                        let dataInicioObj = new Date(dataInicioOriginal);
+                        let dataTerminoObj = new Date(dataTerminoOriginal);
+
+                        const opcoes = { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' };
+
+                        let textoInicio = dataInicioObj.toLocaleDateString('pt-BR', opcoes);
+                        let textoFim = dataTerminoObj.toLocaleDateString('pt-BR', opcoes);
+
+                        evento.dataRealizacao = {
+                            "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
+                            "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
+                        };
+                    }
+
+                    let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(idParaBusca)
+                    if (resultEndereco.status_code == 200) {
+                        evento.endereco = resultEndereco.endereco
+                    }
+                }
+
+                const jsonResult = {
+                    status: MESSAGE.SUCCESS_REQUEST.status,
+                    status_code: MESSAGE.SUCCESS_REQUEST.status_code,
+                    developments: MESSAGE.HEADER.developments,
+                    message: MESSAGE.SUCCESS_REQUEST.message,
+                    evento: result
+                }
+                return jsonResult //200
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CIDADE] invalido!!'
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
+const buscarEventosDeHoje = async function () {
+
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+
+        let result = await eventoDAO.getSelectAllEventsToday()
+        console.log(result)
+        if (result) {
+            for (let evento of result) {
+
+                const dataInicioOriginal = evento.data_inicio;
+                const dataTerminoOriginal = evento.data_termino;
+
+                if (evento.data_inicio) {
+                    evento.data_inicio = new Date(evento.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                }
+                if (evento.data_termino) {
+                    evento.data_termino = new Date(evento.data_termino).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                }
+                if (evento.hora_inicio) {
+                    evento.hora_inicio = new Date(evento.hora_inicio).toISOString().substring(11, 16);
+                }
+                if (evento.hora_termino) {
+                    evento.hora_termino = new Date(evento.hora_termino).toISOString().substring(11, 16);
+                }
+
+                let resultCategoria = await controllerCategoria.buscarCategoriaId(evento.id_categoria)
+
+                if (resultCategoria.status_code == 200 && resultCategoria.categoria && resultCategoria.categoria.length > 0) {
+                    evento.categoria = resultCategoria.categoria[0].nome
+                    delete evento.id_categoria
+                }
+
+                let resultAssunto = await controllerAssunto.buscarAssuntoId(evento.id_assunto)
+                if (resultAssunto.status_code == 200 && resultAssunto.assunto && resultAssunto.assunto.length > 0) {
+                    evento.assunto = resultAssunto.assunto[0].nome
+                    delete evento.id_assunto
+                }
+
+                let resultCliente = await controllerClienteEvento.listarClientesIdEvento(evento.id_evento)
+                if (resultCliente.status_code == 200 && resultCliente.clientes && resultCliente.clientes.length > 0) {
+                    evento.clientes = resultCliente.clientes
+                }
+
+                let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(evento.id_evento)
+                if (resultOrganizador.status_code == 200 && resultOrganizador.organizadores && resultOrganizador.organizadores.length > 0) {
+                    evento.organizadores = resultOrganizador.organizadores
+                }
+
+                if (dataInicioOriginal && dataTerminoOriginal) {
+
+                    let dataInicioObj = new Date(dataInicioOriginal);
+                    let dataTerminoObj = new Date(dataTerminoOriginal);
+
+                    const opcoes = { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' };
+
+                    let textoInicio = dataInicioObj.toLocaleDateString('pt-BR', opcoes);
+                    let textoFim = dataTerminoObj.toLocaleDateString('pt-BR', opcoes);
+
+                    evento.dataRealizacao = {
+                        "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
+                        "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
+                    };
+                }
+
+                let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(evento.id_evento)
+                if (resultEndereco.status_code == 200) {
+                    evento.endereco = resultEndereco.endereco
+                }
+            }
+
+            const jsonResult = {
+                status: MESSAGE.SUCCESS_REQUEST.status,
+                status_code: MESSAGE.SUCCESS_REQUEST.status_code,
+                developments: MESSAGE.HEADER.developments,
+                message: MESSAGE.SUCCESS_REQUEST.message,
+                evento: result
+            }
+            return jsonResult //200
+        } else {
+            console.log(result)
+            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+        }
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 //Insere um novo evento
 const inserirEvento = async function (evento, contentType, banner) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
@@ -568,6 +751,8 @@ const validarDadosEvento = async function (evento) {
 module.exports = {
     listarEventos,
     buscarEventoId,
+    buscarEventosPelaCidade,
+    buscarEventosDeHoje,
     inserirEvento,
     atualizarEvento,
     excluirEvento

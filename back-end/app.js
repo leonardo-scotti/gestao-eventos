@@ -11,19 +11,22 @@ const express_session = require('express-session')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const multer = require('multer')
+const path = require('path');
+const fs = require('fs'); 
 
 //Configuração do diskmanager para o MULTER
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // Define o diretório onde os arquivos serão salvos.
-        // Certifique-se de que o diretório 'uploads/' existe na raiz do seu projeto!
-        cb(null, 'uploads/');
-
+        cb(null, path.join(__dirname, 'uploads')); 
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, uniqueSuffix + '-' + file.originalname)
     }
 });
 
 // Inicializa o Multer com a configuração de armazenamento
-const upload = multer();
+const upload = multer({ storage: storage });
 
 //Define a porta padrão da API, se for em um servidor de nuvem não temos acesso a porta
 // em execução local podemos definir uma porta livre
@@ -73,13 +76,13 @@ const validarBody = async function (err, req, res, next) {
 
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         return res.status(400).json(
-           MESSAGE.ERROR_INVALID_BODY_SYNTAX 
+            MESSAGE.ERROR_INVALID_BODY_SYNTAX
         );
     }
 
     if (err instanceof multer.MulterError) {
         return res.status(400).json(
-            MESSAGE.ERROR_INVALID_BODY_SYNTAX 
+            MESSAGE.ERROR_INVALID_BODY_SYNTAX
         );
     }
     next()
@@ -284,13 +287,14 @@ app.post('/api/v1/unievent/login/cliente', bodyParserJSON, validarBody, async fu
     if (resultadoLogin.status) {
         // Salva os dados do usuário na sessão do servidor
         request.session.user = {
-            id: resultadoLogin.cliente.id,
+            id: resultadoLogin.cliente.id_cliente,
             nome: resultadoLogin.cliente.nome,
             email: resultadoLogin.cliente.email
         };
+
         response.status(200).json({
             message: "Login realizado com sucesso",
-            cliente: request.session.user
+            cliente: resultadoLogin.cliente
         });
 
     } else {
@@ -391,8 +395,30 @@ app.get('/api/v1/unievent/evento/:id', async function (request, response) {
 
 })
 
+//Retorna a um evento filtrando pela Cidade
+app.get('/api/v1/unievent/cidade/evento/', async function (request, response) {
+
+    let cidade = request.query.cidade
+
+    let evento = await controllerEvento.buscarEventosPelaCidade(cidade)
+    
+    response.status(evento.status_code)
+    response.json(evento)
+
+})
+
+//Retorna a um evento filtrando pelos eventoa do dia
+app.get('/api/v1/unievent/dia/evento/', async function (request, response) {
+
+    let evento = await controllerEvento.buscarEventosDeHoje()
+    
+    response.status(evento.status_code)
+    response.json(evento)
+
+})
+
 //Insere um novo Evento no BD
-app.post('/api/v1/unievent/evento', validarBody, upload.single('banner'), async function (request, response) {
+app.post('/api/v1/unievent/evento', upload.single('banner'), async function (request, response) {
 
     let dadosBody = request.body
 
@@ -748,14 +774,14 @@ app.get('/api/v1/unievent/pedido/:id', async function (request, response) {
 //Insere um novo Pedido no BD
 app.post('/api/v1/unievent/pedido', bodyParserJSON, validarBody, async function (request, response) {
 
-        let dadosBody = request.body
+    let dadosBody = request.body
 
-        let contentType = request.headers['content-type']
+    let contentType = request.headers['content-type']
 
-        let pedido = await controllerPedido.inserirPedido(dadosBody, contentType)
+    let pedido = await controllerPedido.inserirPedido(dadosBody, contentType)
 
-        response.status(pedido.status_code)
-        response.json(pedido)
+    response.status(pedido.status_code)
+    response.json(pedido)
 
 })
 

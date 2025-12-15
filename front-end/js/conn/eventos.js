@@ -5,12 +5,12 @@ export async function lerEventos() {
 
     const response = await fetch(url);
     const events = await response.json();
-    console.log(events)
+
     return events
 }
 
 export async function inserirEvento(event) {
-    const url = `https://localhost:8080/api/v1/unievent/evento`;
+    const url = `http://localhost:8080/api/v1/unievent/evento`;
 
     const options = {
         'method': 'POST',
@@ -18,12 +18,12 @@ export async function inserirEvento(event) {
     };
 
     const response = await fetch(url, options)
-    
+
     return response.ok;
 }
 
 export async function atualizarEvento(id, event) {
-    const url = `https://localhost:8080/api/v1/unievent/evento/${id}`;
+    const url = `http://localhost:8080/api/v1/unievent/evento/${id}`;
 
     const options = {
         'method': 'PUT',
@@ -43,6 +43,6 @@ export async function deletarEvento(id) {
     };
 
     const response = await fetch(url, options);
-    
+
     return response.ok;
 }

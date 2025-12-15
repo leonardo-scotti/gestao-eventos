@@ -215,7 +215,9 @@ BEGIN
     )
     WHERE p.id_pedido = NEW.id_pedido;
 END$$
+DELIMITER ;
 
+DELIMITER $$
 -- 4.2. Calcular total do pedido ao ATUALIZAR item
 CREATE TRIGGER trg_AU_item_pedido_calcular_total_pedido
 AFTER UPDATE ON tbl_item_pedido
@@ -230,7 +232,9 @@ BEGIN
     )
     WHERE p.id_pedido = NEW.id_pedido;
 END$$
+DELIMITER ;
 
+DELIMITER $$
 -- 4.3. Calcular total do pedido ao DELETAR item
 CREATE TRIGGER trg_AD_item_pedido_calcular_total_pedido
 AFTER DELETE ON tbl_item_pedido
@@ -245,7 +249,9 @@ BEGIN
     )
     WHERE p.id_pedido = OLD.id_pedido;
 END$$
+DELIMITER ;
 
+DELIMITER $$
 -- 4.4. Setar valores padrão para Pedido
 CREATE TRIGGER trg_BI_pedido_setar_valores_padrao
 BEFORE INSERT ON tbl_pedido
@@ -259,7 +265,9 @@ BEGIN
         SET NEW.status_pedido = 'EM_ANDAMENTO';
     END IF;
 END$$
+DELIMITER ;
 
+DELIMITER $$
 -- 4.5. Validar estoque ANTES de inserir item
 CREATE TRIGGER trg_BI_item_pedido_validar_quantidade_estoque
 BEFORE INSERT ON tbl_item_pedido
@@ -285,7 +293,9 @@ BEGIN
         SET MESSAGE_TEXT = 'Estoque insuficiente para a quantidade solicitada.';
     END IF;
 END$$
+DELIMITER ;
 
+DELIMITER $$
 -- 4.6. Atualizar contagem de estoque APÓS inserir item
 CREATE TRIGGER trg_AI_item_pedido_atualizar_estoque
 AFTER INSERT ON tbl_item_pedido
@@ -296,7 +306,9 @@ BEGIN
     SET e.quantidade_ingresso_comprado = e.quantidade_ingresso_comprado + NEW.quantidade
     WHERE i.id_ingresso = NEW.id_ingresso;
 END$$
+DELIMITER ;
 
+DELIMITER $$
 -- 4.7. Devolver estoque se pedido for CANCELADO
 CREATE TRIGGER trg_AU_pedido_cancelado_devolver_estoque
 AFTER UPDATE ON tbl_pedido
@@ -310,7 +322,9 @@ BEGIN
         WHERE ip.id_pedido = NEW.id_pedido;
     END IF;
 END$$
+DELIMITER ;
 
+DELIMITER $$
 -- 4.8. Validar data de início e fim do evento
 CREATE TRIGGER trg_BI_evento_validar_data_fim
 BEFORE INSERT ON tbl_evento
@@ -321,7 +335,9 @@ BEGIN
         SET MESSAGE_TEXT = 'A data/hora de término do evento deve ser posterior à data/hora de início.';
     END IF;
 END$$
+DELIMITER ;
 
+DELIMITER $$
 -- 4.9. Validações de Cliente (Nascimento e Documento)
 CREATE TRIGGER trg_BI_cliente_validar_data_nascimento
 BEFORE INSERT ON tbl_cliente
@@ -339,6 +355,40 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DELIMITER $$
+-- 4.9. Validações de Cliente (Nascimento e Documento)
+CREATE PROCEDURE BuscarEventoPorCidade( IN cidadeEscolhida VARCHAR(150))
+BEGIN
+    select JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'id', e.id_evento,
+                'nome', ev.nome,
+                'descricao', ev.descricao,
+                'data_inicio', ev.data_inicio,
+                'hora_inicio', ev.hora_inicio,
+                'data_termino', ev.data_termino,
+                'hora_termino', ev.hora_termino,
+                'banner', ev.banner,
+                'quantidade_ingresso', ev.quantidade_ingresso,
+                'quantidade_ingresso_comprado', ev.quantidade_ingresso_comprado,
+                'is_visible', ev.is_visible,
+                'categoria', c.nome,
+                'assunto', a.nome
+            )
+        ) from tbl_endereco e 
+join tbl_evento ev 
+on ev.id_evento = e.id_evento
+join tbl_categoria c
+on ev.id_categoria = c.id_categoria
+join tbl_assunto a 
+on ev.id_assunto = a.id_assunto
+where e.cidade = cidadeEscolhida;
+END$$
+
+DELIMITER ;
+
+CALL BuscarEventoPorCidade("São Paulo");
 
 -- ==========================================
 -- 5. INSERTS (DADOS INICIAIS)

@@ -29,6 +29,30 @@ form h1 {
     font-size: 48px;
 }
 
+form .choices {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.choices h2 {
+    font-size: 28px;
+}
+
+.choices .choice {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 50px;
+}
+
+.choice label {
+    font-size: 22px;
+}   
+
 form .inputs {
     display: flex;
     justify-content: center;
