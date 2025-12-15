@@ -390,6 +390,105 @@ DELIMITER ;
 
 CALL BuscarEventoPorCidade("São Paulo");
 
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS sp_get_events_auto_range $$
+
+CREATE PROCEDURE sp_get_events_auto_range()
+BEGIN
+    DECLARE v_days INT DEFAULT -1;
+    
+    -- Tenta achar HOJE
+    IF EXISTS (SELECT 1 FROM tbl_evento WHERE data_inicio = CURDATE()) THEN
+        SET v_days = 0;
+    
+    -- Tenta achar nos próximos 7 dias
+    ELSEIF EXISTS (SELECT 1 FROM tbl_evento WHERE data_inicio BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY)) THEN
+        SET v_days = 7;
+
+    -- Tenta 30 dias
+    ELSEIF EXISTS (SELECT 1 FROM tbl_evento WHERE data_inicio BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)) THEN
+        SET v_days = 30;
+
+    -- Tenta 90 dias
+    ELSEIF EXISTS (SELECT 1 FROM tbl_evento WHERE data_inicio BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 90 DAY)) THEN
+        SET v_days = 90;
+
+    END IF;
+
+    IF v_days > -1 THEN
+        SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'id', e.id_evento,
+                'nome', ev.nome,
+                'descricao', ev.descricao,
+                'data_inicio', ev.data_inicio,
+                'hora_inicio', ev.hora_inicio,
+                'data_termino', ev.data_termino,
+                'hora_termino', ev.hora_termino,
+                'banner', ev.banner,
+                'quantidade_ingresso', ev.quantidade_ingresso,
+                'quantidade_ingresso_comprado', ev.quantidade_ingresso_comprado,
+                'is_visible', ev.is_visible,
+                'categoria', c.nome,
+                'assunto', a.nome
+            )
+        )
+        FROM tbl_endereco e 
+        JOIN tbl_evento ev ON ev.id_evento = e.id_evento
+        JOIN tbl_categoria c ON ev.id_categoria = c.id_categoria
+        JOIN tbl_assunto a ON ev.id_assunto = a.id_assunto
+        WHERE ev.data_inicio BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL v_days DAY)
+        ORDER BY ev.data_inicio ASC;
+        
+    ELSE
+        SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'id', T.id_evento,
+                'nome', T.nome_evento,
+                'descricao', T.descricao,
+                'data_inicio', T.data_inicio,
+                'hora_inicio', T.hora_inicio,
+                'data_termino', T.data_termino,
+                'hora_termino', T.hora_termino,
+                'banner', T.banner,
+                'quantidade_ingresso', T.quantidade_ingresso,
+                'quantidade_ingresso_comprado', T.quantidade_ingresso_comprado,
+                'is_visible', T.is_visible,
+                'categoria', T.nome_categoria,
+                'assunto', T.nome_assunto
+            )
+        )
+        FROM (
+            SELECT 
+                e.id_evento, 
+                ev.nome AS nome_evento, 
+                ev.descricao, 
+                ev.data_inicio, 
+                ev.hora_inicio, 
+                ev.data_termino, 
+                ev.hora_termino, 
+                ev.banner, 
+                ev.quantidade_ingresso, 
+                ev.quantidade_ingresso_comprado, 
+                ev.is_visible, 
+                c.nome AS nome_categoria, 
+                a.nome AS nome_assunto
+            FROM tbl_endereco e 
+            JOIN tbl_evento ev ON ev.id_evento = e.id_evento
+            JOIN tbl_categoria c ON ev.id_categoria = c.id_categoria
+            JOIN tbl_assunto a ON ev.id_assunto = a.id_assunto
+            WHERE ev.data_inicio >= CURDATE()
+            ORDER BY ev.data_inicio ASC
+            LIMIT 20
+        ) AS T;
+    END IF;
+
+END $$
+
+DELIMITER ;
+
 -- ==========================================
 -- 5. INSERTS (DADOS INICIAIS)
 -- ==========================================
