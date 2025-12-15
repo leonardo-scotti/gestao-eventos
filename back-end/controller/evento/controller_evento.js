@@ -526,6 +526,7 @@ const inserirEvento = async function (evento, contentType, banner) {
             return MESSAGE.ERROR_CONTENT_TYPE // 415
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
 }
