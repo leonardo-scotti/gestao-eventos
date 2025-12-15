@@ -3,57 +3,76 @@
 import { lerEventos } from "./conn/eventos.js";
 import { criarCardEvento } from "./DOM/eventoDOM.js";
 import { protegerPagina, apenasCliente } from './components/guards.js';
-import { logout, getAuth } from "./auth.js";
+import { logout, getAuth, registerCustomer, registerEnterprise } from "./auth.js";
 
-protegerPagina();
+const customerRadio = document.getElementById('customer');
+const organizerRadio = document.getElementById('organizer');
 
-const sair = document.getElementById('logout')
-sair.addEventListener('click', async (event) => {
-    await logout('cliente')
-})
+const personForm = document.getElementById('person');
+const enterpriseForm = document.getElementById('enterprise');
 
-const myAccount = document.getElementById('my-account')
-myAccount.addEventListener('click', (event) => {
-    const register = document.getElementById('register')
-    if (register.classList.contains('active')) {
-        register.classList.remove('active')
+customerRadio.addEventListener('change', () => {
+    personForm.style.display = 'flex';
+    enterpriseForm.style.display = 'none';
+});
+
+organizerRadio.addEventListener('change', () => {
+    personForm.style.display = 'none';
+    enterpriseForm.style.display = 'flex';
+});
+
+const form = document.getElementById('formRegister')
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const selected = document.querySelector('input[name="account-type"]:checked');
+
+    if (!selected) {
+        alert('Selecione Cliente ou Organizador');
+        return;
     }
 
-    const account = document.getElementById('minha-conta')
-    if (!account.classList.contains('active')) {
-        account.classList.add('active')
+    const generoInt = 0
+    const genero = document.getElementById('genero');
+    const generoSelecionado = genero.value
+    console.log()
+    if(generoSelecionado == 'Feminino') {
+        generoInt = 1;
+    } else if(generoSelecionado == 'Masculino') {
+        generoInt = 2;
+    } else if(generoSelecionado == 'Outro') {
+        generoInt = 4;
+    } else if(generoSelecionado == 'Prefiro não informar') {
+        generoInt = 5;
     }
-})
 
-function carregarInformações() {
-    const user = getAuth()
-    console.log(user)
+    if (selected.value === "customer") {
+        const customer = {
+            "nome": document.getElementById('nome').value,
+            "email": document.getElementById('email-customer').value,
+            "senha": document.getElementById('password-customer').value,
+            "cpf": document.getElementById('cpf').value,
+            "cnpj": null,
+            "telefone": document.getElementById('telefone-customer').value,
+            "data_nascimento": document.getElementById('data_nascimento').value,
+            "data_fundacao": null,
+            "id_genero": generoInt
+        }
+        console.log(customer)
+        await registerCustomer(customer);
+    } else if (selected.value === "organizer") {
+        const organizer = {
+            "nome": document.getElementById('razao').value,
+            "email": document.getElementById('email-enterprise').value,
+            "senha": document.getElementById('password-enterprise').value,
+            "cpf": null,
+            "cnpj": document.getElementById('cnpj').value,
+            "telefone": document.getElementById('telefone-enterprise').value,
+            "data_nascimento": null,
+            "data_fundacao": document.getElementById('data_fundacao').value,
+            "id_genero": null
+        }
 
-    const usuario = user.usuario
-
-    const cpfCnpj = document.getElementById('cpf_cnpj')
-    cpfCnpj.value = usuario.cpf
-
-    const nome = document.getElementById('nome-account')
-    nome.value = usuario.nome
-
-    const genero = document.getElementById('genero-account')
-    genero.value = usuario.genero
-
-    const dataNascimento = document.getElementById('data_account')
-    const dataNascimentoFormatada = converterDataParaInput(usuario.data_nascimento)
-    dataNascimento.value = dataNascimentoFormatada
-
-    const email = document.getElementById('email-account')
-    email.value = usuario.email
-
-}
-
-function converterDataParaInput(data) {
-    if (!data) return ''
-
-    const [dia, mes, ano] = data.split('/')
-    return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`
-}
-
-carregarInformações()
+        await registerEnterprise(organizer);
+    }
+});

@@ -19,7 +19,7 @@
                 <img src="./assets/icons/logo.svg" alt="Uni.Event">
             </div>
             <div class="container-register">
-                <form>
+                <form id="formRegister">
                     <h1>Comece seu cadastro!</h1>
                     <div class="choices">
                         <h2>Escolha como deseja se cadastrar:</h2>
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="person">
+                    <div class="person" id="person">
                         <div class="inputs">
                             <div class="input">
                                 <label for="cpf_cnpj">CPF</label>
@@ -61,6 +61,10 @@
                                 <input type="date" id="data_nascimento" max="aaaa-12-12" autocomplete="bday" required>
                             </div>
                             <div class="input">
+                                <label for="telefone">Telefone</label>
+                                <input type="tel" name="input-tel" id="telefone-customer">
+                            </div>
+                            <div class="input">
                                 <label for="email">E-mail</label>
                                 <input type="email" id="email-customer" required>
                             </div>
@@ -70,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="enterprise" style="display: none;">
+                    <div class="enterprise" style="display: none;" id="enterprise">
                         <div class="inputs">
                             <div class="input">
                                 <label for="cpf_cnpj">CNPJ</label>
@@ -83,6 +87,10 @@
                             <div class="input">
                                 <label for="data_nascimento">Data de Fundação</label>
                                 <input type="date" id="data_fundacao" max="aaaa-12-12" autocomplete="bday">
+                            </div>
+                            <div class="input">
+                                <label for="telefone">Telefone</label>
+                                <input type="tel" name="input-tel" id="telefone-enterprise">
                             </div>
                             <div class="input">
                                 <label for="email">E-mail</label>
@@ -101,49 +109,6 @@
                 </form>
             </div>
         </div>
-        <script>
-            const customerRadio = document.getElementById('customer');
-            const organizerRadio = document.getElementById('organizer');
-
-            const personForm = document.querySelector('.person');
-            const enterpriseForm = document.querySelector('.enterprise');
-
-            customerRadio.addEventListener('change', () => {
-                personForm.style.display = 'block';
-                enterpriseForm.style.display = 'none';
-            });
-
-            organizerRadio.addEventListener('change', () => {
-                personForm.style.display = 'none';
-                enterpriseForm.style.display = 'block';
-            });
-
-            import { registerCustomer } from "./js/auth.js"
-
-            const form = document.getElementsByTagName('form')
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault();
-
-                const selected = document.querySelector('input[name="input-choice"]:checked');
-
-                if (!selected) {
-                    alert('Selecione Cliente ou Organizador');
-                    return;
-                }
-
-                if (selected.value === "customer") {
-                    const customer = {
-                        "nome": document.getElementById('nome').value,
-                        "email": document.getElementById('email-customer').value,
-                        "senha": document.getElementById('password-customer').value
-                    }
-
-                    await loginCustomer(email.value, password.value);
-                } else if (selected.value === "organizer") {
-                    await loginOrganizer(email.value, password.value);
-                }
-            });
-        </script>
     </main>
 </body>
 
