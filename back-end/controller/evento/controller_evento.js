@@ -333,7 +333,6 @@ const buscarEventosDeHoje = async function () {
         let result = await eventoDAO.getSelectAllEventsToday()
         console.log(result)
         if (result) {
-
             for (let evento of result) {
 
                 const dataInicioOriginal = evento.data_inicio;
@@ -346,20 +345,31 @@ const buscarEventosDeHoje = async function () {
                     evento.data_termino = new Date(evento.data_termino).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                 }
                 if (evento.hora_inicio) {
-                    evento.hora_inicio = evento.hora_inicio.substring(0, 5);
+                    evento.hora_inicio = new Date(evento.hora_inicio).toISOString().substring(11, 16);
                 }
                 if (evento.hora_termino) {
-                    evento.hora_termino = evento.hora_termino.substring(0, 5);
+                    evento.hora_termino = new Date(evento.hora_termino).toISOString().substring(11, 16);
                 }
 
-                let idParaBusca = evento.id || evento.id_evento;
+                let resultCategoria = await controllerCategoria.buscarCategoriaId(evento.id_categoria)
 
-                let resultCliente = await controllerClienteEvento.listarClientesIdEvento(idParaBusca)
+                if (resultCategoria.status_code == 200 && resultCategoria.categoria && resultCategoria.categoria.length > 0) {
+                    evento.categoria = resultCategoria.categoria[0].nome
+                    delete evento.id_categoria
+                }
+
+                let resultAssunto = await controllerAssunto.buscarAssuntoId(evento.id_assunto)
+                if (resultAssunto.status_code == 200 && resultAssunto.assunto && resultAssunto.assunto.length > 0) {
+                    evento.assunto = resultAssunto.assunto[0].nome
+                    delete evento.id_assunto
+                }
+
+                let resultCliente = await controllerClienteEvento.listarClientesIdEvento(evento.id_evento)
                 if (resultCliente.status_code == 200 && resultCliente.clientes && resultCliente.clientes.length > 0) {
                     evento.clientes = resultCliente.clientes
                 }
 
-                let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(idParaBusca)
+                let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(evento.id_evento)
                 if (resultOrganizador.status_code == 200 && resultOrganizador.organizadores && resultOrganizador.organizadores.length > 0) {
                     evento.organizadores = resultOrganizador.organizadores
                 }
@@ -380,12 +390,11 @@ const buscarEventosDeHoje = async function () {
                     };
                 }
 
-                let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(idParaBusca)
+                let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(evento.id_evento)
                 if (resultEndereco.status_code == 200) {
                     evento.endereco = resultEndereco.endereco
                 }
             }
-
 
             const jsonResult = {
                 status: MESSAGE.SUCCESS_REQUEST.status,

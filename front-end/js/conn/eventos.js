@@ -10,7 +10,7 @@ export async function lerEventos() {
 }
 
 export async function inserirEvento(event) {
-    const url = `https://localhost:8080/api/v1/unievent/evento`;
+    const url = `http://localhost:8080/api/v1/unievent/evento`;
 
     const options = {
         'method': 'POST',
@@ -23,7 +23,7 @@ export async function inserirEvento(event) {
 }
 
 export async function atualizarEvento(id, event) {
-    const url = `https://localhost:8080/api/v1/unievent/evento/${id}`;
+    const url = `http://localhost:8080/api/v1/unievent/evento/${id}`;
 
     const options = {
         'method': 'PUT',

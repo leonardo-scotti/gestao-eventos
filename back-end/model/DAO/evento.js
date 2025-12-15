@@ -90,16 +90,56 @@ const getSelectEventByCity = async function (cidade) {
 const getSelectAllEventsToday = async function () {
     try {
         //Script SQL
-        let sql = `CALL sp_get_events_auto_range();`
+        let sql = `select * from tbl_evento where data_inicio = curdate();`
 
         //Executa no BD o script SQL
         let result = await prisma.$queryRawUnsafe(sql)
 
         //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
         if (Array.isArray(result)) {
-            return result[0].f0
+            return result
         } else {
-            return false
+            let sql = `SELECT * FROM tbl_evento WHERE data_inicio BETWEEN (CURDATE() - INTERVAL 1 MONTH) AND CURDATE();`
+
+            //Executa no BD o script SQL
+            let result = await prisma.$queryRawUnsafe(sql)
+
+            //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
+            if (Array.isArray(result)) {
+                return result
+            } else {
+                let sql = `SELECT * FROM tbl_evento WHERE data_inicio BETWEEN (CURDATE() - INTERVAL 3 MONTH) AND CURDATE();`
+
+                //Executa no BD o script SQL
+                let result = await prisma.$queryRawUnsafe(sql)
+
+                //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
+                if (Array.isArray(result)) {
+                    return result
+                } else {
+                    let sql = `SELECT * FROM tbl_evento WHERE data_inicio BETWEEN (CURDATE() - INTERVAL 6 MONTH) AND CURDATE();`
+
+                    //Executa no BD o script SQL
+                    let result = await prisma.$queryRawUnsafe(sql)
+
+                    //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
+                    if (Array.isArray(result)) {
+                        return result
+                    } else {
+                        let sql = `SELECT * FROM tbl_evento WHERE data_inicio BETWEEN (CURDATE() - INTERVAL 12 MONTH) AND CURDATE();`
+
+                        //Executa no BD o script SQL
+                        let result = await prisma.$queryRawUnsafe(sql)
+
+                        //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
+                        if (Array.isArray(result)) {
+                            return result
+                        } else {
+                            return false
+                        }
+                    }
+                }
+            }
         }
     } catch (error) {
         return false
