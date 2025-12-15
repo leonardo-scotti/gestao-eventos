@@ -14,11 +14,13 @@ export async function inserirIngresso(ingresso) {
 
     const options = {
         'method': 'POST',
-        'body': ingresso
+        'headers': {
+            'content-type': 'application/json'
+        },
+        'body': JSON.stringify(ingresso)
     };
 
     const response = await fetch(url, options)
-    console.log(response)
 
     return response.ok;
 }
@@ -28,7 +30,10 @@ export async function atualizarIngresso(id, ingresso) {
 
     const options = {
         'method': 'PUT',
-        'body': ingresso
+        'headers': {
+            'content-type': 'application/json'
+        },
+        'body': JSON.stringify(ingresso)
     };
 
     const response = await fetch(url, options)

@@ -18,8 +18,9 @@ export async function inserirEvento(event) {
     };
 
     const response = await fetch(url, options)
+    const evento = await response.json();
 
-    return response.ok;
+    return evento;
 }
 
 export async function atualizarEvento(id, event) {

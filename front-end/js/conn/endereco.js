@@ -14,11 +14,13 @@ export async function inserirEndereco(endereco) {
 
     const options = {
         'method': 'POST',
-        'body': endereco
+        'headers': {
+            'content-type': 'application/json'
+        },
+        'body': JSON.stringify(endereco)
     };
 
     const response = await fetch(url, options)
-    console.log(response)
 
     return response.ok;
 }
@@ -28,7 +30,10 @@ export async function atualizarEndereco(id, endereco) {
 
     const options = {
         'method': 'PUT',
-        'body': endereco
+        'headers': {
+            'content-type': 'application/json'
+        },
+        'body': JSON.stringify(endereco)
     };
 
     const response = await fetch(url, options)

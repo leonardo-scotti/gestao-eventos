@@ -97,7 +97,6 @@ async function PublicarEvento() {
 
     const dados = new FormData();
 
-
     //Evento
     dados.append('nome', nome_evento.value);
     dados.append('descricao', descricao_evento.value);
@@ -117,7 +116,9 @@ async function PublicarEvento() {
 
     const evento = await inserirEvento(dados);
 
-    let id_evento_retornado = evento.id
+    let idEvento = evento
+
+    console.log(idEvento)
 
     //Endereço
 
@@ -129,7 +130,7 @@ async function PublicarEvento() {
         "bairro": `${bairro.value}`,
         "cidade": `${cidade.value}`,
         "id_estado": estado.value,
-        "id_evento": id_evento_retornado
+        "id_evento": idEvento
       }
 
     let enderecoEnviado = await inserirEndereco(endereco)
@@ -140,7 +141,7 @@ async function PublicarEvento() {
         "nome": `${nome_ingresso.value}`,
         "preco_unitario": `${valor_ingresso.value}`,
         "is_ativo": true,
-        "id_evento": id_evento_retornado
+        "id_evento": idEvento
       }
 
       let ingressoEnviado = await inserirIngresso(ingresso)
