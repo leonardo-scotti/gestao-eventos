@@ -73,13 +73,13 @@ const validarBody = async function (err, req, res, next) {
 
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         return res.status(400).json(
-           MESSAGE.ERROR_INVALID_BODY_SYNTAX 
+            MESSAGE.ERROR_INVALID_BODY_SYNTAX
         );
     }
 
     if (err instanceof multer.MulterError) {
         return res.status(400).json(
-            MESSAGE.ERROR_INVALID_BODY_SYNTAX 
+            MESSAGE.ERROR_INVALID_BODY_SYNTAX
         );
     }
     next()
@@ -284,13 +284,14 @@ app.post('/api/v1/unievent/login/cliente', bodyParserJSON, validarBody, async fu
     if (resultadoLogin.status) {
         // Salva os dados do usuário na sessão do servidor
         request.session.user = {
-            id: resultadoLogin.cliente.id,
+            id: resultadoLogin.cliente.id_cliente,
             nome: resultadoLogin.cliente.nome,
             email: resultadoLogin.cliente.email
         };
+
         response.status(200).json({
             message: "Login realizado com sucesso",
-            cliente: request.session.user
+            cliente: resultadoLogin.cliente
         });
 
     } else {
@@ -770,14 +771,14 @@ app.get('/api/v1/unievent/pedido/:id', async function (request, response) {
 //Insere um novo Pedido no BD
 app.post('/api/v1/unievent/pedido', bodyParserJSON, validarBody, async function (request, response) {
 
-        let dadosBody = request.body
+    let dadosBody = request.body
 
-        let contentType = request.headers['content-type']
+    let contentType = request.headers['content-type']
 
-        let pedido = await controllerPedido.inserirPedido(dadosBody, contentType)
+    let pedido = await controllerPedido.inserirPedido(dadosBody, contentType)
 
-        response.status(pedido.status_code)
-        response.json(pedido)
+    response.status(pedido.status_code)
+    response.json(pedido)
 
 })
 

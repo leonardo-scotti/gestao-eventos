@@ -139,7 +139,7 @@ const buscarClienteId = async function (id) {
                             delete cliente.cnpj
                             delete cliente.data_fundacao
                         }
-                        if(cliente.genero == null) {
+                        if (cliente.genero == null) {
                             delete cliente.genero
                         }
 
@@ -470,7 +470,7 @@ const validarDadosCliente = async function (cliente) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [SENHA] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    }  else if (cliente.email == null || cliente.email == undefined || cliente.email == '' || cliente.email > 100) {
+    } else if (cliente.email == null || cliente.email == undefined || cliente.email == '' || cliente.email > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [EMAIL] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
@@ -519,9 +519,8 @@ const AutenticarLoginCliente = async function (email, senha) {
 
         let dadosClientes = await listarClientes();
 
-        if (dadosClientes.status_code === 200) {
-            let listaReal = dadosClientes.clientes;
-
+        if (dadosClientes.status_code == 200) {
+            console.log('entrou')
             let senhaCriptografada = gerarSha1(senha);
 
             let partes = email.split('@')
@@ -530,12 +529,13 @@ const AutenticarLoginCliente = async function (email, senha) {
 
             email = usuario + dominio
 
-            let clienteEncontrado = listaReal.find(cliente =>
+            let clienteEncontrado = dadosClientes.clientes.find(cliente =>
                 cliente.email == email &&
                 cliente.senha == senhaCriptografada
             );
-
+            console.log(clienteEncontrado)
             if (clienteEncontrado) {
+                delete clienteEncontrado.senha
                 return {
                     status: MESSAGE.SUCCESS_REQUEST.status,
                     status_code: MESSAGE.SUCCESS_REQUEST.status_code,
