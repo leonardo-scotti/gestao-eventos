@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./js/main.js" defer type="module"></script>
-    <script src="./js/auth.js" defer></script>
+    <script src="./js/auth.js" defer>
+        import { verificarLogin } from "./js/auth.js"
+        verificarLogin()
+    </script>
     <title>Uni.Event</title>
 </head>
 
@@ -168,7 +171,7 @@
                     <div class="info" id="info_evento">
                         <h4>Ney Matogrosso homem com h | o musical</h4>
                         <div class="date">
-                            <p>31 de jan - 2025 > 32 de jan - 18:00</p>
+                            <p><img src="./assets/icons/" alt="">31 de jan - 2025 > 32 de jan - 18:00</p>
                             <p>São Paulo</p>
                         </div>
                         <div class="description">

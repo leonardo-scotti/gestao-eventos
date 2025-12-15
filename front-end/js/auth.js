@@ -1,15 +1,13 @@
 'use strict'
 
 export async function loginCustomer(email, senha) {
-    const response = await fetch(
-        'http://localhost:3000/api/v1/unievent/login/cliente',
-        {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ email, senha })
-        }
-    );
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, senha })
+    }
+    const response = await fetch('http://localhost:8080/api/v1/unievent/login/cliente', options);
 
     if (!response.ok) {
         alert('Login inválido');
@@ -43,7 +41,26 @@ export async function loginOrganizer(email, senha) {
     }
 }
 
-export async function logout(type) {
+export async function registerCustomer(customer) {
+    const url = `http://localhost:8080/api/v1/unievent/cliente`
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(customer)
+    }
+
+    const response = await fetch(url, options)
+
+    if (!response.ok) {
+        alert('Informações inválidas')
+        return
+    } else {
+        window.location.href = "../login.html"
+    }
+}
+
+async function logout(type) {
     try {
         await fetch('http://localhost:3000/api/v1/unievent/cliente/logout', {
             method: 'POST',
@@ -60,12 +77,9 @@ export async function logout(type) {
     window.location.assign('./login.html');
 }
 
-function verificarLogin() {
+export function verificarLogin() {
     const logado = sessionStorage.getItem('logado');
-    console.log('logado:', logado)
     if (!logado) {
-        window.location.href = '../login.html';
+        window.location.replace('./login.html');
     }
 }
-
-verificarLogin();

@@ -521,6 +521,7 @@ const AutenticarLoginCliente = async function (email, senha) {
 
         if (dadosClientes.status_code == 200) {
             console.log('entrou')
+            console.log(dadosClientes)
             let senhaCriptografada = gerarSha1(senha);
 
             let partes = email.split('@')

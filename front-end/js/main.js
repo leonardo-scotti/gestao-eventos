@@ -1,7 +1,7 @@
 'use strict'
 
 import { lerEventos } from "./conn/eventos.js"
-import { criarCardEvento } from "./eventoDOM.js"
+import { criarCardEvento } from "./DOM/eventoDOM.js"
 
 async function criarEventosHoje() {
     const container = document.getElementById('events')
