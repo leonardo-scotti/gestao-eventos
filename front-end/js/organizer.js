@@ -1,6 +1,8 @@
 'use strict'
 
 import { inserirEvento } from "./conn/eventos.js"
+import { inserirEndereco } from "./conn/endereco.js"
+import { inserirIngresso } from "./conn/ingresso.js"
 
 const inicio_organizador = document.getElementById('inicio-organizador')
 const dashboard_organizador = document.getElementById('dashboard-organizador')
@@ -32,6 +34,7 @@ const hora_de_termino = document.getElementById('hora_de_termino')
 const cep = document.getElementById('cep')
 const estado = document.getElementById('estado')
 const rua = document.getElementById('rua')
+const cidade = document.getElementById('cidade')
 const numero_do_endereco = document.getElementById('numero_do_endereco')
 const bairro = document.getElementById('bairro')
 const complemento = document.getElementById('complemento')
@@ -89,12 +92,12 @@ if (btn_public_event) {
 //Funções
 
 
-async function PublicarEvento(e) {
-    // 1. IMPORTANTE: Previne o F5 automático
-    e.preventDefault(); 
+async function PublicarEvento() {
 
     const dados = new FormData();
 
+
+    //Evento
     dados.append('nome', nome_evento.value);
     dados.append('descricao', descricao_evento.value);
     dados.append('data_inicio', data_inicio.value);
@@ -110,11 +113,35 @@ async function PublicarEvento(e) {
     }
     dados.append('quantidade_ingresso', quantidade_ingresso.value);
     dados.append('quantidade_ingresso_comprado', 0);
-    dados.append('cep', cep.value);
-    dados.append('estado', estado.value);
-    dados.append('rua', rua.value);
-    dados.append('numero', numero_do_endereco.value);
-    dados.append('bairro', bairro.value);
-    dados.append('complemento', complemento.value);
-    const sucesso = await inserirEvento(dados);
+
+    const evento = await inserirEvento(dados);
+
+    let id_evento_retornado = evento.id
+
+    //Endereço
+
+    let endereco = {
+        "cep": `${cep.value}`,
+        "logradouro": `${rua.value}`,
+        "complemento": `${complemento.value}`,
+        "numero": `${numero_do_endereco.value}`,
+        "bairro": `${bairro.value}`,
+        "cidade": `${cidade.value}`,
+        "id_estado": estado.value,
+        "id_evento": id_evento_retornado
+      }
+
+    let enderecoEnviado = await inserirEndereco(endereco)
+
+    //Ingresso
+
+    let ingresso = {
+        "nome": `${nome_ingresso.value}`,
+        "preco_unitario": `${valor_ingresso.value}`,
+        "is_ativo": true,
+        "id_evento": id_evento_retornado
+      }
+
+      let ingressoEnviado = await inserirIngresso(ingresso)
+    
 }

@@ -498,11 +498,14 @@ const inserirEvento = async function (evento, contentType, banner) {
                                 }
                             }
 
+                            evento.id = lastIdEvento
+
                             const jsonResult = {
                                 status: MESSAGE.SUCCESS_CREATED_ITEM.status,
                                 status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
                                 developments: MESSAGE.HEADER.developments,
-                                message: MESSAGE.SUCCESS_CREATED_ITEM.message
+                                message: MESSAGE.SUCCESS_CREATED_ITEM.message,
+                                evento: evento
                             }
                             return jsonResult // Retorna 201 Created
 
@@ -625,6 +628,7 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
                                 status_code: MESSAGE.SUCCESS_UPDATED_ITEM.status_code,
                                 developments: MESSAGE.HEADER.developments,
                                 message: MESSAGE.SUCCESS_UPDATED_ITEM.message,
+                                evento: evento
                             }
 
                             return jsonResult //200
