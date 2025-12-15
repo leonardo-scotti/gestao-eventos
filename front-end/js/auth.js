@@ -1,19 +1,30 @@
 'use strict'
 
 export async function loginCustomer(email, senha) {
-    const response = await fetch('http://localhost:3000/api/v1/unievent/login/cliente', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email, senha })
-    });
+    const response = await fetch(
+        'http://localhost:3000/api/v1/unievent/login/cliente',
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email, senha })
+        }
+    );
 
-    if (response.ok) {
-        sessionStorage.setItem('logado', 'true');
-        window.location.href = '/dashboard.html';
-    } else {
+    if (!response.ok) {
         alert('Login inválido');
+        return;
     }
+
+    const data = await response.json();
+
+    sessionStorage.setItem('auth', JSON.stringify({
+        logado: true,
+        tipo: 'cliente',
+        usuario: data.cliente
+    }));
+
+    window.location.href = '../index.html';
 }
 
 export async function loginOrganizer(email, senha) {

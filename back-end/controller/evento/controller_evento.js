@@ -331,60 +331,60 @@ const buscarEventosDeHoje = async function () {
     try {
 
         let result = await eventoDAO.getSelectAllEventsToday()
-
+        console.log(result)
         if (result) {
 
             for (let evento of result) {
 
-                    const dataInicioOriginal = evento.data_inicio;
-                    const dataTerminoOriginal = evento.data_termino;
+                const dataInicioOriginal = evento.data_inicio;
+                const dataTerminoOriginal = evento.data_termino;
 
-                    if (evento.data_inicio) {
-                        evento.data_inicio = new Date(evento.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-                    }
-                    if (evento.data_termino) {
-                        evento.data_termino = new Date(evento.data_termino).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-                    }
-                    if (evento.hora_inicio) {
-                        evento.hora_inicio = evento.hora_inicio.substring(0, 5);
-                    }
-                    if (evento.hora_termino) {
-                        evento.hora_termino = evento.hora_termino.substring(0, 5);
-                    }
-
-                    let idParaBusca = evento.id || evento.id_evento;
-
-                    let resultCliente = await controllerClienteEvento.listarClientesIdEvento(idParaBusca)
-                    if (resultCliente.status_code == 200 && resultCliente.clientes && resultCliente.clientes.length > 0) {
-                        evento.clientes = resultCliente.clientes
-                    }
-
-                    let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(idParaBusca)
-                    if (resultOrganizador.status_code == 200 && resultOrganizador.organizadores && resultOrganizador.organizadores.length > 0) {
-                        evento.organizadores = resultOrganizador.organizadores
-                    }
-
-                    if (dataInicioOriginal && dataTerminoOriginal) {
-
-                        let dataInicioObj = new Date(dataInicioOriginal);
-                        let dataTerminoObj = new Date(dataTerminoOriginal);
-
-                        const opcoes = { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' };
-
-                        let textoInicio = dataInicioObj.toLocaleDateString('pt-BR', opcoes);
-                        let textoFim = dataTerminoObj.toLocaleDateString('pt-BR', opcoes);
-
-                        evento.dataRealizacao = {
-                            "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
-                            "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
-                        };
-                    }
-
-                    let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(idParaBusca)
-                    if (resultEndereco.status_code == 200) {
-                        evento.endereco = resultEndereco.endereco
-                    }
+                if (evento.data_inicio) {
+                    evento.data_inicio = new Date(evento.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                 }
+                if (evento.data_termino) {
+                    evento.data_termino = new Date(evento.data_termino).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                }
+                if (evento.hora_inicio) {
+                    evento.hora_inicio = evento.hora_inicio.substring(0, 5);
+                }
+                if (evento.hora_termino) {
+                    evento.hora_termino = evento.hora_termino.substring(0, 5);
+                }
+
+                let idParaBusca = evento.id || evento.id_evento;
+
+                let resultCliente = await controllerClienteEvento.listarClientesIdEvento(idParaBusca)
+                if (resultCliente.status_code == 200 && resultCliente.clientes && resultCliente.clientes.length > 0) {
+                    evento.clientes = resultCliente.clientes
+                }
+
+                let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(idParaBusca)
+                if (resultOrganizador.status_code == 200 && resultOrganizador.organizadores && resultOrganizador.organizadores.length > 0) {
+                    evento.organizadores = resultOrganizador.organizadores
+                }
+
+                if (dataInicioOriginal && dataTerminoOriginal) {
+
+                    let dataInicioObj = new Date(dataInicioOriginal);
+                    let dataTerminoObj = new Date(dataTerminoOriginal);
+
+                    const opcoes = { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' };
+
+                    let textoInicio = dataInicioObj.toLocaleDateString('pt-BR', opcoes);
+                    let textoFim = dataTerminoObj.toLocaleDateString('pt-BR', opcoes);
+
+                    evento.dataRealizacao = {
+                        "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
+                        "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
+                    };
+                }
+
+                let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(idParaBusca)
+                if (resultEndereco.status_code == 200) {
+                    evento.endereco = resultEndereco.endereco
+                }
+            }
 
 
             const jsonResult = {
@@ -396,6 +396,7 @@ const buscarEventosDeHoje = async function () {
             }
             return jsonResult //200
         } else {
+            console.log(result)
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) {
