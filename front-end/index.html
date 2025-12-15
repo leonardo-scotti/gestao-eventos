@@ -1,40 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<<<<<<< HEAD
-=======
 
->>>>>>> b3225f53a27e8a3a8a672b3f8f33934a24a35cf6
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/main.js" defer type="module"></script>
+    <script src="./js/auth.js" defer></script>
     <title>Uni.Event</title>
 </head>
-<<<<<<< HEAD
-<body>
-    <header>
-        <div class="logo">
-            <img src="./assets/icons/logo.svg" alt="Uni.Event">
-        </div>
-        <div class="search-bar">
-            <label for="search-bar"><img src="./assets/icons/magnifying-glass.svg" alt="Pesquisar Evento"></label>
-            <input type="search" id="search-bar" placeholder="Pesquise um evento...">
-        </div>
-        <div class="user-area">
-            <button id="small-menu"><img src="./assets/icons/small-menu.svg" alt="Menu de Opções"></button>
-            <img src="./assets/icons/circle-user.svg" alt="Foto usuário">
-        </div>
-    </header>
-    <main></main>
-    <footer></footer>
-</body>
-=======
 
 <body>
     <header>
         <nav>
             <div class="logo">
-                <img src="./assets/icons/logo.svg" alt="Uni.Event">
+                <a href="index.html"><img src="./assets/icons/logo.svg" alt="Uni.Event"></a>
             </div>
             <div class="search-bar">
                 <label for="search-bar"><img src="./assets/icons/magnifying-glass.svg" alt="Pesquisar Evento"></label>
@@ -45,37 +25,18 @@
                 <img src="./assets/icons/circle-user.svg" alt="Foto usuário">
             </div>
             <menu id="menu">
-                <li><a href="#"><img src="./assets/icons/user.svg" alt="Minha Conta">Minha Conta</a></li>
+                <li><a href="register.html"><img src="./assets/icons/user.svg" alt="Minha Conta">Minha Conta</a></li>
                 <li><a href="#"><img src="./assets/icons/events.svg" alt="Meus Eventos">Meus Eventos</a></li>
-                <li><a href="#"><img src="./assets/icons/logout.svg" alt="Sair">Sair</a></li>
+                <li id="logout"><a href="#"><img src="./assets/icons/logout.svg" alt="Sair">Sair</a></li>
             </menu>
             <script>
-                const btnMenu = document.getElementById('small-menu');
-                const menu = document.getElementById('menu');
 
-                btnMenu.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    toggleMenu();
-                });
-
-                function toggleMenu() {
-                    menu.classList.toggle('active');
-                }
-
-                document.addEventListener('click', (event) => {
-                    if (menu.classList.contains('active')) {
-
-                        if (!menu.contains(event.target) && !btnMenu.contains(event.target)) {
-                            menu.classList.remove('active');
-                        }
-                    }
-                });
             </script>
         </nav>
     </header>
     <main>
         <!-- ======================= HOME ========================== -->
-        <div id="home">
+        <div id="home" class="active">
             <section class="first-section">
                 <div class="slogan">
                     <h1>O Mundo dos Eventos ao Seu Alcance</h1>
@@ -119,8 +80,8 @@
                     </div>
                     <div class="events-today">
                         <h2>Eventos <span>HOJE</span></h2>
-                        <div class="events">
-                            <div class="event">
+                        <div class="events" id="events">
+                            <!-- <div class="event">
                                 <img src="./assets/img/img-carrossel1.png" alt="Ney Matogrosso homem com h | o musical">
                                 <div class="info">
                                     <h4>Ney Matogrosso homem com h | o musical</h4>
@@ -179,7 +140,7 @@
                                         <p>Domingo, 19 de setembro</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -202,9 +163,52 @@
                 </div>
             </section>
         </div>
-        <!-- ==================================================================== -->
-        <div class="evento">
-            
+        <!-- ======================= EVENTO ========================== -->
+        <div id="evento" class="evento">
+            <section class="fourth-section">
+                <div class="container-fourth">
+                    <div class="info" id="info_evento">
+                        <h4>Ney Matogrosso homem com h | o musical</h4>
+                        <div class="date">
+                            <p>31 de jan - 2025 > 32 de jan - 18:00</p>
+                            <p>São Paulo</p>
+                        </div>
+                        <div class="description">
+                            <h5>DESCRIÇÃO</h5>
+                            <p>Lorem ipsum dolor sit amet et delectus accommodare his consul copiosae
+                                legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos
+                                cu eum an brute copiosae hendrerit. Eos erant dolorum an. Per facer
+                                affert ut. Mei iisque mentitum moderatius cu. Sit munere facilis accusam
+                                eu dicat falli consulatu at vis. Te facilisis mnesarchum qui posse
+                                omnium mediocritatem est cu. Modus argumentum ne qui tation efficiendi
+                                in eos. Ei mea falli legere efficiantur et tollit aliquip debitis mei.
+                                No deserunt mediocritatem mel. Lorem ipsum dolor sit amet et delectus
+                                accommodare his consul copiosae legendos at vix ad putent delectus delicata
+                                usu. Vidit dissentiet eos cu eum an brute copiosae hendrerit. Eos erant dolorum
+                                an. Per facer affert ut. Mei iisque mentitum moderatius cu. Sit munere facilis
+                                accusam eu dicat falli consulatu at vis. Te facilisis mnesarchum qui posse omnium
+                                mediocritatem est cu. Modus argumentum ne qui tation efficiendi in eos. Ei mea falli
+                                legere efficiantur et tollit aliquip debitis mei. No deserunt mediocritatem mel. Lorem
+                                ipsum dolor sit amet et delectus accommodare his consul copiosae legendos at vix
+                                ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute copiosae
+                                hendrerit.
+                                Eos erant dolorum an. Per facer affert ut. Mei iisque mentitum moderatius cu. Sit munere
+                                facilis accusam eu dicat falli consulatu at vis. Te facilisis mnesarchum qui posse
+                                omnium
+                                mediocritatem est cu. Modus argumentum ne qui tation</p>
+                        </div>
+                    </div>
+                    <div class="event-media">
+                        <img src="./assets/img/img-carrossel1.png" alt="Ney Matogrosso homem com h | o musical">
+                        <div class="ingresso">
+                            <div class="inscription">
+                                <h4>Inscrições</h4>
+                            </div>
+                            <button type="submit">Inscrever-se</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
     <footer>
@@ -250,5 +254,4 @@
     </footer>
 </body>
 
->>>>>>> b3225f53a27e8a3a8a672b3f8f33934a24a35cf6
 </html>

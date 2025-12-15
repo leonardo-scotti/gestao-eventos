@@ -391,6 +391,28 @@ app.get('/api/v1/unievent/evento/:id', async function (request, response) {
 
 })
 
+//Retorna a um evento filtrando pela Cidade
+app.get('/api/v1/unievent/cidade/evento/', async function (request, response) {
+
+    let cidade = request.query.cidade
+
+    let evento = await controllerEvento.buscarEventosPelaCidade(cidade)
+    
+    response.status(evento.status_code)
+    response.json(evento)
+
+})
+
+//Retorna a um evento filtrando pelos eventoa do dia
+app.get('/api/v1/unievent/dia/evento/', async function (request, response) {
+
+    let evento = await controllerEvento.buscarEventosDeHoje()
+    
+    response.status(evento.status_code)
+    response.json(evento)
+
+})
+
 //Insere um novo Evento no BD
 app.post('/api/v1/unievent/evento', validarBody, upload.single('banner'), async function (request, response) {
 
@@ -515,6 +537,15 @@ app.get('/api/v1/unievent/endereco/:id', async function (request, response) {
     response.status(endereco.status_code)
     response.json(endereco)
 
+})
+
+//Retorna a lista de cidades
+app.get('/api/v1/unievent/cidade', async function (request, response) {
+
+    let endereco = await controllerEndereco.listarCidades()
+
+    response.status(endereco.status_code)
+    response.json(endereco)
 })
 
 //Insere um novo Endereco no BD

@@ -12,9 +12,6 @@ const enderecoDAO = require('../../model/DAO/endereco.js')
 //Import da controller estado 
 const controllerEstado = require('../estado/controller_estado.js')
 
-//Import da controller evento 
-const controllerEvento = require('../evento/controller_evento.js')
-
 //Import do arquivo que padroniza todas as mensagens
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -39,12 +36,6 @@ const listarEnderecos = async function () {
                         delete endereco.id_estado
                     }
 
-                    // let resultEvento = await controllerEvento.buscarEventoId(endereco.id_evento)
-                    // if (resultEvento.status_code == 200 && resultEvento.evento && resultEvento.evento.length > 0) {
-                    //     endereco.evento = resultEvento.evento[0]
-                    //     delete endereco.id_evento
-                    // }
-
                     if (endereco.cep) {
                         let ultimos3digitos = endereco.cep.slice(-3)
                         let primeiros5digitos = endereco.cep.slice(0, 5)
@@ -59,6 +50,43 @@ const listarEnderecos = async function () {
                     developments: MESSAGE.HEADER.developments,
                     message: MESSAGE.SUCCESS_REQUEST.message,
                     enderecos: result
+                }
+
+                return jsonResult //200
+
+            } else {
+                return MESSAGE.ERROR_NOT_FOUND //404
+            }
+        } else {
+            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+        }
+    } catch (error) {
+
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
+}
+
+//Retorna uma lista de cidades
+const listarCidades = async function () {
+    //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
+    //não interfiram em outras funções
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+
+        //Chama a função do DAO para retornar a lista de enderecos
+        let result = await enderecoDAO.getSelectAllCities()
+
+        if (result) {
+            if (result.length > 0) {
+
+                const jsonResult = {
+                    status: MESSAGE.SUCCESS_REQUEST.status,
+                    status_code: MESSAGE.SUCCESS_REQUEST.status_code,
+                    developments: MESSAGE.HEADER.developments,
+                    message: MESSAGE.SUCCESS_REQUEST.message,
+                    cidades: result
                 }
 
                 return jsonResult //200
@@ -98,20 +126,12 @@ const buscarEnderecoId = async function (id) {
                             delete endereco.id_estado
                         }
 
-                        let resultEvento = await controllerEvento.buscarEventoId(endereco.id_evento)
-
-                        if (resultEvento.status_code == 200 && resultEvento.evento && resultEvento.evento.length > 0) {
-                            endereco.evento = resultEvento.evento[0]
-                            delete endereco.id_evento
-                        }
-
                         if (endereco.cep) {
                             let ultimos3digitos = endereco.cep.slice(-3)
                             let primeiros5digitos = endereco.cep.slice(0, 5)
 
                             endereco.cep = primeiros5digitos + "-" + ultimos3digitos
                         }
-
                     }
 
 
@@ -167,6 +187,7 @@ const buscarEnderecoByIdEvento = async function (idEvent) {
 
                             endereco.cep = primeiros5digitos + "-" + ultimos3digitos
                         }
+                        delete endereco.id_evento
                     }
 
                     const jsonResult = {
@@ -206,6 +227,9 @@ const inserirEndereco = async function (endereco, contentType) {
             let validarDados = await validarDadosEndereco(endereco)
 
             if (!validarDados) {
+
+                let cidadeFormatada = formatarCidade(endereco.cidade)
+                endereco.cidade     = cidadeFormatada
 
                 //Chama a função do DAO para inserir um novo filme
                 let result = await enderecoDAO.setInsertAddress(endereco)
@@ -259,6 +283,9 @@ const atualizarEndereco = async function (endereco, id, contentType) {
             let validarDados = await validarDadosEndereco(endereco)
 
             if (!validarDados) {
+
+                let cidadeFormatada = formatarCidade(endereco.cidade)
+                endereco.cidade     = cidadeFormatada
 
                 //Chama a função para validar a consistencia do ID e verificar se existe no BD
                 let validarID = await buscarEnderecoId(id)
@@ -341,6 +368,27 @@ const excluirEndereco = async function (id) {
 
 }
 
+
+const formatarCidade = (cidade) => {
+    if (!cidade) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CIDADE] invalido!!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+    } 
+
+    let texto = cidade.trim().toLowerCase();
+    let palavras = texto.split(' ');
+    const preposicoes = ['de', 'da', 'do', 'dos', 'das', 'e', 'em'];
+    let palavrasFormatadas = palavras.map((palavra) => {
+        if (preposicoes.includes(palavra)) {
+            return palavra;
+        }
+        return palavra.charAt(0).toUpperCase() + palavra.slice(1);
+    });
+
+    return palavrasFormatadas.join(' ');
+}
+
+
 //Validação dos dados de cadastro do endereco
 const validarDadosEndereco = async function (endereco) {
 
@@ -374,7 +422,7 @@ const validarDadosEndereco = async function (endereco) {
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
     } else if (endereco.cidade == '' || endereco.cidade == null || endereco.cidade == undefined || endereco.cidade.length > 150) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [BAIRRO] invalido!!!'
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CIDADE] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
     } else if (endereco.id_estado == '' || endereco.id_estado == null || endereco.id_estado == undefined || isNaN(endereco.id_estado)) {
@@ -389,16 +437,11 @@ const validarDadosEndereco = async function (endereco) {
 
         let validarid_estado = await controllerEstado.buscarEstadoId(endereco.id_estado)
 
-        let validarid_evento = await controllerEvento.buscarEventoId(endereco.id_evento)
-
+        // let validarid_evento = await controllerEvento.buscarEventoId(endereco.id_evento)
+0
         if (validarid_estado.status_code !== 200) {
             MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_ESTADO] invalido!!!'
-            return MESSAGE.ERROR_REQUIRED_FIELDS //400
-        }
-
-        if (validarid_evento.status_code !== 200) {
-            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_EVENTO] invalido!!!'
-            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+            return MESSAGE.ERROR_REQUIRED_FIELDS //40
         }
 
         return false
@@ -408,6 +451,7 @@ const validarDadosEndereco = async function (endereco) {
 
 module.exports = {
     listarEnderecos,
+    listarCidades,
     buscarEnderecoId,
     buscarEnderecoByIdEvento,
     inserirEndereco,

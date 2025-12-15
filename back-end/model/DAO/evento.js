@@ -58,15 +58,55 @@ const getSelectLastIdEvent = async function () {
         let result = await prisma.$queryRawUnsafe(sql)
 
         //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
-        if (Array.isArray(result)){
-            return Number(result[0].id_evento) 
-        }else{
+        if (Array.isArray(result)) {
+            return Number(result[0].id_evento)
+        } else {
             return false
         }
     } catch (error) {
         return false
     }
 }
+
+const getSelectEventByCity = async function (cidade) {
+    try {
+        //Script SQL
+        let sql = `CALL BuscarEventoPorCidade('${cidade}');`
+
+        //Executa no BD o script SQL
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
+        if (Array.isArray(result)) {
+            return result[0].f0
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+const getSelectAllEventsToday = async function () {
+    try {
+        //Script SQL
+        let sql = `CALL sp_get_events_auto_range();`
+
+        //Executa no BD o script SQL
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
+        if (Array.isArray(result)) {
+            return result[0].f0
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+
 
 //Insere um evento no banco de dados
 const setInsertEvent = async function (evento) {
@@ -99,7 +139,7 @@ const setInsertEvent = async function (evento) {
         // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
 
-        if(result)
+        if (result)
             return true
         else
             return false
@@ -130,12 +170,11 @@ const setUpdateEvent = async function (evento) {
         // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
 
-        if(result)
+        if (result)
             return true
         else
             return false
     } catch (error) {
-        console.log(error)
         return false
     }
 }
@@ -148,7 +187,7 @@ const setDeleteEvent = async function (id) {
         // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
 
-        if(result)
+        if (result)
             return true
         else
             return false
@@ -161,6 +200,8 @@ module.exports = {
     getSelectAllEvents,
     getSelectByIdEvent,
     getSelectLastIdEvent,
+    getSelectEventByCity,
+    getSelectAllEventsToday,
     setInsertEvent,
     setUpdateEvent,
     setDeleteEvent
