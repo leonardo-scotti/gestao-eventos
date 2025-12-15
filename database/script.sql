@@ -17,7 +17,8 @@ CREATE TABLE tbl_assunto (
 
 CREATE TABLE tbl_categoria (
     id_categoria INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL
+    nome VARCHAR(100) NOT NULL,
+    icone VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE tbl_estado (
