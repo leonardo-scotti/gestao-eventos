@@ -520,7 +520,6 @@ const AutenticarLoginCliente = async function (email, senha) {
         let dadosClientes = await listarClientes();
 
         if (dadosClientes.status_code == 200) {
-            console.log('entrou')
             let senhaCriptografada = gerarSha1(senha);
 
             let partes = email.split('@')
@@ -533,7 +532,7 @@ const AutenticarLoginCliente = async function (email, senha) {
                 cliente.email == email &&
                 cliente.senha == senhaCriptografada
             );
-            console.log(clienteEncontrado)
+            
             if (clienteEncontrado) {
                 delete clienteEncontrado.senha
                 return {

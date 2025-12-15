@@ -1,8 +1,12 @@
 'use strict'
 
 import { inserirEvento } from "./conn/eventos.js"
+<<<<<<< HEAD
 import { inserirEndereco } from "./conn/endereco.js"
 import { inserirIngresso } from "./conn/ingresso.js"
+=======
+import { protegerPagina, apenasOrganizador } from './components/guards.js';
+>>>>>>> a85669fa9dcaf526fd1484679bae533c2d361ef0
 
 const inicio_organizador = document.getElementById('inicio-organizador')
 const dashboard_organizador = document.getElementById('dashboard-organizador')

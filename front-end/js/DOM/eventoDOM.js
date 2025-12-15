@@ -3,6 +3,9 @@
 export function criarCardEvento(evento) {
     const card = document.createElement('div')
     card.classList.add('event')
+    card.addEventListener('click', () => {
+        paginaEvento(evento)
+    })
 
     const banner = document.createElement('img')
     banner.src = evento.banner
@@ -31,4 +34,12 @@ export function criarCardEvento(evento) {
     card.appendChild(info)
 
     return card
+}
+
+export async function paginaEvento(evento) {
+    const home = document.getElementById('home')
+    home.classList.remove('active')
+
+    const eventHtml = document.getElementById('evento')
+    eventHtml.classList.add('active')
 }

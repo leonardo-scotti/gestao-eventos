@@ -331,70 +331,70 @@ const buscarEventosDeHoje = async function () {
     try {
 
         let result = await eventoDAO.getSelectAllEventsToday()
-
+        console.log(result)
         if (result) {
             for (let evento of result) {
 
-                    const dataInicioOriginal = evento.data_inicio;
-                    const dataTerminoOriginal = evento.data_termino;
+                const dataInicioOriginal = evento.data_inicio;
+                const dataTerminoOriginal = evento.data_termino;
 
-                    if (evento.data_inicio) {
-                        evento.data_inicio = new Date(evento.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-                    }
-                    if (evento.data_termino) {
-                        evento.data_termino = new Date(evento.data_termino).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-                    }
-                    if (evento.hora_inicio) {
-                        evento.hora_inicio = new Date(evento.hora_inicio).toISOString().substring(11, 16);
-                    }
-                    if (evento.hora_termino) {
-                        evento.hora_termino = new Date(evento.hora_termino).toISOString().substring(11, 16);
-                    }
-
-                    let resultCategoria = await controllerCategoria.buscarCategoriaId(evento.id_categoria)
-
-                    if (resultCategoria.status_code == 200 && resultCategoria.categoria && resultCategoria.categoria.length > 0) {
-                        evento.categoria = resultCategoria.categoria[0].nome
-                        delete evento.id_categoria
-                    }
-
-                    let resultAssunto = await controllerAssunto.buscarAssuntoId(evento.id_assunto)
-                    if (resultAssunto.status_code == 200 && resultAssunto.assunto && resultAssunto.assunto.length > 0) {
-                        evento.assunto = resultAssunto.assunto[0].nome
-                        delete evento.id_assunto
-                    }
-
-                    let resultCliente = await controllerClienteEvento.listarClientesIdEvento(evento.id_evento)
-                    if (resultCliente.status_code == 200 && resultCliente.clientes && resultCliente.clientes.length > 0) {
-                        evento.clientes = resultCliente.clientes
-                    }
-
-                    let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(evento.id_evento)
-                    if (resultOrganizador.status_code == 200 && resultOrganizador.organizadores && resultOrganizador.organizadores.length > 0) {
-                        evento.organizadores = resultOrganizador.organizadores
-                    }
-
-                    if (dataInicioOriginal && dataTerminoOriginal) {
-
-                        let dataInicioObj = new Date(dataInicioOriginal);
-                        let dataTerminoObj = new Date(dataTerminoOriginal);
-
-                        const opcoes = { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' };
-
-                        let textoInicio = dataInicioObj.toLocaleDateString('pt-BR', opcoes);
-                        let textoFim = dataTerminoObj.toLocaleDateString('pt-BR', opcoes);
-
-                        evento.dataRealizacao = {
-                            "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
-                            "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
-                        };
-                    }
-
-                    let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(evento.id_evento)
-                    if (resultEndereco.status_code == 200) {
-                        evento.endereco = resultEndereco.endereco
-                    }
+                if (evento.data_inicio) {
+                    evento.data_inicio = new Date(evento.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                 }
+                if (evento.data_termino) {
+                    evento.data_termino = new Date(evento.data_termino).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                }
+                if (evento.hora_inicio) {
+                    evento.hora_inicio = new Date(evento.hora_inicio).toISOString().substring(11, 16);
+                }
+                if (evento.hora_termino) {
+                    evento.hora_termino = new Date(evento.hora_termino).toISOString().substring(11, 16);
+                }
+
+                let resultCategoria = await controllerCategoria.buscarCategoriaId(evento.id_categoria)
+
+                if (resultCategoria.status_code == 200 && resultCategoria.categoria && resultCategoria.categoria.length > 0) {
+                    evento.categoria = resultCategoria.categoria[0].nome
+                    delete evento.id_categoria
+                }
+
+                let resultAssunto = await controllerAssunto.buscarAssuntoId(evento.id_assunto)
+                if (resultAssunto.status_code == 200 && resultAssunto.assunto && resultAssunto.assunto.length > 0) {
+                    evento.assunto = resultAssunto.assunto[0].nome
+                    delete evento.id_assunto
+                }
+
+                let resultCliente = await controllerClienteEvento.listarClientesIdEvento(evento.id_evento)
+                if (resultCliente.status_code == 200 && resultCliente.clientes && resultCliente.clientes.length > 0) {
+                    evento.clientes = resultCliente.clientes
+                }
+
+                let resultOrganizador = await controllerOrganizadorEvento.listarOrganizadoresIdEvento(evento.id_evento)
+                if (resultOrganizador.status_code == 200 && resultOrganizador.organizadores && resultOrganizador.organizadores.length > 0) {
+                    evento.organizadores = resultOrganizador.organizadores
+                }
+
+                if (dataInicioOriginal && dataTerminoOriginal) {
+
+                    let dataInicioObj = new Date(dataInicioOriginal);
+                    let dataTerminoObj = new Date(dataTerminoOriginal);
+
+                    const opcoes = { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' };
+
+                    let textoInicio = dataInicioObj.toLocaleDateString('pt-BR', opcoes);
+                    let textoFim = dataTerminoObj.toLocaleDateString('pt-BR', opcoes);
+
+                    evento.dataRealizacao = {
+                        "data_inicio": textoInicio.charAt(0).toUpperCase() + textoInicio.slice(1),
+                        "data_termino": textoFim.charAt(0).toUpperCase() + textoFim.slice(1)
+                    };
+                }
+
+                let resultEndereco = await controllerEndereco.buscarEnderecoByIdEvento(evento.id_evento)
+                if (resultEndereco.status_code == 200) {
+                    evento.endereco = resultEndereco.endereco
+                }
+            }
 
             const jsonResult = {
                 status: MESSAGE.SUCCESS_REQUEST.status,
@@ -405,6 +405,7 @@ const buscarEventosDeHoje = async function () {
             }
             return jsonResult //200
         } else {
+            console.log(result)
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) {
@@ -595,7 +596,7 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
 
                         //Chama a função do DAO para atualizar um evento
                         let result = await eventoDAO.setUpdateEvent(evento)
-
+                        
                         if (result) {
 
                             if (Array.isArray(evento.cliente) && evento.cliente.length > 0) {
