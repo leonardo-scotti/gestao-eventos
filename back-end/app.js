@@ -549,7 +549,6 @@ app.post('/api/v1/unievent/endereco', bodyParserJSON, validarBody, async functio
     let contentType = request.headers['content-type']
 
     let endereco = await controllerEndereco.inserirEndereco(dadosBody, contentType)
-    console.log(endereco)
 
     response.status(endereco.status_code)
     response.json(endereco)
@@ -611,7 +610,6 @@ app.post('/api/v1/unievent/ingresso', bodyParserJSON, validarBody, async functio
     let contentType = request.headers['content-type']
 
     let ingresso = await controllerIngresso.inserirIngresso(dadosBody, contentType)
-    console.log(ingresso)
 
     response.status(ingresso.status_code)
     response.json(ingresso)

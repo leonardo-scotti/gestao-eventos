@@ -3,6 +3,9 @@
 import { inserirEvento } from "./conn/eventos.js"
 import { inserirEndereco } from "./conn/endereco.js"
 import { inserirIngresso } from "./conn/ingresso.js"
+import { lerEstados } from "./conn/estado.js"
+import { lerAssuntos } from "./conn/assunto.js"
+import { lerCategorias } from "./conn/categoria.js"
 import { protegerPagina, apenasOrganizador } from './components/guards.js';
 
 const inicio_organizador = document.getElementById('inicio-organizador')
@@ -104,9 +107,9 @@ async function PublicarEvento() {
     dados.append('hora_inicio', hora_de_inicio.value);
     dados.append('data_termino', data_termino.value);
     dados.append('hora_termino', hora_de_termino.value);
-    dados.append('id_categoria', categoria.value); 
+    dados.append('id_categoria', categoria.value);
     dados.append('id_assunto', assunto.value);
-    dados.append('is_visible', 'true'); 
+    dados.append('is_visible', 'true');
 
     if (banner_input.files.length > 0) {
         dados.append('banner', banner_input.files[0]);
@@ -116,9 +119,7 @@ async function PublicarEvento() {
 
     const evento = await inserirEvento(dados);
 
-    let idEvento = evento
-
-    console.log(idEvento)
+    const idEvento = evento.evento.id;
 
     //Endereço
 
@@ -131,9 +132,9 @@ async function PublicarEvento() {
         "cidade": `${cidade.value}`,
         "id_estado": estado.value,
         "id_evento": idEvento
-      }
+    }
 
-    let enderecoEnviado = await inserirEndereco(endereco)
+    let enderecoInserido = await inserirEndereco(endereco)
 
     //Ingresso
 
@@ -142,8 +143,62 @@ async function PublicarEvento() {
         "preco_unitario": `${valor_ingresso.value}`,
         "is_ativo": true,
         "id_evento": idEvento
-      }
+    }
 
-      let ingressoEnviado = await inserirIngresso(ingresso)
-    
+    let ingressoInserido = await inserirIngresso(ingresso)
+
 }
+
+async function BuscarEstados() {
+    let resposta = await lerEstados()
+    let estados = resposta.estados
+
+    if (Array.isArray(estados)) {
+        estados.forEach(element => {
+            if (element != null) {
+                let options = document.createElement('option')
+                options.value = element.id_estado
+                options.textContent = element.sigla
+                estado.appendChild(options)
+            }
+        });
+    }
+}
+
+async function BuscarAssuntos() {
+    let resposta = await lerAssuntos()
+    let assuntos = resposta.assuntos
+
+    if (Array.isArray(assuntos)) {
+        assuntos.forEach(element => {
+            if (element != null) {
+                let options = document.createElement('option')
+                options.value = element.id_assunto
+                options.textContent = element.nome
+                assunto.appendChild(options)
+            }
+        });
+    }
+}
+
+async function BuscarCategorias() {
+    let resposta = await lerCategorias()
+    let categorias = resposta.categorias
+
+    if (Array.isArray(categorias)) {
+        categorias.forEach(element => {
+            if (element != null) {
+                let options = document.createElement('option')
+                options.value = element.id_categoria
+                options.textContent = element.nome
+                categoria.appendChild(options)
+            }
+        });
+    }
+}
+
+
+
+BuscarEstados()
+BuscarCategorias()
+BuscarAssuntos()

@@ -16,11 +16,10 @@ export async function inserirEvento(event) {
         'method': 'POST',
         'body': event
     };
-
-    const response = await fetch(url, options)
-    const evento = await response.json();
-
-    return evento;
+    
+    const response = await fetch(url, options);
+    const result = await response.json();
+    return result;
 }
 
 export async function atualizarEvento(id, event) {
