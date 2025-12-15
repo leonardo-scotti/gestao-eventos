@@ -15,7 +15,6 @@ const fetch = require('node-fetch').default
 
 //Função para realizar o upload de arquivos no servidor da Azure
 const uploadFiles = async function(file){
-    console.log(file)
     //Configura os os tipos de dados aceitos na API
     let arrayAllowTypes = ['JPG', 'PNG', 'JPEG']
     //Recebe a extensão do arquivo
@@ -45,7 +44,6 @@ const uploadFiles = async function(file){
             body: file.buffer
         })
 
-        console.log(response)
         if(response.status == 201)
             return urlFile
         else
