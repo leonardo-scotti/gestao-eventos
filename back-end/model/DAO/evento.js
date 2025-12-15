@@ -209,7 +209,7 @@ const setUpdateEvent = async function (evento) {
 
         // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
-
+        
         if (result)
             return true
         else

@@ -593,7 +593,7 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
 
                         //Chama a função do DAO para atualizar um evento
                         let result = await eventoDAO.setUpdateEvent(evento)
-
+                        
                         if (result) {
 
                             if (Array.isArray(evento.cliente) && evento.cliente.length > 0) {

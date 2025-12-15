@@ -22,23 +22,32 @@ export async function loginCustomer(email, senha) {
         usuario: data.cliente
     }));
 
-    window.location.href = '../index.html';
+    window.location.href = './index.html';
 }
 
 export async function loginOrganizer(email, senha) {
-    const response = await fetch('http://localhost:3000/api/v1/unievent/login/organizador', {
+    const options = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ email, senha })
-    });
-
-    if (response.ok) {
-        sessionStorage.setItem('logado', 'true');
-        window.location.href = '/dashboard.html';
-    } else {
-        alert('Login inválido');
     }
+    const response = await fetch('http://localhost:8080/api/v1/unievent/login/organizador', options);
+
+    if (!response.ok) {
+        alert('Login inválido');
+        return;
+    }
+
+    const data = await response.json();
+
+    sessionStorage.setItem('auth', JSON.stringify({
+        logado: true,
+        tipo: 'organizador',
+        usuario: data.organizador
+    }));
+
+    window.location.href = './organizer.html';
 }
 
 export async function registerCustomer(customer) {
@@ -56,7 +65,7 @@ export async function registerCustomer(customer) {
         alert('Informações inválidas')
         return
     } else {
-        window.location.href = "../login.html"
+        window.location.href = "./login.html"
     }
 }
 
@@ -83,6 +92,8 @@ export function verificarLogin() {
     const auth = JSON.parse(sessionStorage.getItem('auth'));
 
     if (!auth || !auth.logado) {
-        window.location.replace('../login.html');
+        if (!window.location.pathname.includes('login.html')) {
+            window.location.replace('/login.html');
+        }
     }
 }
