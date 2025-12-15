@@ -68,6 +68,24 @@ const getSelectByIdAddress = async function (id) {
     }
 }
 
+const getSelectAddressByIdEvent = async function (idEvent) {
+    try {
+        //Script SQL
+        let sql = `select * from tbl_endereco where id_evento=${idEvent}`
+
+        //Executa no BD o script SQL
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        //Validação para identificar se o retorno do BD é um ARRAY (vazio ou com dados)
+        if (Array.isArray(result))
+            return result
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
 const getSelectLastIdAddress = async function () {
     try {
         //Script SQL
@@ -166,6 +184,7 @@ module.exports = {
     getSelectAllAddresses,
     getSelectAllCities,
     getSelectByIdAddress,
+    getSelectAddressByIdEvent,
     getSelectLastIdAddress,
     setInsertAddress,
     setUpdateAddress,
