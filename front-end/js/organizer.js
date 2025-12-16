@@ -94,7 +94,12 @@ banner_input.addEventListener('change', function () {
 })
 
 if (btn_public_event) {
-    btn_public_event.addEventListener('click', PublicarEvento)
+    btn_public_event.addEventListener('click', function () {
+        criar_ingresso_evento_organizador.classList.remove('active')
+        inicio_organizador.classList.add('active')
+        side_bar.style.display = 'flex'
+        PublicarEvento()
+    })
 }
 //Funções
 
@@ -122,7 +127,7 @@ async function PublicarEvento() {
 
     const eventoInserido = await inserirEvento(dados);
 
-    const idEvento = parseInt(evento.evento.id_evento)
+    const idEvento = parseInt(eventoInserido.evento.id_evento)
 
     //Endereço
 
@@ -298,7 +303,7 @@ async function ExibirMeusEventos() {
     }
 }
 
-//ExibirMeusEventos()
+ExibirMeusEventos()
 BuscarEstados()
 BuscarCategorias()
 BuscarAssuntos()
