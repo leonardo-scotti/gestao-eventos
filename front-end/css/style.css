@@ -513,9 +513,14 @@ main #evento.active {
     margin-top: 20%;
 }
 
-.container-fourth .info .date{
+.container-fourth .info .date-event{
     align-items: center;
     text-align: center;
+}
+
+.date-event p img {
+    width: 30px;
+    height: 30px;
 }
 
 .container-fourth .info h5 {
