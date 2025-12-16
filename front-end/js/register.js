@@ -32,19 +32,8 @@ form.addEventListener('submit', async (event) => {
         return;
     }
 
-    const generoInt = 0
     const genero = document.getElementById('genero');
-    const generoSelecionado = genero.value
-    console.log()
-    if(generoSelecionado == 'Feminino') {
-        generoInt = 1;
-    } else if(generoSelecionado == 'Masculino') {
-        generoInt = 2;
-    } else if(generoSelecionado == 'Outro') {
-        generoInt = 4;
-    } else if(generoSelecionado == 'Prefiro não informar') {
-        generoInt = 5;
-    }
+    const generoInt = genero.value
 
     if (selected.value === "customer") {
         const customer = {
