@@ -42,4 +42,6 @@ export async function paginaEvento(evento) {
 
     const eventHtml = document.getElementById('evento')
     eventHtml.classList.add('active')
+
+
 }

@@ -324,7 +324,6 @@ const excluirEventoPorCliente = async function (id) {
 
                 let result = await clienteEventoDAO.setDeleteByIdCustomersAndEventId(parseInt(id))
 
-                console.log(result)
                 if (result) {
                     const jsonResult = {
                         status: MESSAGE.SUCCESS_DELETED_ITEM.status,

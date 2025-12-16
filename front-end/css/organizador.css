@@ -12,10 +12,15 @@ main {
 }
 
 .side-bar {
+    position: fixed; 
+    top: 0;       
+    left: 0;       
+    height: 100vh;  
+    z-index: 1000; 
     display: flex;
     justify-content: center;
     align-items: center;
-    width: auto;
+    width: 200px;;
 }
 
 .organizador-section {
@@ -465,3 +470,13 @@ main #criar-ingresso-evento-organizador.active {
     font-size: 20px;
 }
 
+.status {
+    display: flex;
+}
+
+.icon-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%; 
+    margin-right: 8px; 
+}

@@ -60,7 +60,6 @@ export async function registerCustomer(customer) {
     }
 
     const response = await fetch(url, options)
-    console.log(response)
     if (!response.ok) {
         alert('Informações inválidas')
         return
@@ -102,7 +101,6 @@ export async function logout(type) {
         window.location.href = '../login.html';
 
     } catch (error) {
-        console.error('Erro ao fazer logout', error);
         alert('Erro ao sair da conta');
     }
 }

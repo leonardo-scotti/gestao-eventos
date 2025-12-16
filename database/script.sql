@@ -357,6 +357,20 @@ END$$
 
 DELIMITER ;
 
+DROP TRIGGER IF EXISTS trg_quebrar_constraint_evento_delete;
+
+DELIMITER $$
+
+CREATE TRIGGER trg_quebrar_constraint_evento_delete
+BEFORE DELETE ON tbl_evento
+FOR EACH ROW
+BEGIN
+    DELETE FROM tbl_endereco WHERE id_evento = OLD.id_evento;
+    DELETE FROM tbl_ingresso WHERE id_evento = OLD.id_evento;
+END$$
+
+DELIMITER ;
+
 DELIMITER $$
 -- 4.9. Validações de Cliente (Nascimento e Documento)
 CREATE PROCEDURE BuscarEventoPorCidade( IN cidadeEscolhida VARCHAR(150))
@@ -411,12 +425,12 @@ INSERT INTO tbl_assunto (nome) VALUES
 ('Esportes e Lazer'),
 ('Gastronomia');
 
-INSERT INTO tbl_categoria (nome) VALUES 
-('Congressos e Seminários'),
-('Shows e Festivais'),
-('Workshops e Cursos'),
-('Eventos Esportivos'),
-('Feiras e Exposições');
+INSERT INTO tbl_categoria (nome, icone) VALUES 
+('Congressos e Seminários', 'banner.jpg'),
+('Shows e Festivais', 'banner.jpg'),
+('Workshops e Cursos', 'banner.jpg'),
+('Eventos Esportivos', 'banner.jpg'),
+('Feiras e Exposições', 'banner.jpg');
 
 INSERT INTO tbl_estado (sigla) VALUES 
 ('SP'), ('RJ'), ('MG'), ('BA'), ('RS');
