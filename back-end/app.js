@@ -12,7 +12,11 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const multer = require('multer')
 const path = require('path');
+<<<<<<< HEAD
 const fs = require('fs'); 
+=======
+const fs = require('fs');
+>>>>>>> aaf76393568edbdcbd081a6a8888933542ae46c4
 
 // Inicializa o Multer com a configuração de armazenamento
 const upload = multer();
@@ -390,7 +394,7 @@ app.get('/api/v1/unievent/cidade/evento/', async function (request, response) {
     let cidade = request.query.cidade
 
     let evento = await controllerEvento.buscarEventosPelaCidade(cidade)
-    
+
     response.status(evento.status_code)
     response.json(evento)
 
@@ -400,7 +404,7 @@ app.get('/api/v1/unievent/cidade/evento/', async function (request, response) {
 app.get('/api/v1/unievent/dia/evento/', async function (request, response) {
 
     let evento = await controllerEvento.buscarEventosDeHoje()
-    
+
     response.status(evento.status_code)
     response.json(evento)
 
