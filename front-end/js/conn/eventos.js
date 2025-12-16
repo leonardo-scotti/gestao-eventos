@@ -16,10 +16,15 @@ export async function inserirEvento(event) {
         'method': 'POST',
         'body': event
     };
-    
-    const response = await fetch(url, options);
-    const result = await response.json();
-    return result;
+
+    const response = await fetch(url, options)
+
+    if (response.ok) {
+        return response.ok;
+    } else {
+        alert("Problemas no cadastro do evento!")
+    }
+
 }
 
 export async function atualizarEvento(id, event) {
