@@ -18,7 +18,7 @@ export async function inserirEvento(event) {
     };
 
     const response = await fetch(url, options)
-    console.log(response)
+
     if (response.ok) {
         return response.ok;
     } else {
