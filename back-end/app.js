@@ -12,21 +12,10 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const multer = require('multer')
 const path = require('path');
-const fs = require('fs'); 
-
-//Configuração do diskmanager para o MULTER
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, 'uploads')); 
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, uniqueSuffix + '-' + file.originalname)
-    }
-});
+const fs = require('fs');
 
 // Inicializa o Multer com a configuração de armazenamento
-const upload = multer({ storage: storage });
+const upload = multer();
 
 //Define a porta padrão da API, se for em um servidor de nuvem não temos acesso a porta
 // em execução local podemos definir uma porta livre
@@ -401,7 +390,7 @@ app.get('/api/v1/unievent/cidade/evento/', async function (request, response) {
     let cidade = request.query.cidade
 
     let evento = await controllerEvento.buscarEventosPelaCidade(cidade)
-    
+
     response.status(evento.status_code)
     response.json(evento)
 
@@ -411,7 +400,7 @@ app.get('/api/v1/unievent/cidade/evento/', async function (request, response) {
 app.get('/api/v1/unievent/dia/evento/', async function (request, response) {
 
     let evento = await controllerEvento.buscarEventosDeHoje()
-    
+
     response.status(evento.status_code)
     response.json(evento)
 

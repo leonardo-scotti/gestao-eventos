@@ -1,6 +1,6 @@
 'use strict';
 
-import { protegerPagina, apenasCliente } from './components/guards.js';
+import { protegerPagina } from './components/guards.js';
 import { logout, getAuth } from "./auth.js";
 
 protegerPagina();

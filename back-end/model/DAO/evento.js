@@ -146,8 +146,6 @@ const getSelectAllEventsToday = async function () {
     }
 }
 
-
-
 //Insere um evento no banco de dados
 const setInsertEvent = async function (evento) {
     try {
@@ -209,7 +207,7 @@ const setUpdateEvent = async function (evento) {
 
         // $executeRawUnsafe() -> Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
-        
+
         if (result)
             return true
         else
