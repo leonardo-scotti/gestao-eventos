@@ -246,7 +246,7 @@ const buscarEventosPelaCidade = async function (cidade) {
             let result = await eventoDAO.getSelectEventByCity(cidade)
 
             if (result == null) {
-                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ESTADO] invalido!!!'
+                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CIDADE] invalido!!!'
                 return MESSAGE.ERROR_REQUIRED_FIELDS //400
             }
 
@@ -331,7 +331,6 @@ const buscarEventosDeHoje = async function () {
     try {
 
         let result = await eventoDAO.getSelectAllEventsToday()
-        console.log(result)
         if (result) {
             for (let evento of result) {
 
@@ -405,7 +404,6 @@ const buscarEventosDeHoje = async function () {
             }
             return jsonResult //200
         } else {
-            console.log(result)
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) {
@@ -418,10 +416,8 @@ const inserirEvento = async function (evento, contentType, banner) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
-        // Validação de Content-Type
         if (String(contentType).toLowerCase().includes('multipart/form-data')) {
 
-            // Converte IDs e Números
             if (evento.id_assunto) evento.id_assunto = Number(evento.id_assunto);
             if (evento.id_categoria) evento.id_categoria = Number(evento.id_categoria);
             if (evento.quantidade_ingresso) evento.quantidade_ingresso = Number(evento.quantidade_ingresso);
@@ -439,7 +435,7 @@ const inserirEvento = async function (evento, contentType, banner) {
                     }
                 }
             } else {
-                evento.cliente = []; // Garante array vazio se não vier nada
+                evento.cliente = [];
             }
 
             if (evento.organizador) {
@@ -451,10 +447,9 @@ const inserirEvento = async function (evento, contentType, banner) {
                     }
                 }
             } else {
-                evento.organizador = []; // Garante array vazio se não vier nada
+                evento.organizador = [];
             }
 
-            //Upload da Imagem
             let urlFoto = await UPLOAD.uploadFiles(banner)
 
             if (urlFoto) {
@@ -465,7 +460,6 @@ const inserirEvento = async function (evento, contentType, banner) {
 
                 if (!validarDados) {
 
-                    // Insere o Evento Principal no Banco
                     let result = await eventoDAO.setInsertEvent(evento)
 
                     if (result) {
@@ -499,47 +493,50 @@ const inserirEvento = async function (evento, contentType, banner) {
                                 }
                             }
 
-                            evento.id_evento = lastIdEvento
+                            // BUSCA O EVENTO RECÉM-CRIADO E FORMATADO (IGUAL AO GET)
+                            let eventoFormatado = await buscarEventoId(lastIdEvento);
 
-                            const jsonResult = {
-                                status: MESSAGE.SUCCESS_CREATED_ITEM.status,
-                                status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
-                                developments: MESSAGE.HEADER.developments,
-                                message: MESSAGE.SUCCESS_CREATED_ITEM.message,
-                                evento: evento
+                            if (eventoFormatado.status_code === 200) {
+                                const jsonResult = {
+                                    status: MESSAGE.SUCCESS_CREATED_ITEM.status,
+                                    status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
+                                    developments: MESSAGE.HEADER.developments,
+                                    message: MESSAGE.SUCCESS_CREATED_ITEM.message,
+                                    evento: eventoFormatado.evento
+                                }
+                                return jsonResult
+                            } else {
+                                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                             }
-                            return jsonResult // Retorna 201 Created
 
                         } else {
-                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
+                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                         }
                     } else {
-                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                     }
                 } else {
-                    return validarDados // Retorna 400 (Erro de validação)
+                    return validarDados
                 }
             } else {
-                return MESSAGE.ERROR_UPLOADED_FILE // 415 ou erro de arquivo
+                return MESSAGE.ERROR_UPLOADED_FILE
             }
         } else {
-            return MESSAGE.ERROR_CONTENT_TYPE // 415
+            return MESSAGE.ERROR_CONTENT_TYPE
         }
     } catch (error) {
-        console.log(error)
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 
 //Atualiza um evento filtrando pelo ID
 const atualizarEvento = async function (evento, id, contentType, banner) {
 
-    //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
-    //não interfiram em outras funções
+    //Realizando uma cópia do objeto MESSAGE_DEFAULT
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
-        //Validação do content-type
+        // Validação do content-type
         if (String(contentType).toLowerCase().includes('multipart/form-data')) {
 
             // Converte IDs e Números
@@ -551,6 +548,7 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
             if (evento.is_visible === 'true') evento.is_visible = true;
             if (evento.is_visible === 'false') evento.is_visible = false;
 
+            // Tratamento do array de clientes
             if (evento.cliente) {
                 if (typeof evento.cliente === 'string') {
                     try {
@@ -560,9 +558,10 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
                     }
                 }
             } else {
-                evento.cliente = []; // Garante array vazio se não vier nada
+                evento.cliente = [];
             }
 
+            // Tratamento do array de organizadores
             if (evento.organizador) {
                 if (typeof evento.organizador === 'string') {
                     try {
@@ -572,34 +571,33 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
                     }
                 }
             } else {
-                evento.organizador = []; // Garante array vazio se não vier nada
+                evento.organizador = [];
             }
 
+            // 1. Upload e Atualização do Banner
             let urlFoto = await UPLOAD.uploadFiles(banner)
             if (urlFoto) {
-
                 let urlLimpa = urlFoto.split('?')[0];
                 evento.banner = urlLimpa;
-
-                //Chama a função de validação dos dados de cadastro
+                
+                // 2. Validação dos Dados
                 let validarDados = await validarDadosEvento(evento)
 
                 if (!validarDados) {
 
-                    //Chama a função para validar a consistencia do ID e verificar se existe no BD
+                    // 3. Validação do ID (Existência)
                     let validarID = await buscarEventoId(id)
 
-                    //Verifica se o ID existe no BD, caso exista teremos o status 200
                     if (validarID.status_code == 200) {
 
-                        //Adicionando o ID no JSON com os dados do evento
                         evento.id = parseInt(id)
 
-                        //Chama a função do DAO para atualizar um evento
+                        // 4. Chamada principal de UPDATE
                         let result = await eventoDAO.setUpdateEvent(evento)
 
                         if (result) {
-
+                            await controllerClienteEvento.excluirEventoPorCliente(evento.id);
+                            
                             if (Array.isArray(evento.cliente) && evento.cliente.length > 0) {
                                 for (let cliente of evento.cliente) {
                                     if (cliente.id) {
@@ -607,11 +605,13 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
                                             id_evento: evento.id,
                                             id_cliente: cliente.id
                                         }
-                                        let resultCliente = await controllerClienteEvento.inserirClienteEvento(clienteEvento, 'application/json');
-
+                                        await controllerClienteEvento.inserirClienteEvento(clienteEvento, 'application/json'); 
                                     }
                                 }
                             }
+
+                            await controllerOrganizadorEvento.excluirOrganizadorEvento(evento.id);
+
                             if (Array.isArray(evento.organizador) && evento.organizador.length > 0) {
                                 for (let organizador of evento.organizador) {
                                     if (organizador.id) {
@@ -619,42 +619,48 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
                                             id_evento: evento.id,
                                             id_organizador: organizador.id
                                         }
-                                        let resultOrganizador = await controllerOrganizadorEvento.inserirOrganizadorEvento(organizadorEvento, 'application/json');
-
+                                        // Não precisamos aguardar o resultado de cada inserção (Pode ser otimizado)
+                                        await controllerOrganizadorEvento.inserirOrganizadorEvento(organizadorEvento, 'application/json');
                                     }
                                 }
                             }
 
-                            const jsonResult = {
-                                status: MESSAGE.SUCCESS_UPDATED_ITEM.status,
-                                status_code: MESSAGE.SUCCESS_UPDATED_ITEM.status_code,
-                                developments: MESSAGE.HEADER.developments,
-                                message: MESSAGE.SUCCESS_UPDATED_ITEM.message,
-                                evento: evento
+                            let eventoFormatado = await buscarEventoId(evento.id);
+
+                            if (eventoFormatado.status_code === 200) {
+                                // 6. Retorno de Sucesso (Status 200/201)
+                                const jsonResult = {
+                                    status: MESSAGE.SUCCESS_UPDATED_ITEM.status,
+                                    status_code: MESSAGE.SUCCESS_UPDATED_ITEM.status_code,
+                                    developments: MESSAGE.HEADER.developments,
+                                    message: MESSAGE.SUCCESS_UPDATED_ITEM.message,
+                                    evento: eventoFormatado.evento // Retorna o objeto formatado!
+                                }
+                                return jsonResult // 200
+                            } else {
+                                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                             }
-
-                            return jsonResult //200
-
                         } else {
-                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
                         }
                     } else {
-                        return validarID //Retorno da função de buscareventoId (400 ou 404 ou 500)
+                        // Erro de ID não encontrado (400/404)
+                        return validarID 
                     }
                 } else {
-                    return validarDados //Retorno da função de validar dados do Gênero 400
+                    // Erro de validação de dados (400)
+                    return validarDados 
                 }
             } else {
-                return MESSAGE.ERROR_UPLOADED_FILE
+                // Erro de upload de arquivo
+                return MESSAGE.ERROR_UPLOADED_FILE // 400
             }
         } else {
-            return MESSAGE.ERROR_CONTENT_TYPE //415
+            return MESSAGE.ERROR_CONTENT_TYPE // 415
         }
-
     } catch (error) {
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
-
 }
 
 //Apaga uma evento filtrando pelo ID

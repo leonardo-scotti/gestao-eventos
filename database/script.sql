@@ -425,12 +425,12 @@ INSERT INTO tbl_assunto (nome) VALUES
 ('Esportes e Lazer'),
 ('Gastronomia');
 
-INSERT INTO tbl_categoria (nome) VALUES 
-('Congressos e Seminários'),
-('Shows e Festivais'),
-('Workshops e Cursos'),
-('Eventos Esportivos'),
-('Feiras e Exposições');
+INSERT INTO tbl_categoria (nome, icone) VALUES 
+('Congressos e Seminários', 'banner.jpg'),
+('Shows e Festivais', 'banner.jpg'),
+('Workshops e Cursos', 'banner.jpg'),
+('Eventos Esportivos', 'banner.jpg'),
+('Feiras e Exposições', 'banner.jpg');
 
 INSERT INTO tbl_estado (sigla) VALUES 
 ('SP'), ('RJ'), ('MG'), ('BA'), ('RS');

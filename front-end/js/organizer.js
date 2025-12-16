@@ -122,11 +122,7 @@ async function PublicarEvento() {
 
     const eventoInserido = await inserirEvento(dados);
 
-    const eventos = await lerEventos();
-
-    const evento = eventos.eventos[0]
-
-    const idEvento = evento.id_evento;
+    const idEvento = parseInt(evento.evento.id_evento)
 
     //Endereço
 
