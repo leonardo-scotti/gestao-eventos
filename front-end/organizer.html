@@ -351,14 +351,15 @@
                                     <label for="estado">Estado</label>
                                     <select id="estado" name="estado">
                                         <option value="" disabled selected>Selecione...</option>
-                                        <option value="sp">São Paulo</option>
-                                        <option value="rj">Rio de Janeiro</option>
-                                        <option value="ce">Ceará</option>
                                     </select>
                                 </div>
                                 <div class="input">
                                     <label for="rua">Rua</label>
                                     <input type="text" id="rua">
+                                </div>
+                                <div class="input">
+                                    <label for="cidade">Cidade</label>
+                                    <input type="text" id="cidade">
                                 </div>
                                 <div class="input">
                                     <label for="numero_do_endereco">Número do endereço</label>
@@ -376,18 +377,12 @@
                                     <label for="categoria">Categoria</label>
                                     <select id="categoria" name="categoria">
                                         <option value="" disabled selected>Selecione...</option>
-                                        <option value="1">Sociais</option>
-                                        <option value="2">Corporativos</option>
-                                        <option value="3">Acadêmicos</option>
                                     </select>
                                 </div>
                                 <div class="input">
                                     <label for="assunto">Assunto</label>
                                     <select id="assunto" name="assunto">
                                         <option value="" disabled selected>Selecione...</option>
-                                        <option value="1">Sociais</option>
-                                        <option value="2">Corporativos</option>
-                                        <option value="3">Acadêmicos</option>
                                     </select>
                                 </div>
                                 <div class="uploud">
@@ -423,11 +418,6 @@
                                     <label for="valor_ingresso">Valor do Ingresso</label>
                                     <input type="number" id="valor_ingresso">
                                 </div>
-                                <div class="input">
-                                    <label for="descricao_ingresso">Descrição do Ingresso</label>
-                                    <textarea id="descricao_ingresso"></textarea>
-                                </div>
-
                                 <div class="buttons">
                                     <div class="button-public">
                                         <button type="button" class="button-public" id="btn-public">Publicar Evento</button>

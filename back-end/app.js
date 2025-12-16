@@ -12,7 +12,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const multer = require('multer')
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs'); 
 
 // Inicializa o Multer com a configuração de armazenamento
 const upload = multer();
@@ -422,7 +422,7 @@ app.post('/api/v1/unievent/evento', upload.single('banner'), async function (req
 
 })
 
-app.put('/api/v1/unievent/evento/:id', validarBody, upload.single('banner'), async function (request, response) {
+app.put('/api/v1/unievent/evento/:id', upload.single('banner'), async function (request, response) {
 
     dadosBody = request.body
 

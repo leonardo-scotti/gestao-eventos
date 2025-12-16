@@ -11,11 +11,10 @@
 const AZURE = require('../modulo/config_upload_azure.js')
 
 //Import da biblioteca para fazer requisições pelo Back-end
-//const fetch = require('node-fetch').default
+const fetch = require('node-fetch').default
 
 //Função para realizar o upload de arquivos no servidor da Azure
-const uploadFiles = async function (file) {
-
+const uploadFiles = async function(file){
     //Configura os os tipos de dados aceitos na API
     let arrayAllowTypes = ['JPG', 'PNG', 'JPEG']
     //Recebe a extensão do arquivo
@@ -24,16 +23,16 @@ const uploadFiles = async function (file) {
     let lengthFile = Number(file.size) / 1024
 
     //Validação do tipo de extensão e do tamanho do arquivo
-    if (arrayAllowTypes.indexOf(mimeType) != -1 && lengthFile.toFixed(1) <= 50000) {
+    if(arrayAllowTypes.indexOf(mimeType) != -1 && lengthFile.toFixed(1) <= 50000){
 
         //Cria o nome do arquivo com a data e hora atual
         let fileName = Date.now() + file.originalname
 
         //URL para realizar a requisição para o servidor da AZURE
-        let urlFile = `https://${AZURE.ACCOUNT}.blob.core.windows.net/${AZURE.CONTAINER}/${fileName}`
+        let urlFile         = `https://${AZURE.ACCOUNT}.blob.core.windows.net/${AZURE.CONTAINER}/${fileName}`
 
         //URL do arquivo + token de autenticação
-        let urlFileToken = `${urlFile}?${AZURE.TOKEN}`
+        let urlFileToken    = `${urlFile}?${AZURE.TOKEN}`
 
         //Realiza a requisição no servidor da AZURE e encaminha no body o file
         let response = await fetch(urlFileToken, {
@@ -45,39 +44,13 @@ const uploadFiles = async function (file) {
             body: file.buffer
         })
 
-        if (response.status == 201)
+        if(response.status == 201)
             return urlFile
         else
             return false
-    } else {
+    }else{
         return false
     }
 }
 
-const deleteFileByUrl = async function (fullUrl) {
-
-    let urlToDelete = fullUrl
-
-    if (!fullUrl.includes('?')) {
-        urlToDelete = `${fullUrl}?${AZURE.TOKEN}`
-    }
-
-    try {
-        let response = await fetch(urlToDelete, {
-            method: 'DELETE',
-            headers: {
-                'x-ms-date': new Date().toUTCString()
-            }
-        })
-
-        if (response.status === 202) {
-            return true
-        } else {
-            return false
-        }
-    } catch (error) {
-        return false
-    }
-}
-
-module.exports = { uploadFiles, deleteFileByUrl }
+module.exports = {uploadFiles}

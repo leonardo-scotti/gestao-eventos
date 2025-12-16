@@ -499,11 +499,14 @@ const inserirEvento = async function (evento, contentType, banner) {
                                 }
                             }
 
+                            evento.id_evento = lastIdEvento
+
                             const jsonResult = {
                                 status: MESSAGE.SUCCESS_CREATED_ITEM.status,
                                 status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
                                 developments: MESSAGE.HEADER.developments,
-                                message: MESSAGE.SUCCESS_CREATED_ITEM.message
+                                message: MESSAGE.SUCCESS_CREATED_ITEM.message,
+                                evento: evento
                             }
                             return jsonResult // Retorna 201 Created
 
@@ -523,6 +526,7 @@ const inserirEvento = async function (evento, contentType, banner) {
             return MESSAGE.ERROR_CONTENT_TYPE // 415
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
 }
@@ -626,6 +630,7 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
                                 status_code: MESSAGE.SUCCESS_UPDATED_ITEM.status_code,
                                 developments: MESSAGE.HEADER.developments,
                                 message: MESSAGE.SUCCESS_UPDATED_ITEM.message,
+                                evento: evento
                             }
 
                             return jsonResult //200

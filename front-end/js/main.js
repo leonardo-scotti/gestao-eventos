@@ -11,7 +11,7 @@ apenasCliente();
 async function criarEventosHoje() {
     const container = document.getElementById('events');
     const response = await lerEventos();
-
+    console.log(response)
     for (let i = 0; i <= 5; i++) {
         const evento = criarCardEvento(response.eventos[i]);
         container.appendChild(evento);
