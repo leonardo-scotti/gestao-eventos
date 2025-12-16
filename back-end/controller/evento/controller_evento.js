@@ -499,7 +499,7 @@ const inserirEvento = async function (evento, contentType, banner) {
                                 }
                             }
 
-                            evento.id = lastIdEvento
+                            evento.id_evento = lastIdEvento
 
                             const jsonResult = {
                                 status: MESSAGE.SUCCESS_CREATED_ITEM.status,

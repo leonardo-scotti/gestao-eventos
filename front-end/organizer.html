@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/organizador.css">
-    <script type="module" src="./js/organizer.js" defer></script>
+    <script type="module" src="./js/organizer.js" defer type="module"></script>
     <title>Uni.Event</title>
 </head>
 
@@ -15,7 +15,7 @@
         <header>
             <nav>
                 <div class="logo">
-                    <a href="index.html"><img src="./assets/icons/logo.svg" alt="Uni.Event"></a>
+                    <a href="organizer.html"><img src="./assets/icons/logo.svg" alt="Uni.Event"></a>
                 </div>
                 <div class="user-area">
                     <button id="small-menu" on><img src="./assets/icons/small-menu.svg" alt="Menu de Opções"></button>
@@ -24,7 +24,7 @@
                 <menu id="menu">
                     <li><a href="#"><img src="./assets/icons/user.svg" alt="Minha Conta">Minha Conta</a></li>
                     <li><a href="#"><img src="./assets/icons/events.svg" alt="Meus Eventos">Meus Eventos</a></li>
-                    <li><a href="#"><img src="./assets/icons/logout.svg" alt="Sair">Sair</a></li>
+                    <li id="logout"><a href="#"><img src="./assets/icons/logout.svg" alt="Sair">Sair</a></li>
                 </menu>
                 <script src="./js/components/header.js"></script>
             </nav>
@@ -418,11 +418,6 @@
                                     <label for="valor_ingresso">Valor do Ingresso</label>
                                     <input type="number" id="valor_ingresso">
                                 </div>
-                                <div class="input">
-                                    <label for="descricao_ingresso">Descrição do Ingresso</label>
-                                    <textarea id="descricao_ingresso"></textarea>
-                                </div>
-
                                 <div class="buttons">
                                     <div class="button-public">
                                         <button type="button" class="button-public" id="btn-public">Publicar Evento</button>

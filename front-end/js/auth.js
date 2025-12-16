@@ -60,6 +60,25 @@ export async function registerCustomer(customer) {
     }
 
     const response = await fetch(url, options)
+    console.log(response)
+    if (!response.ok) {
+        alert('Informações inválidas')
+        return
+    } else {
+        window.location.href = "./login.html"
+    }
+}
+
+export async function registerEnterprise(enterprise) {
+    const url = `http://localhost:8080/api/v1/unievent/organizador`
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(enterprise)
+    }
+
+    const response = await fetch(url, options)
 
     if (!response.ok) {
         alert('Informações inválidas')
@@ -96,4 +115,9 @@ export function verificarLogin() {
             window.location.replace('/login.html');
         }
     }
+}
+
+export function getAuth() {
+    const auth = sessionStorage.getItem('auth');
+    return auth ? JSON.parse(auth) : null;
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-import { verificarLogin } from '../auth.js';
+import { verificarLogin, getAuth } from '../auth.js';
 
 export function protegerPagina() {
     verificarLogin();

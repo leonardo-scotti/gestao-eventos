@@ -7,6 +7,7 @@ import { lerEstados } from "./conn/estado.js"
 import { lerAssuntos } from "./conn/assunto.js"
 import { lerCategorias } from "./conn/categoria.js"
 import { protegerPagina, apenasOrganizador } from './components/guards.js';
+import { logout } from "./auth.js";
 
 const inicio_organizador = document.getElementById('inicio-organizador')
 const dashboard_organizador = document.getElementById('dashboard-organizador')
@@ -47,7 +48,6 @@ const assunto = document.getElementById('assunto')
 const banner = document.getElementById('banner')
 
 const nome_ingresso = document.getElementById('nome_ingresso')
-const descricao_ingresso = document.getElementById('descricao_ingresso')
 const quantidade_ingresso = document.getElementById('quantidade_ingresso')
 const valor_ingresso = document.getElementById('valor_ingresso')
 
@@ -119,7 +119,7 @@ async function PublicarEvento() {
 
     const evento = await inserirEvento(dados);
 
-    const idEvento = evento.evento.id;
+    const idEvento = evento.evento.id_evento;
 
     //Endereço
 
@@ -202,3 +202,12 @@ async function BuscarCategorias() {
 BuscarEstados()
 BuscarCategorias()
 BuscarAssuntos()
+
+
+const sair = document.getElementById('logout')
+sair.addEventListener('click', async (event) => {
+    await logout('cliente')
+})
+
+protegerPagina()
+apenasOrganizador()
