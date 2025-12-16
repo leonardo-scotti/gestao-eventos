@@ -135,7 +135,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseCreate'
+                $ref: '#/components/schemas/RespostaPostEvento' # <-- ALTERADO
     put:
       tags: [Evento]
       summary: Atualizar Evento
@@ -156,6 +156,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseUpdate'
+  /cidade/evento: # <-- NOVO ENDPOINT
+    get:
+      tags: [Evento]
+      summary: Buscar Evento Pela Cidade
+      description: Retorna uma lista de eventos filtrados pelo nome da cidade (via query parameter).
+      operationId: buscarEventosPorCidade
+      parameters:
+        - name: cidade
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Nome da cidade para filtrar os eventos.
+          example: São Paulo
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespostaBuscaEventos'
+  /hoje/evento: # <-- NOVO ENDPOINT
+    get:
+      tags: [Evento]
+      summary: Buscar Eventos Pelo Dia de Hoje
+      description: Retorna uma lista de eventos que estão ocorrendo ou começando no dia atual.
+      operationId: buscarEventosDeHoje
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespostaBuscaEventos'
   /categorias:
     get:
       tags: [Categoria]
@@ -916,7 +950,7 @@ components:
       properties:
         id_cliente: { type: integer, example: 5 }
         nome: { type: string, example: "Diana Ferreira" }
-    OrganizadorResumo:
+    OrganizadorSimples: # Renomeado de OrganizadorResumo para reuso
       type: object
       properties:
         id_organizador: { type: integer, example: 5 }
@@ -963,7 +997,7 @@ components:
         organizadores:
           type: array
           items:
-            $ref: '#/components/schemas/OrganizadorResumo'
+            $ref: '#/components/schemas/OrganizadorSimples'
         dataRealizacao:
           $ref: '#/components/schemas/DataRealizacao'
     CategoriaResponseObject:
@@ -1296,8 +1330,8 @@ components:
           items:
             type: object
             properties:
-               id: { type: integer, example: 8 }
-               quantidade: { type: integer, example: 20 }
+              id: { type: integer, example: 8 }
+              quantidade: { type: integer, example: 20 }
     GeneroRequest:
       type: object
       properties:
@@ -1328,3 +1362,98 @@ components:
         cidade: { type: string, example: "São Paulo" }
         id_estado: { type: integer, example: 2 }
         id_evento: { type: integer, example: 2 }
+    # Schemas para o novo POST /evento
+    RespostaPostEvento:
+      type: object
+      properties:
+        status: { type: boolean, example: true }
+        status_code: { type: integer, example: 201 }
+        developments: { type: string, example: "Vitor Miguel Rodrigues Cezario" }
+        message: { type: string, example: "Requisição bem sucedida, objeto criado com sucesso !!!" }
+        evento:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventoResponsePost'
+      required:
+        - status
+        - status_code
+        - message
+        - evento
+    EventoResponsePost:
+      type: object
+      properties:
+        id_evento: { type: integer, example: 21 }
+        nome: { type: string, example: "Tech Summit São Paulo 2024" }
+        descricao: { type: string, example: "O maior evento de inovação..." }
+        data_inicio: { type: string, example: "15/07/2025" }
+        hora_inicio: { type: string, example: "09:00" }
+        data_termino: { type: string, example: "25/07/2025" }
+        hora_termino: { type: string, example: "18:00" }
+        banner: { type: string, format: url, example: "https://nuvemsenai.blob.core.windows.net/uploudimagens/..." }
+        quantidade_ingresso: { type: integer, example: 500 }
+        quantidade_ingresso_comprado: { type: integer, example: 0 }
+        is_visible: { type: integer, example: 1 }
+        categoria: { type: string, example: "Shows e Festivais" }
+        assunto: { type: string, example: "Gastronomia" }
+        organizadores:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizadorSimples'
+        dataRealizacao:
+          $ref: '#/components/schemas/DataRealizacao'
+    # Schemas para a nova busca de eventos
+    ClienteSimples:
+      type: object
+      properties:
+        id_cliente: { type: integer, example: 1 }
+        nome: { type: string, example: "Ana Silva" }
+    EnderecoBusca:
+      type: object
+      properties:
+        id_endereco: { type: integer, example: 1 }
+        cep: { type: string, example: "01001-000" }
+        logradouro: { type: string, example: "Av. Paulista" }
+        complemento: { type: string, nullable: true, example: "Próximo ao metrô" }
+        numero: { type: string, example: "1500" }
+        bairro: { type: string, example: "Bela Vista" }
+        cidade: { type: string, example: "São Paulo" }
+        estado: { type: string, example: "SP" }
+    EventoBuscaObject:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        nome: { type: string, example: "Tech Summit 2026" }
+        banner: { type: string, example: "banner_tech.jpg" }
+        assunto: { type: string, example: "Tecnologia e Inovação" }
+        categoria: { type: string, example: "Congressos e Seminários" }
+        descricao: { type: string, example: "Conferência sobre IA e desenvolvimento." }
+        is_visible: { type: integer, example: 1 }
+        data_inicio: { type: string, example: "10/03/2026" }
+        hora_inicio: { type: string, example: "09:00" }
+        data_termino: { type: string, example: "12/03/2026" }
+        hora_termino: { type: string, example: "18:00" }
+        quantidade_ingresso: { type: integer, example: 500 }
+        quantidade_ingresso_comprado: { type: integer, example: 52 }
+        clientes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClienteSimples'
+        organizadores:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizadorSimples'
+        dataRealizacao:
+          $ref: '#/components/schemas/DataRealizacao'
+        endereco:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnderecoBusca'
+    RespostaBuscaEventos:
+      allOf:
+        - $ref: '#/components/schemas/ResponseGenericMessage'
+        - type: object
+          properties:
+            evento:
+              type: array
+              items:
+                $ref: '#/components/schemas/EventoBuscaObject'

@@ -331,7 +331,6 @@ const buscarEventosDeHoje = async function () {
     try {
 
         let result = await eventoDAO.getSelectAllEventsToday()
-        console.log(result)
         if (result) {
             for (let evento of result) {
 
@@ -405,7 +404,6 @@ const buscarEventosDeHoje = async function () {
             }
             return jsonResult //200
         } else {
-            console.log(result)
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) {
@@ -418,10 +416,8 @@ const inserirEvento = async function (evento, contentType, banner) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
-        // Validação de Content-Type
         if (String(contentType).toLowerCase().includes('multipart/form-data')) {
 
-            // Converte IDs e Números
             if (evento.id_assunto) evento.id_assunto = Number(evento.id_assunto);
             if (evento.id_categoria) evento.id_categoria = Number(evento.id_categoria);
             if (evento.quantidade_ingresso) evento.quantidade_ingresso = Number(evento.quantidade_ingresso);
@@ -439,7 +435,7 @@ const inserirEvento = async function (evento, contentType, banner) {
                     }
                 }
             } else {
-                evento.cliente = []; // Garante array vazio se não vier nada
+                evento.cliente = [];
             }
 
             if (evento.organizador) {
@@ -451,10 +447,9 @@ const inserirEvento = async function (evento, contentType, banner) {
                     }
                 }
             } else {
-                evento.organizador = []; // Garante array vazio se não vier nada
+                evento.organizador = [];
             }
 
-            //Upload da Imagem
             let urlFoto = await UPLOAD.uploadFiles(banner)
 
             if (urlFoto) {
@@ -465,7 +460,6 @@ const inserirEvento = async function (evento, contentType, banner) {
 
                 if (!validarDados) {
 
-                    // Insere o Evento Principal no Banco
                     let result = await eventoDAO.setInsertEvent(evento)
 
                     if (result) {
@@ -499,35 +493,39 @@ const inserirEvento = async function (evento, contentType, banner) {
                                 }
                             }
 
-                            evento.id_evento = lastIdEvento
+                            // BUSCA O EVENTO RECÉM-CRIADO E FORMATADO (IGUAL AO GET)
+                            let eventoFormatado = await buscarEventoId(lastIdEvento);
 
-                            const jsonResult = {
-                                status: MESSAGE.SUCCESS_CREATED_ITEM.status,
-                                status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
-                                developments: MESSAGE.HEADER.developments,
-                                message: MESSAGE.SUCCESS_CREATED_ITEM.message,
-                                evento: evento
+                            if (eventoFormatado.status_code === 200) {
+                                const jsonResult = {
+                                    status: MESSAGE.SUCCESS_CREATED_ITEM.status,
+                                    status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
+                                    developments: MESSAGE.HEADER.developments,
+                                    message: MESSAGE.SUCCESS_CREATED_ITEM.message,
+                                    evento: eventoFormatado.evento
+                                }
+                                return jsonResult
+                            } else {
+                                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                             }
-                            return jsonResult // Retorna 201 Created
 
                         } else {
-                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
+                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                         }
                     } else {
-                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                     }
                 } else {
-                    return validarDados // Retorna 400 (Erro de validação)
+                    return validarDados
                 }
             } else {
-                return MESSAGE.ERROR_UPLOADED_FILE // 415 ou erro de arquivo
+                return MESSAGE.ERROR_UPLOADED_FILE
             }
         } else {
-            return MESSAGE.ERROR_CONTENT_TYPE // 415
+            return MESSAGE.ERROR_CONTENT_TYPE
         }
     } catch (error) {
-        console.log(error)
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 
