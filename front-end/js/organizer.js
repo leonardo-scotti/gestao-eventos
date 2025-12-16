@@ -7,6 +7,7 @@ import { lerEstados } from "./conn/estado.js"
 import { lerAssuntos } from "./conn/assunto.js"
 import { lerCategorias } from "./conn/categoria.js"
 import { protegerPagina, apenasOrganizador } from './components/guards.js';
+import { logout } from "./auth.js";
 
 const inicio_organizador = document.getElementById('inicio-organizador')
 const dashboard_organizador = document.getElementById('dashboard-organizador')
@@ -202,3 +203,10 @@ async function BuscarCategorias() {
 BuscarEstados()
 BuscarCategorias()
 BuscarAssuntos()
+const sair = document.getElementById('logout')
+sair.addEventListener('click', async (event) => {
+    await logout('cliente')
+})
+
+protegerPagina()
+apenasOrganizador()
