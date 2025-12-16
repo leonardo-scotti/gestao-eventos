@@ -184,57 +184,50 @@ const inserirOrganizador = async function (organizador, contentType) {
                 if (await organizadorDAO.validCNPJ(organizador.cnpj) == false) {
 
                     if (await organizadorDAO.validCPF(organizador.cpf) == false) {
-                        let validarGenero = await controllerGenero.buscarGeneroId(organizador.id_genero)
 
-                        if (validarGenero.status_code == 200) {
+                        organizador.senha = gerarSha1(organizador.senha)
 
-                            organizador.senha = gerarSha1(organizador.senha)
+                        let email = organizador.email
+                        let partes = email.split('@')
 
-                            let email = organizador.email
-                            let partes = email.split('@')
+                        let usuario = partes[0]
+                        let dominio = partes[1].toLowerCase()
 
-                            let usuario = partes[0]
-                            let dominio = partes[1].toLowerCase()
+                        organizador.email = usuario + dominio
 
-                            organizador.email = usuario + dominio
+                        let validaremail = await organizadorDAO.getSelectAllOrganizers()
 
-                            let validaremail = await organizadorDAO.getSelectAllOrganizers()
-
-                            for (let item of validaremail) {
-                                if (item.email == organizador.email) {
-                                    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'O [EMAIL] já está em uso!!!'
-                                    return MESSAGE.ERROR_REQUIRED_FIELDS //400
-                                }
+                        for (let item of validaremail) {
+                            if (item.email == organizador.email) {
+                                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'O [EMAIL] já está em uso!!!'
+                                return MESSAGE.ERROR_REQUIRED_FIELDS //400
                             }
+                        }
 
-                            //Chama a função do DAO para inserir um novo organizador
-                            let result = await organizadorDAO.setInsertOrganizer(organizador)
+                        //Chama a função do DAO para inserir um novo organizador
+                        let result = await organizadorDAO.setInsertOrganizer(organizador)
 
-                            if (result) {
+                        if (result) {
 
-                                //Chama a função para receber o ID gerado no BD
-                                let lastIdorganizador = await organizadorDAO.getSelectLastIdOrganizer()
+                            //Chama a função para receber o ID gerado no BD
+                            let lastIdorganizador = await organizadorDAO.getSelectLastIdOrganizer()
 
-                                if (lastIdorganizador) {
+                            if (lastIdorganizador) {
 
-                                    const jsonResult = {
-                                        status: MESSAGE.SUCCESS_CREATED_ITEM.status,
-                                        status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
-                                        developments: MESSAGE.HEADER.developments,
-                                        message: MESSAGE.SUCCESS_CREATED_ITEM.message
-                                    }
-
-                                    return jsonResult //201
-
-                                } else {
-                                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                                const jsonResult = {
+                                    status: MESSAGE.SUCCESS_CREATED_ITEM.status,
+                                    status_code: MESSAGE.SUCCESS_CREATED_ITEM.status_code,
+                                    developments: MESSAGE.HEADER.developments,
+                                    message: MESSAGE.SUCCESS_CREATED_ITEM.message
                                 }
+
+                                return jsonResult //201
+
                             } else {
                                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                             }
                         } else {
-                            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_GENERO] invalido!!!'
-                            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                         }
                     } else {
                         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Este [CPF] já está em uso!!!'

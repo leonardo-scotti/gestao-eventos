@@ -19,7 +19,12 @@ export async function inserirEvento(event) {
 
     const response = await fetch(url, options)
 
-    return response.ok;
+    if (response.ok) {
+        return response.ok;
+    } else {
+        alert("Problemas no cadastro do evento!")
+    }
+
 }
 
 export async function atualizarEvento(id, event) {
