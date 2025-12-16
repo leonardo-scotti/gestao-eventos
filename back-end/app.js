@@ -11,8 +11,6 @@ const express_session = require('express-session')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const multer = require('multer')
-const path = require('path');
-const fs = require('fs'); 
 
 // Inicializa o Multer com a configuração de armazenamento
 const upload = multer();
