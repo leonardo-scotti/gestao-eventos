@@ -12,11 +12,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const multer = require('multer')
 const path = require('path');
-<<<<<<< HEAD
 const fs = require('fs'); 
-=======
-const fs = require('fs');
->>>>>>> aaf76393568edbdcbd081a6a8888933542ae46c4
 
 // Inicializa o Multer com a configuração de armazenamento
 const upload = multer();
