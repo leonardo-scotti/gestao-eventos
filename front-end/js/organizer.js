@@ -1,6 +1,6 @@
 'use strict'
 
-import { inserirEvento } from "./conn/eventos.js"
+import { inserirEvento, lerEventos } from "./conn/eventos.js"
 import { inserirEndereco } from "./conn/endereco.js"
 import { inserirIngresso, lerIngressos } from "./conn/ingresso.js"
 import { lerEstados } from "./conn/estado.js"
@@ -120,9 +120,13 @@ async function PublicarEvento() {
     dados.append('quantidade_ingresso', quantidade_ingresso.value);
     dados.append('quantidade_ingresso_comprado', 0);
 
-    const evento = await inserirEvento(dados);
+    const eventoInserido = await inserirEvento(dados);
 
-    const idEvento = evento.evento.id_evento;
+    const eventos = await lerEventos();
+
+    const evento = eventos.eventos[0]
+
+    const idEvento = evento.id_evento;
 
     //Endereço
 
@@ -231,11 +235,11 @@ async function ExibirMeusEventos() {
             if (login.usuario.email === emailOrganizadorPedido && ingressoRelacionado) {
 
                 const eventoData = ingressoRelacionado.evento?.[0];
-                
-                if (!eventoData) return; 
+
+                if (!eventoData) return;
 
                 const enderecoData = eventoData.endereco?.[0];
-                
+
                 if (!enderecoData) return;
 
                 const nomeEvento = eventoData.nome;
@@ -265,15 +269,15 @@ async function ExibirMeusEventos() {
                 name_event.textContent = nomeEvento || 'Evento Desconhecido';
 
                 visilite.textContent = statusPedido ? statusPedido.replace('_', ' ') : 'Status Indefinido';
-                
+
                 if (statusPedido === 'FINALIZADO') {
-                    icon_status.style.backgroundColor = '#4CAF50'; 
+                    icon_status.style.backgroundColor = '#4CAF50';
                 } else if (statusPedido === 'EM_ANDAMENTO') {
-                    icon_status.style.backgroundColor = '#FFC107'; 
+                    icon_status.style.backgroundColor = '#FFC107';
                 } else {
-                    icon_status.style.backgroundColor = '#F44336'; 
+                    icon_status.style.backgroundColor = '#F44336';
                 }
-                
+
                 states.textContent = estadoSigla || 'Estado Indefinido';
                 day_event_realizing.textContent = dataInicio || 'Data Indefinida';
 
@@ -298,7 +302,7 @@ async function ExibirMeusEventos() {
     }
 }
 
-ExibirMeusEventos()
+//ExibirMeusEventos()
 BuscarEstados()
 BuscarCategorias()
 BuscarAssuntos()

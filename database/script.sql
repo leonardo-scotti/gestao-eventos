@@ -357,6 +357,20 @@ END$$
 
 DELIMITER ;
 
+DROP TRIGGER IF EXISTS trg_quebrar_constraint_evento_delete;
+
+DELIMITER $$
+
+CREATE TRIGGER trg_quebrar_constraint_evento_delete
+BEFORE DELETE ON tbl_evento
+FOR EACH ROW
+BEGIN
+    DELETE FROM tbl_endereco WHERE id_evento = OLD.id_evento;
+    DELETE FROM tbl_ingresso WHERE id_evento = OLD.id_evento;
+END$$
+
+DELIMITER ;
+
 DELIMITER $$
 -- 4.9. Validações de Cliente (Nascimento e Documento)
 CREATE PROCEDURE BuscarEventoPorCidade( IN cidadeEscolhida VARCHAR(150))

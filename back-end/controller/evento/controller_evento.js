@@ -597,7 +597,7 @@ const atualizarEvento = async function (evento, id, contentType, banner) {
 
                         //Chama a função do DAO para atualizar um evento
                         let result = await eventoDAO.setUpdateEvent(evento)
-                        
+
                         if (result) {
 
                             if (Array.isArray(evento.cliente) && evento.cliente.length > 0) {
@@ -667,8 +667,6 @@ const excluirEvento = async function (id) {
     try {
 
         let validarID = await buscarEventoId(id)
-        let banner = validarID.evento[0].banner
-        await UPLOAD.deleteFileByUrl(banner)
 
         if (validarID.status_code == 200) {
 
@@ -693,6 +691,7 @@ const excluirEvento = async function (id) {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
